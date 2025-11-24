@@ -33,6 +33,12 @@ export function HeroAI() {
               Krijg direct een prijsindicatie en zie met AI hoe uw huis eruit gaat zien met uw nieuwe verfkleur. Vindt u goedkoper? Wij betalen het verschil!
             </p>
 
+            <div className="inline-block bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full mb-4">
+              <p className="text-md sm:text-lg font-semibold text-white">
+                🏆 Laagste Prijs Garantie Schilderwerk
+              </p>
+            </div>
+
             <div className="hidden sm:flex flex-wrap gap-3 md:gap-4 text-sm md:text-base text-white">
               <span>Binnen</span>
               <span>|</span>
