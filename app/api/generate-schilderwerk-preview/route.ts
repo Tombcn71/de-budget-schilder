@@ -14,18 +14,17 @@ function getGeminiClient() {
   return new GoogleGenAI({ apiKey });
 }
 
-interface KozijnSpecs {
-  materiaal: string;
-  kleur: string;
-  kozijnType: string;
-  glasType: string;
+interface SchilderwerkSpecs {
+  verfkleur: string;
+  projectType: string;
+  schilderwerkType: string;
 }
 
 export async function POST(request: Request) {
   try {
     const { imageUrl, imageData, specs } = await request.json();
     
-    console.log('🎨 Gemini Image Generation gestart voor kozijnen preview');
+    console.log('🎨 Gemini Image Generation gestart voor schilderwerk preview');
     console.log('📋 Specs:', specs);
 
     if (!imageUrl && !imageData) {
@@ -37,22 +36,22 @@ export async function POST(request: Request) {
 
     if (!specs) {
       return NextResponse.json(
-        { error: 'Geen kozijn specificaties opgegeven' },
+        { error: 'Geen schilderwerk specificaties opgegeven' },
         { status: 400 }
       );
     }
 
-    const kozijnSpecs: KozijnSpecs = specs;
+    const schilderwerkSpecs: SchilderwerkSpecs = specs;
     
     console.log('🔑 Gemini API Key aanwezig:', !!process.env.GOOGLE_AI_API_KEY);
     console.log('🔑 Alternative Key aanwezig:', !!process.env.GEMINI_API_KEY);
     
     const ai = getGeminiClient();
     console.log('📡 Gemini client geïnitialiseerd');
-    console.log('📡 Gemini request verzenden met specs:', JSON.stringify(kozijnSpecs));
+    console.log('📡 Gemini request verzenden met specs:', JSON.stringify(schilderwerkSpecs));
 
-    // Build a detailed prompt for window frame transformation
-    const prompt = buildKozijnPrompt(kozijnSpecs);
+    // Build a detailed prompt for painting transformation
+    const prompt = buildSchilderwerkPrompt(schilderwerkSpecs);
 
     // Prepare the content parts
     const contentParts: any[] = [
@@ -118,12 +117,12 @@ export async function POST(request: Request) {
       throw new Error('Geen afbeelding gegenereerd door Gemini - check console logs');
     }
 
-    console.log('✅ Kozijn preview succesvol gegenereerd!');
+    console.log('✅ Schilderwerk preview succesvol gegenereerd!');
 
     return NextResponse.json({
       success: true,
       previewImage: `data:image/png;base64,${generatedImageData}`,
-      specs: kozijnSpecs,
+      specs: schilderwerkSpecs,
     });
 
   } catch (error: any) {
@@ -145,93 +144,120 @@ export async function POST(request: Request) {
   }
 }
 
-function buildKozijnPrompt(specs: KozijnSpecs): string {
-  const materiaalDescriptions: Record<string, string> = {
-    'kunststof': 'kunststof (PVC) raamkozijnen met een glad, modern oppervlak',
-    'hout': 'houten raamkozijnen met natuurlijke houtnerven en textuur',
-    'aluminium': 'strakke aluminium raamkozijnen met een gepolijste, moderne uitstraling',
-    'hout-aluminium': 'hoogwaardige hout-aluminium combinatie kozijnen met hout aan de binnenkant en aluminium aan de buitenkant'
-  };
-
+function buildSchilderwerkPrompt(specs: SchilderwerkSpecs): string {
   const kleurDescriptions: Record<string, string> = {
-    'wit': 'helder wit',
-    'creme': 'zachte crème',
+    'wit': 'helder wit (RAL 9010)',
+    'gebroken-wit': 'warm gebroken wit (RAL 9001)',
+    'lichtgrijs': 'licht grijs (RAL 7035)',
     'grijs': 'modern grijs (RAL 7016)',
     'antraciet': 'elegant antraciet grijs (RAL 7021)',
-    'zwart': 'diep zwart',
-    'donkergroen': 'klassiek donkergroen (RAL 6009)',
-    'houtkleur': 'natuurlijke houtkleur met zichtbare nerven'
+    'zwart': 'diep zwart (RAL 9005)',
+    'beige': 'warm beige (RAL 1015)',
+    'zandgeel': 'zacht zandgeel (RAL 1002)',
+    'groen': 'donkergroen (RAL 6009)',
+    'blauw': 'elegant blauw (RAL 5014)'
   };
 
-  const glasDescriptions: Record<string, string> = {
-    'dubbel': 'dubbel glas met heldere transparantie',
-    'hr++': 'HR++ glas met subtiele reflectie voor energiebesparing',
-    'triple': 'triple glas met optimale isolatie',
-    'geluidswerend': 'geluidswerend glas met extra dikte'
+  const projectTypeDescriptions: Record<string, string> = {
+    'binnen': 'binnenschilderwerk',
+    'buiten': 'buitenschilderwerk',
+    'binnen_buiten': 'binnen en buiten schilderwerk'
   };
 
-  const materiaalDesc = materiaalDescriptions[specs.materiaal] || specs.materiaal;
-  const kleurDesc = kleurDescriptions[specs.kleur] || specs.kleur;
-  const glasDesc = glasDescriptions[specs.glasType] || specs.glasType;
+  const schilderwerkTypeDescriptions: Record<string, string> = {
+    'muren': 'muren',
+    'plafond': 'plafond',
+    'kozijnen': 'kozijnen',
+    'deuren': 'deuren',
+    'plinten': 'plinten',
+    'lijstwerk': 'lijstwerk',
+    'volledige_kamer': 'volledige kamer (muren, plafond en houtwerk)',
+    'gevel': 'gevel'
+  };
 
-  return `Edit this photo: replace ONLY the window frame with new ${materiaalDesc} in ${kleurDesc} color.
+  const kleurDesc = kleurDescriptions[specs.verfkleur] || specs.verfkleur;
+  const projectDesc = projectTypeDescriptions[specs.projectType] || specs.projectType;
+  const werkDesc = schilderwerkTypeDescriptions[specs.schilderwerkType] || specs.schilderwerkType;
 
-🚫 ABSOLUTE RULES - DO NOT BREAK THESE:
-- DO NOT ADD any new elements, textures, or materials that are not in the original photo
-- DO NOT invent brick walls, stone, wood panels, or any surface that wasn't there
-- DO NOT change what the wall is made of (if it's plaster, keep it plaster. If it's brick, keep it brick)
-- ONLY edit the window frame itself - nothing else around it
+  return `Edit this photo: repaint the ${werkDesc} in ${kleurDesc} color for ${projectDesc}.
 
-⚠️ STEP 1 - DELETE CURTAINS & OBJECTS (CRITICAL):
-CURTAINS MUST BE 100% INVISIBLE:
-- Delete ALL curtains completely - they must NOT be visible at all
-- Delete ALL drapes - remove every pixel
-- Delete ALL blinds - make them disappear completely
-- Delete ALL shades - total removal
-- Delete ALL fabric/textile near window - zero visibility
-- If curtains are white, beige, colored - DELETE ALL
-- If curtains are open or closed - DELETE ALL
-- Curtains are FORBIDDEN in the result image
+🎨 PAINTING TRANSFORMATION RULES:
 
-OTHER ITEMS TO DELETE:
-- Remove ALL balcony items: chairs, tables, plants, pots, furniture, decorations
-- Remove ALL objects visible through window: delete them entirely
-- Keep sky, buildings, architecture visible in background
-- Do NOT add solid color, blur or replacement - just delete the objects
+STEP 1 - IDENTIFY WHAT TO PAINT:
+${specs.schilderwerkType === 'muren' || specs.schilderwerkType === 'volledige_kamer' ? `
+- Paint ALL visible walls/wall surfaces
+- Apply ${kleurDesc} paint color evenly
+- Keep wall texture (smooth/textured) exactly the same
+- Paint goes from floor to ceiling
+` : ''}
+${specs.schilderwerkType === 'plafond' || specs.schilderwerkType === 'volledige_kamer' ? `
+- Paint the entire ceiling surface
+- Apply ${kleurDesc} paint color evenly
+- Keep ceiling texture exactly the same
+` : ''}
+${specs.schilderwerkType === 'kozijnen' ? `
+- Paint ONLY the window frames/kozijnen
+- Apply ${kleurDesc} paint to all frame parts
+- Keep glass clear and transparent
+- DO NOT paint the glass itself
+` : ''}
+${specs.schilderwerkType === 'deuren' ? `
+- Paint ONLY the doors
+- Apply ${kleurDesc} paint to entire door surface
+- Keep door handles/hardware unpainted (metal color)
+` : ''}
+${specs.schilderwerkType === 'plinten' || specs.schilderwerkType === 'volledige_kamer' ? `
+- Paint all baseboards/plinten
+- Apply ${kleurDesc} paint evenly
+` : ''}
+${specs.schilderwerkType === 'lijstwerk' || specs.schilderwerkType === 'volledige_kamer' ? `
+- Paint all crown molding/lijstwerk
+- Apply ${kleurDesc} paint evenly
+` : ''}
+${specs.schilderwerkType === 'gevel' ? `
+- Paint the exterior facade/gevel
+- Apply ${kleurDesc} paint to entire outside wall surface
+- Keep windows, doors, and trim as they are
+` : ''}
 
-RESULT OF STEP 1: Window with ZERO curtains visible, clear glass, outdoor view visible
+STEP 2 - APPLY PAINT PROFESSIONALLY:
+- Paint looks freshly applied, smooth and even
+- Color is ${kleurDesc} - use the exact RAL color specification
+- NO drips, NO streaks, NO uneven patches
+- Professional finish with proper coverage
+- Paint has a matte/satin finish (not glossy unless specified)
 
-STEP 2 - REPLACE ONLY THE WINDOW FRAME:
-- Replace ONLY the window frame with ${materiaalDesc} in ${kleurDesc}
-- Frame type: ${specs.kozijnType}
-- Glass: ${glasDesc}, clear/transparent with view visible
-- STOP HERE - do not edit anything else
+STEP 3 - PRESERVE EVERYTHING ELSE 100%:
+- DO NOT paint areas that shouldn't be painted:
+  ${specs.schilderwerkType !== 'gevel' ? '* Keep ceiling original if only walls are being painted' : ''}
+  ${specs.schilderwerkType !== 'muren' && specs.schilderwerkType !== 'volledige_kamer' ? '* Keep walls original if not specified to paint them' : ''}
+  * Keep floors exactly the same
+  * Keep furniture exactly the same (color, position, everything)
+  * Keep decorations, pictures, lighting exactly the same
+  * Keep windows and glass transparent and clean
+  * Keep door handles, hinges, metal parts unpainted
+  ${specs.schilderwerkType === 'gevel' ? '* Keep roof, windows, doors in original colors' : ''}
 
-STEP 3 - PRESERVE EVERYTHING ELSE 100% IDENTICAL:
-- Wall material: if plaster/stucco → stays plaster/stucco, if brick → stays brick, if paint → stays paint
-- DO NOT add textures or materials that weren't in the original
-- Wall color stays EXACTLY the same RGB values
-- Keep all damage, cracks, stains, imperfections exactly as they are
-- Keep all shadows and light exactly as they are
-- Window position EXACTLY the same coordinates
-- Room interior EXACTLY the same
-- DO NOT add decorative elements
+- Preserve all architectural details:
+  * Same lighting and shadows
+  * Same room layout
+  * Same textures on unpainted surfaces
+  * Same reflections in glass/mirrors
 
-CRITICAL PROHIBITION:
-- DO NOT invent new brick walls
-- DO NOT add stone textures
-- DO NOT add wood paneling
-- DO NOT change wall materials AT ALL
-- CURTAINS MUST BE 100% DELETED - ZERO VISIBILITY
-- NO curtains, drapes, blinds, or fabric visible anywhere
-- If you see a white plaster wall → keep it white plaster wall
-- If you see painted wall → keep it painted wall
+CRITICAL RULES:
+✓ ONLY paint the specified surfaces (${werkDesc})
+✓ Paint color is ${kleurDesc} - must be accurate
+✓ Professional, even finish with no defects
+✓ Everything else stays 100% identical to original
+✓ NO hallucinations - don't add or remove furniture/objects
+✓ Keep room atmosphere and lighting the same
 
-FINAL CHECK BEFORE RETURNING IMAGE:
-✓ Are curtains completely gone? (must be YES)
-✓ Is only the window frame changed? (must be YES)
-✓ Are wall materials unchanged? (must be YES)
+FINAL QUALITY CHECK:
+✓ Is ONLY the ${werkDesc} painted in ${kleurDesc}? (must be YES)
+✓ Is everything else unchanged? (must be YES)
+✓ Does the paint look professional and even? (must be YES)
+✓ Are the RAL color specifications correct? (must be YES)
 
-RESULT: Identical photo with ONLY the window frame replaced. NO CURTAINS VISIBLE. Everything else is a perfect 1:1 copy of the original.`;
+RESULT: Professional ${projectDesc} with ${werkDesc} freshly painted in ${kleurDesc}. Everything else perfectly preserved from original photo.`;
 }
 
