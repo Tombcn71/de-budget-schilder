@@ -18,6 +18,7 @@ const nextConfig = {
       },
     ],
     formats: ['image/avif', 'image/webp'],
+    qualities: [75, 85, 90, 95, 100],
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
@@ -33,7 +34,6 @@ const nextConfig = {
       '@radix-ui/react-slot',
     ],
   },
-  swcMinify: true,
   poweredByHeader: false,
   compress: true,
   productionBrowserSourceMaps: false,
