@@ -21,26 +21,50 @@ interface PriceRange {
 }
 
 type ProjectType = 'binnen' | 'buiten' | 'binnen_buiten'
-type SchilderwerkType = 'muren' | 'plafond' | 'kozijnen' | 'deuren' | 'volledige_kamer' | 'gevel'
+type SchilderwerkType = 'muren' | 'plafond' | 'kozijnen' | 'deuren' | 'plinten' | 'lijstwerk' | 'volledige_kamer' | 'gevel'
+type MeasurementUnit = 'm2' | 'm1' // m² of strekkende meter
 
 // ============================================================================
-// CONSTANTEN - Prijzen per m²
+// CONSTANTEN - Prijzen per m² of strekkende meter
 // ============================================================================
 
+// Schilderwerk berekend per VIERKANTE METER (m²)
 const PRIJZEN_PER_M2 = {
   binnen: {
     muren: { min: 12, max: 18 },           // €12-18 per m²
     plafond: { min: 15, max: 22 },         // €15-22 per m²
-    kozijnen: { min: 25, max: 35 },        // €25-35 per m² (raamoppervlak)
-    deuren: { min: 80, max: 120 },         // €80-120 per deur
-    volledige_kamer: { min: 450, max: 750 } // €450-750 per kamer
+    volledige_kamer: { min: 450, max: 750 } // €450-750 per kamer (flat rate)
   },
   buiten: {
     gevel: { min: 25, max: 40 },           // €25-40 per m²
-    kozijnen: { min: 30, max: 45 },        // €30-45 per raamoppervlak
-    deuren: { min: 120, max: 180 },        // €120-180 per deur
   }
 } as const
+
+// Schilderwerk berekend per STREKKENDE METER (m¹)
+const PRIJZEN_PER_M1 = {
+  binnen: {
+    kozijnen: { min: 35, max: 55 },        // €35-55 per strekkende meter
+    deuren: { min: 45, max: 75 },          // €45-75 per strekkende meter (omtrek)
+    plinten: { min: 8, max: 15 },          // €8-15 per strekkende meter
+    lijstwerk: { min: 10, max: 18 },       // €10-18 per strekkende meter
+  },
+  buiten: {
+    kozijnen: { min: 45, max: 70 },        // €45-70 per strekkende meter
+    deuren: { min: 55, max: 90 },          // €55-90 per strekkende meter (omtrek)
+  }
+} as const
+
+// Helper: bepaal welke eenheid gebruikt moet worden
+const MEASUREMENT_UNITS: Record<SchilderwerkType, MeasurementUnit> = {
+  muren: 'm2',
+  plafond: 'm2',
+  gevel: 'm2',
+  volledige_kamer: 'm2',
+  kozijnen: 'm1',
+  deuren: 'm1',
+  plinten: 'm1',
+  lijstwerk: 'm1',
+}
 
 // Verfkleuren opties
 const VERFKLEUREN = [
@@ -71,19 +95,42 @@ function calculatePriceRange(
   let minPrice = 0
   let maxPrice = 0
   
-  if (projectType === 'binnen' || projectType === 'binnen_buiten') {
-    const prijzen = PRIJZEN_PER_M2.binnen[schilderwerkType as keyof typeof PRIJZEN_PER_M2.binnen]
-    if (prijzen) {
-      minPrice += oppervlakte * prijzen.min
-      maxPrice += oppervlakte * prijzen.max
-    }
-  }
+  // Bepaal of we per m² of per strekkende meter rekenen
+  const unit = MEASUREMENT_UNITS[schilderwerkType]
   
-  if (projectType === 'buiten' || projectType === 'binnen_buiten') {
-    const prijzen = PRIJZEN_PER_M2.buiten[schilderwerkType as keyof typeof PRIJZEN_PER_M2.buiten]
-    if (prijzen) {
-      minPrice += oppervlakte * prijzen.min
-      maxPrice += oppervlakte * prijzen.max
+  if (unit === 'm2') {
+    // Berekening per VIERKANTE METER
+    if (projectType === 'binnen' || projectType === 'binnen_buiten') {
+      const prijzen = PRIJZEN_PER_M2.binnen[schilderwerkType as keyof typeof PRIJZEN_PER_M2.binnen]
+      if (prijzen) {
+        minPrice += oppervlakte * prijzen.min
+        maxPrice += oppervlakte * prijzen.max
+      }
+    }
+    
+    if (projectType === 'buiten' || projectType === 'binnen_buiten') {
+      const prijzen = PRIJZEN_PER_M2.buiten[schilderwerkType as keyof typeof PRIJZEN_PER_M2.buiten]
+      if (prijzen) {
+        minPrice += oppervlakte * prijzen.min
+        maxPrice += oppervlakte * prijzen.max
+      }
+    }
+  } else {
+    // Berekening per STREKKENDE METER
+    if (projectType === 'binnen' || projectType === 'binnen_buiten') {
+      const prijzen = PRIJZEN_PER_M1.binnen[schilderwerkType as keyof typeof PRIJZEN_PER_M1.binnen]
+      if (prijzen) {
+        minPrice += oppervlakte * prijzen.min
+        maxPrice += oppervlakte * prijzen.max
+      }
+    }
+    
+    if (projectType === 'buiten' || projectType === 'binnen_buiten') {
+      const prijzen = PRIJZEN_PER_M1.buiten[schilderwerkType as keyof typeof PRIJZEN_PER_M1.buiten]
+      if (prijzen) {
+        minPrice += oppervlakte * prijzen.min
+        maxPrice += oppervlakte * prijzen.max
+      }
     }
   }
   
@@ -367,7 +414,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                 : 'border-border hover:border-primary/50'
                             }`}
                           >
-                            <div className="font-semibold text-foreground text-sm">Muren</div>
+                            <div className="font-semibold text-foreground text-sm">Muren (m²)</div>
                           </button>
                           <button
                             type="button"
@@ -378,7 +425,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                 : 'border-border hover:border-primary/50'
                             }`}
                           >
-                            <div className="font-semibold text-foreground text-sm">Plafond</div>
+                            <div className="font-semibold text-foreground text-sm">Plafond (m²)</div>
                           </button>
                           <button
                             type="button"
@@ -389,8 +436,32 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                 : 'border-border hover:border-primary/50'
                             }`}
                           >
-                            <div className="font-semibold text-foreground text-sm">Volledige kamer</div>
+                            <div className="font-semibold text-foreground text-sm">Volledige kamer (m²)</div>
                             <div className="text-xs text-muted-foreground mt-1">Muren, plafond en houtwerk</div>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setFormData({ ...formData, schilderwerkType: 'plinten' })}
+                            className={`p-3 border-2 rounded-lg text-left transition-all ${
+                              formData.schilderwerkType === 'plinten'
+                                ? 'border-primary bg-primary/5'
+                                : 'border-border hover:border-primary/50'
+                            }`}
+                          >
+                            <div className="font-semibold text-foreground text-sm">Plinten (m¹)</div>
+                            <div className="text-xs text-muted-foreground mt-1">Per strekkende meter</div>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setFormData({ ...formData, schilderwerkType: 'lijstwerk' })}
+                            className={`p-3 border-2 rounded-lg text-left transition-all ${
+                              formData.schilderwerkType === 'lijstwerk'
+                                ? 'border-primary bg-primary/5'
+                                : 'border-border hover:border-primary/50'
+                            }`}
+                          >
+                            <div className="font-semibold text-foreground text-sm">Lijstwerk (m¹)</div>
+                            <div className="text-xs text-muted-foreground mt-1">Per strekkende meter</div>
                           </button>
                         </>
                       ) : null}
@@ -404,7 +475,8 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                             : 'border-border hover:border-primary/50'
                         }`}
                       >
-                        <div className="font-semibold text-foreground text-sm">Kozijnen</div>
+                        <div className="font-semibold text-foreground text-sm">Kozijnen (m¹)</div>
+                        <div className="text-xs text-muted-foreground mt-1">Per strekkende meter</div>
                       </button>
                       <button
                         type="button"
@@ -415,7 +487,8 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                             : 'border-border hover:border-primary/50'
                         }`}
                       >
-                        <div className="font-semibold text-foreground text-sm">Deuren</div>
+                        <div className="font-semibold text-foreground text-sm">Deuren (m¹)</div>
+                        <div className="text-xs text-muted-foreground mt-1">Per strekkende meter (omtrek)</div>
                       </button>
                       
                       {formData.projectType === 'buiten' || formData.projectType === 'binnen_buiten' ? (
@@ -428,7 +501,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                               : 'border-border hover:border-primary/50'
                           }`}
                         >
-                          <div className="font-semibold text-foreground text-sm">Gevel</div>
+                          <div className="font-semibold text-foreground text-sm">Gevel (m²)</div>
                         </button>
                       ) : null}
                     </div>
@@ -442,18 +515,24 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                 {/* Oppervlakte */}
                 <div>
                   <Label className="text-foreground text-sm mb-2 block">
-                    Oppervlakte in m² *
+                    {formData.schilderwerkType && MEASUREMENT_UNITS[formData.schilderwerkType] === 'm1' 
+                      ? 'Lengte in strekkende meters (m¹) *'
+                      : 'Oppervlakte in vierkante meters (m²) *'
+                    }
                   </Label>
                   <Input
                     type="number"
-                    placeholder="Bijv. 50"
+                    placeholder={formData.schilderwerkType && MEASUREMENT_UNITS[formData.schilderwerkType] === 'm1' ? "Bijv. 25" : "Bijv. 50"}
                     value={formData.oppervlakte}
                     onChange={(e) => setFormData({ ...formData, oppervlakte: e.target.value })}
                     className="bg-background border-0 h-11"
                     min="1"
                   />
                   <p className="text-xs text-muted-foreground mt-1">
-                    💡 Schat gerust - we bespreken de exacte maten later
+                    💡 {formData.schilderwerkType && MEASUREMENT_UNITS[formData.schilderwerkType] === 'm1' 
+                      ? 'Strekkende meter = totale lengte (bijv. kozijnen omtrek, plint lengte)'
+                      : 'Vierkante meter = lengte × breedte'
+                    } - schat gerust, we bespreken de exacte maten later
                   </p>
                 </div>
 
@@ -627,7 +706,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                 </div>
               </div>
               <p className="text-sm text-muted-foreground">
-                Totale offerte voor {formData.oppervlakte} m² {formData.schilderwerkType}
+                Totale offerte voor {formData.oppervlakte} {formData.schilderwerkType && MEASUREMENT_UNITS[formData.schilderwerkType] === 'm1' ? 'm¹' : 'm²'} {formData.schilderwerkType}
               </p>
             </div>
           )}
