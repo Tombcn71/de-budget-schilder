@@ -254,7 +254,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
         const { url } = await uploadRes.json()
 
         try {
-          const generateRes = await fetch('/api/generate-preview', {
+          const generateRes = await fetch('/api/generate-schilderwerk-preview', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 

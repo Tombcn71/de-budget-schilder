@@ -1,18 +1,18 @@
 # Gemini "Nano Banana" Image Generation Setup
 
-Deze app gebruikt **Google Gemini's image generation** (ook wel "Nano Banana" genoemd) om AI-powered previews te genereren van nieuwe raamkozijnen.
+Deze app gebruikt **Google Gemini's image generation** (ook wel "Nano Banana" genoemd) om AI-powered previews te genereren van geschilderde muren en oppervlaktes.
 
 ## 📋 Wat doet het?
 
 Wanneer een klant:
-1. Hun kozijnspecificaties invult (materiaal, kleur, type, glas)
-2. Foto's uploadt van hun huidige ramen
+1. Hun schilderwerk specificaties invult (projecttype, verfkleur, aantal lagen)
+2. Foto's uploadt van hun huis/muren
 3. Op "Bereken Prijs & Genereer Preview" klikt
 
 Dan gebruikt de app Gemini om:
 - De originele foto's te analyseren
-- Nieuwe afbeeldingen te genereren met de gekozen kozijnen
-- Een realistische preview te tonen van hoe het eruit gaat zien
+- Nieuwe afbeeldingen te genereren met de gekozen verfkleur
+- Een realistische preview te tonen van hoe het geschilderde resultaat eruit gaat zien
 
 ## 🔑 API Key Verkrijgen
 
@@ -52,21 +52,20 @@ pnpm dev
 De app gebruikt het `gemini-2.5-flash-image` model met de volgende flow:
 
 1. **Upload**: Klant uploadt foto's van ramen
-2. **Specificaties**: Klant kiest materiaal, kleur, type kozijn, glastype
+2. **Specificaties**: Klant kiest projecttype, schilderwerk type, verfkleur, aantal lagen
 3. **API Call**: Backend stuurt foto + specs naar Gemini
-4. **Generatie**: Gemini genereert nieuwe afbeelding met de gekozen kozijnen
-5. **Preview**: Klant ziet direct hoe nieuwe kozijnen eruit gaan zien
+4. **Generatie**: Gemini genereert nieuwe afbeelding met de geschilderde muren
+5. **Preview**: Klant ziet direct hoe de nieuwe verfkleur eruit gaat zien
 
 ## 📁 Relevante Bestanden
 
-- `/app/api/generate-kozijn-preview/route.ts` - Gemini API integration
+- `/app/api/generate-schilderwerk-preview/route.ts` - Gemini API integration
 - `/components/ai-quote-form.tsx` - Frontend formulier en preview display
-- `/lib/pricing/ai-calculator.ts` - Prijsberekening
 
 ## 🚀 Features
 
 - ✅ Text-to-image generation
-- ✅ Image editing (kozijnen vervangen)
+- ✅ Image editing (muren schilderen)
 - ✅ Multiple image processing
 - ✅ Photorealistic results
 - ✅ Fallback naar originele foto's als API key ontbreekt

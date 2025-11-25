@@ -1,16 +1,15 @@
-# Budget Kozijnenshop 🪟
+# De Budgetschilder 🎨
 
-Een moderne Next.js web applicatie voor het verkrijgen van directe prijsopgaven voor nieuwe raamkozijnen, inclusief AI-gegenereerde previews van hoe je nieuwe kozijnen eruit gaan zien!
+Een moderne Next.js web applicatie voor het verkrijgen van directe prijsopgaven voor professioneel schilderwerk, inclusief AI-gegenereerde previews van hoe je geschilderde muren eruit gaan zien!
 
 ## ✨ Features
 
-- 🎨 **AI Preview Generation** - Zie direct hoe je nieuwe kozijnen eruit gaan zien met Google Gemini "Nano Banana"
-- 💰 **Instant Prijsberekening** - Directe prijsopgave op basis van specificaties
-- 📸 **Foto Upload** - Upload foto's van je huidige ramen
-- 🎯 **Materiaal Keuze** - Kunststof, Hout, Aluminium, Hout/Aluminium
-- 🎨 **Kleur Opties** - Wit, Crème, Grijs, Antraciet, Zwart, Donkergroen, Houtkleur
-- 🪟 **Type Selectie** - Draaikiepraam, Draadraam, Kiepraam, Schuifraam, Vaste beglazing
-- 🔆 **Glas Typen** - Dubbel glas, HR++, Triple glas, Geluidswerend
+- 🎨 **AI Preview Generation** - Zie direct hoe je nieuwe verfkleur eruit gaat zien met Google Gemini "Nano Banana"
+- 💰 **Instant Prijsberekening** - Directe prijsopgave op basis van m² en m¹
+- 📸 **Foto Upload** - Upload foto's van je huis/muren
+- 🏠 **Project Typen** - Binnen, Buiten, of Binnen & Buiten
+- 🎨 **Verfkleuren** - Wit, Gebroken wit, Lichtgrijs, Donkergrijs, Beige, Blauw, Groen, Custom
+- 🖌️ **Schilderwerk Types** - Muren (m²), Plafond (m²), Kozijnen (m¹), Deuren (m¹), Plinten (m¹), Lijstwerk (m¹), Gevel (m²)
 - 📱 **Responsive Design** - Werkt perfect op mobiel en desktop
 - 💳 **Laagste Prijs Garantie** - Vind je het goedkoper? Wij betalen het verschil!
 
@@ -19,7 +18,7 @@ Een moderne Next.js web applicatie voor het verkrijgen van directe prijsopgaven 
 ### 1. Clone & Install
 
 ```bash
-cd Budgetkozijnenshop
+cd debudgetschilder
 pnpm install
 ```
 
@@ -60,23 +59,23 @@ Open [http://localhost:3000](http://localhost:3000)
 ## 🗂️ Project Structure
 
 ```
-Budgetkozijnenshop/
+debudgetschilder/
 ├── app/
 │   ├── api/
-│   │   ├── generate-kozijn-preview/  # Gemini AI preview generation
-│   │   └── upload/                    # Vercel Blob uploads
-│   ├── page.tsx                       # Homepage
-│   └── layout.tsx                     # Root layout
+│   │   ├── generate-schilderwerk-preview/  # Gemini AI preview generation
+│   │   └── upload/                          # Vercel Blob uploads
+│   ├── page.tsx                             # Homepage
+│   └── layout.tsx                           # Root layout
 ├── components/
-│   ├── ai-quote-form.tsx              # Main quote form met AI
-│   ├── hero-ai.tsx                    # Hero section
-│   ├── header.tsx                     # Navigation
-│   ├── how-it-works.tsx               # Process explanation
-│   └── ui/                            # Reusable UI components
+│   ├── ai-quote-form.tsx                    # Main quote form met AI
+│   ├── hero-ai.tsx                          # Hero section
+│   ├── header.tsx                           # Navigation
+│   ├── how-it-works.tsx                     # Process explanation
+│   ├── faq.tsx                              # FAQ section
+│   └── ui/                                  # Reusable UI components
 ├── lib/
-│   └── pricing/
-│       └── ai-calculator.ts           # Pricing logic
-└── public/                            # Static assets
+│   └── utils.ts                             # Utility functions
+└── public/                                  # Static assets
 ```
 
 ## 🎯 How It Works
@@ -84,57 +83,65 @@ Budgetkozijnenshop/
 ### Customer Journey:
 
 1. **Klant vult specificaties in**:
-   - Postcode
-   - Materiaal (kunststof/hout/aluminium)
-   - Kleur (wit, grijs, antraciet, etc.)
-   - Type kozijn (draaikiepraam, schuifraam, etc.)
-   - Aantal ramen & m² glas
-   - Glastype (dubbel, HR++, triple, geluidswerend)
+   - Projecttype (binnen/buiten/beide)
+   - Schilderwerk type (muren, plafond, kozijnen, deuren, etc.)
+   - Oppervlakte in m² of m¹
+   - Verfkleur keuze
+   - Aantal verflagen (1-3 lagen)
+   - Voorbereidingswerk (optioneel)
 
 2. **Upload foto's**:
-   - Min. 3 foto's van huidige ramen
+   - Min. 1 foto van te schilderen oppervlak
    - Van binnen of buiten
    - Automatisch upload naar Vercel Blob
 
 3. **AI Preview Generation** ✨:
    - Google Gemini analyseert foto's
    - Genereert realistische previews
-   - Toont nieuwe kozijnen met gekozen specs
-   - Behoudt architectuur, vervangt alleen kozijnen
+   - Toont geschilderde muren met gekozen verfkleur
+   - Behoudt architectuur, past alleen verfkleur toe
 
 4. **Prijsberekening**:
    ```
-   Kozijnen:  €280-650 per m² (afhankelijk van materiaal)
-   Glas:      €80-220 per m² (afhankelijk van type)
-   Kleur:     €0-100 toeslag per raam
-   Montage:   €75 per raam (optioneel)
-   Afvoer:    €200 forfait (optioneel)
+   Binnen:
+   - Muren:     €12-18 per m²
+   - Plafond:   €15-22 per m²
+   - Kozijnen:  €35-55 per m¹
+   - Deuren:    €45-75 per m¹
+   - Plinten:   €8-15 per m¹
+   - Lijstwerk: €10-18 per m¹
    
-   Min. prijs: €1.500
+   Buiten:
+   - Gevel:     €25-40 per m²
+   - Kozijnen:  €45-70 per m¹
+   - Deuren:    €55-90 per m¹
+   
+   Extra lagen: +40-50% per extra laag
+   Voorbereiding: +€150-300
    ```
 
-5. **Offerte & Booking**:
+5. **Offerte & Contact**:
    - Direct offerte met breakdown
-   - Preview van nieuwe kozijnen
+   - AI preview van geschilderd resultaat
    - Contactgegevens invullen
-   - Plan opname/plaatsing
+   - Plan schilderwerk afspraak
    - Laagste prijs garantie
 
 ## 💡 API Routes
 
-### `POST /api/generate-kozijn-preview`
+### `POST /api/generate-schilderwerk-preview`
 
-Genereert AI previews met Google Gemini:
+Genereert AI previews van geschilderde muren met Google Gemini:
 
 **Input:**
 ```json
 {
   "imageUrl": "https://blob.vercel-storage.com/...",
   "specs": {
-    "materiaal": "kunststof",
-    "kleur": "wit",
-    "kozijnType": "draaikiepraam",
-    "glasType": "hr++"
+    "projectType": "binnen",
+    "schilderwerkType": "muren",
+    "verfkleur": "lichtgrijs",
+    "aantalLagen": "2"
   }
 }
 ```
@@ -227,13 +234,13 @@ BLOB_READ_WRITE_TOKEN=auto_generated_by_vercel
 
 ## 🎨 AI Preview Examples
 
-**Input**: Oude witte kozijnen
-**Specs**: Antraciet aluminium, HR++ glas
-**Output**: Realistische preview met nieuwe antraciet kozijnen
+**Input**: Witte woonkamer muur
+**Specs**: Lichtgrijs, 2 lagen, binnen
+**Output**: Realistische preview met lichtgrijze geschilderde muur
 
-**Input**: Traditionele houten ramen
-**Specs**: Kunststof wit, triple glas
-**Output**: Preview met moderne witte kozijnen
+**Input**: Oude beige gevel
+**Specs**: Modern donkergrijs, 2 lagen, buiten
+**Output**: Preview met moderne donkergrijze gevel
 
 ## 💰 Kosten
 
