@@ -166,6 +166,8 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisResults, setAnalysisResults] = useState<any[]>([])
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null)
+  const [isSendingEmail, setIsSendingEmail] = useState(false)
+  const [emailSent, setEmailSent] = useState(false)
 
   const [formData, setFormData] = useState({
     projectType: "" as ProjectType | "",
@@ -212,6 +214,52 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
       }
     } catch (error) {
       console.log('Share cancelled or failed:', error)
+    }
+  }
+
+  const handleSubmitQuote = async () => {
+    if (!formData.naam || !formData.email) {
+      alert('Vul alstublieft uw naam en e-mail in')
+      return
+    }
+
+    setIsSendingEmail(true)
+
+    try {
+      const response = await fetch('/api/send-quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          formData: {
+            naam: formData.naam,
+            email: formData.email,
+            telefoon: formData.telefoon,
+            projectType: formData.projectType,
+            schilderwerkType: formData.schilderwerkType,
+            oppervlakte: formData.oppervlakte,
+            verfkleur: formData.verfkleur,
+            aantalLagen: formData.extraLagen ? 3 : 2,
+            voorbereiding: true,
+          },
+          analysisResults,
+          priceRange,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Kon offerte niet verzenden')
+      }
+
+      setEmailSent(true)
+      console.log('✅ Offerte verzonden:', data)
+
+    } catch (error: any) {
+      console.error('❌ Offerte verzenden mislukt:', error)
+      alert('Er is iets misgegaan bij het verzenden. Probeer het opnieuw of neem contact op.')
+    } finally {
+      setIsSendingEmail(false)
     }
   }
 
@@ -884,11 +932,37 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
             />
           </div>
 
+          {emailSent && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+              <div className="flex items-center justify-center gap-2 text-green-700 font-semibold">
+                <Check className="w-5 h-5" />
+                De offerte is verzonden naar uw email!
+              </div>
+              <p className="text-sm text-green-600 mt-2">
+                Check uw inbox voor de volledige offerte en AI preview.
+              </p>
+            </div>
+          )}
+
           <Button 
-            type="submit"
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-12 text-base"
+            type="button"
+            onClick={handleSubmitQuote}
+            disabled={isSendingEmail || emailSent || !formData.naam || !formData.email}
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-12 text-base disabled:opacity-50"
           >
-            Verstuur Offerte Aanvraag
+            {isSendingEmail ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Offerte verzenden...
+              </>
+            ) : emailSent ? (
+              <>
+                <Check className="w-4 h-4 mr-2" />
+                Offerte verzonden!
+              </>
+            ) : (
+              'Verstuur Offerte Aanvraag'
+            )}
           </Button>
 
           <Button
@@ -897,6 +971,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
               setCurrentStep(1)
               setPhotos([])
               setAnalysisResults([])
+              setEmailSent(false)
               setFormData({
                 projectType: "",
                 schilderwerkType: "",
