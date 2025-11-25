@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     question: "Wat kost het om mijn huis te laten schilderen?",
-    answer: "De kosten variëren afhankelijk van het oppervlak, de staat van het houtwerk en het aantal lagen. Een gemiddelde tussenwoning buiten schilderen kost tussen €3.500 en €6.500. Een kamer binnen schilderen vanaf €450. Gebruik onze calculator voor een exacte prijsindicatie."
+    answer: "De kosten variëren afhankelijk van het oppervlak, de staat van het houtwerk en het aantal lagen. Gebruik onze calculator bovenaan de pagina om direct een exacte prijsindicatie te krijgen op basis van uw specifieke situatie."
   },
   {
     question: "Welke verfmerken gebruiken jullie?",
