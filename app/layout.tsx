@@ -13,24 +13,24 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: "Budget Kozijnenshop - Nieuwe Raamkozijnen voor de Laagste Prijs",
+  title: "De Budgetschilder - Professioneel Schilderwerk voor de Laagste Prijs",
   description:
-    "Vindt u een goedkopere offerte? Wij betalen u het verschil terug. Direct een prijsindicatie met AI en preview van uw nieuwe kozijnen.",
+    "Vindt u hetzelfde schilderwerk elders goedkoper? Dan gaan wij eronder! Direct een prijsindicatie met AI preview van uw geschilderde ruimte.",
   generator: "v0.app",
-  keywords: "raamkozijnen, kunststof kozijnen, houten kozijnen, aluminium kozijnen, kozijn plaatsen, kozijn prijzen, kunststof ramen",
-  authors: [{ name: "Budget Kozijnenshop" }],
+  keywords: "schilder, schilderwerk, muren verven, plafond schilderen, kozijnen schilderen, binnen schilderen, buiten schilderen, schilder prijzen, schilderofferte",
+  authors: [{ name: "De Budgetschilder" }],
   openGraph: {
-    title: "Budget Kozijnenshop - Nieuwe Raamkozijnen voor de Laagste Prijs",
-    description: "Vindt u een goedkopere offerte? Wij betalen u het verschil terug. Direct een prijsindicatie met AI.",
-    url: "https://budgetkozijnenshop.nl",
-    siteName: "Budget Kozijnenshop",
+    title: "De Budgetschilder - Professioneel Schilderwerk voor de Laagste Prijs",
+    description: "Vindt u hetzelfde schilderwerk elders goedkoper? Dan gaan wij eronder! Direct een prijsindicatie met AI preview.",
+    url: "https://debudgetschilder.nl",
+    siteName: "De Budgetschilder",
     locale: "nl_NL",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Budget Kozijnenshop - Nieuwe Raamkozijnen voor de Laagste Prijs",
-    description: "Vindt u een goedkopere offerte? Wij betalen u het verschil terug.",
+    title: "De Budgetschilder - Professioneel Schilderwerk voor de Laagste Prijs",
+    description: "Vindt u hetzelfde schilderwerk elders goedkoper? Dan gaan wij eronder!",
   },
   robots: {
     index: true,
