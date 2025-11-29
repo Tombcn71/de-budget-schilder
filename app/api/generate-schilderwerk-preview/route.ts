@@ -156,14 +156,27 @@ function buildSchilderwerkPrompt(specs: SchilderwerkSpecs): string {
   const kleurDescriptions: Record<string, string> = {
     'wit': 'helder wit (RAL 9010)',
     'gebroken-wit': 'warm gebroken wit (RAL 9001)',
-    'lichtgrijs': 'licht grijs (RAL 7035)',
-    'grijs': 'modern grijs (RAL 7016)',
-    'antraciet': 'elegant antraciet grijs (RAL 7021)',
-    'zwart': 'diep zwart (RAL 9005)',
+    'creme': 'crème kleur (RAL 9001)',
+    'lichtbeige': 'licht beige (RAL 1013)',
     'beige': 'warm beige (RAL 1015)',
     'zandgeel': 'zacht zandgeel (RAL 1002)',
+    'lichtgrijs': 'licht grijs (RAL 7035)',
+    'grijs': 'modern grijs (RAL 7016)',
+    'donkergrijs': 'donker grijs (RAL 7024)',
+    'antraciet': 'elegant antraciet grijs (RAL 7021)',
+    'zwart': 'diep zwart (RAL 9005)',
+    'lichtblauw': 'licht blauw (RAL 5024)',
+    'blauw': 'elegant blauw (RAL 5014)',
+    'donkerblauw': 'donker blauw (RAL 5011)',
+    'mintgroen': 'mint groen (RAL 6019)',
     'groen': 'donkergroen (RAL 6009)',
-    'blauw': 'elegant blauw (RAL 5014)'
+    'olijfgroen': 'olijf groen (RAL 6003)',
+    'roze': 'roze/oudroze (RAL 3015)',
+    'bordeaux': 'bordeaux rood (RAL 3005)',
+    'zachtgeel': 'zacht geel (RAL 1014)',
+    'oker': 'oker geel (RAL 1024)',
+    'terracotta': 'terracotta (RAL 8023)',
+    'bruin': 'bruin (RAL 8014)'
   };
 
   // Helper functie om kleur te beschrijven (ondersteunt custom kleuren)
