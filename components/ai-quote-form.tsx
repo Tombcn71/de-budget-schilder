@@ -1139,6 +1139,103 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
             </Button>
           </div>
 
+          {/* AI Preview Sectie (als er previews zijn gegenereerd) */}
+          {analysisResults.length > 0 && (
+            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 border-2 border-green-200">
+              <div className="flex items-center gap-2 mb-4">
+                <Sparkles className="w-6 h-6 text-green-600" />
+                <h3 className="font-bold text-xl text-foreground">Uw AI Preview</h3>
+              </div>
+              
+              <div className="space-y-4">
+                {analysisResults.map((result, idx) => (
+                  <div key={idx} className="bg-white rounded-lg p-4 space-y-3">
+                    <p className="text-sm font-semibold text-muted-foreground">Preview {idx + 1}</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Voor */}
+                      <div className="space-y-2">
+                        <div 
+                          className="relative rounded-lg overflow-hidden border-2 border-border group cursor-pointer"
+                          onClick={() => setEnlargedImage(result.url)}
+                        >
+                          <img
+                            src={result.url}
+                            alt={`Voor - Foto ${idx + 1}`}
+                            className="w-full h-auto object-contain max-h-64"
+                          />
+                          <div className="absolute top-2 right-2 flex gap-2">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleShare(result.url, 'Huidige situatie')
+                              }}
+                              className="bg-black/60 p-1.5 rounded-full hover:bg-black/80 transition-colors"
+                              aria-label="Deel foto"
+                            >
+                              <Share2 className="w-4 h-4 text-white" />
+                            </button>
+                            <button
+                              onClick={() => setEnlargedImage(result.url)}
+                              className="bg-black/60 p-1.5 rounded-full hover:bg-black/80 transition-colors"
+                              aria-label="Vergroot foto"
+                            >
+                              <ZoomIn className="w-4 h-4 text-white" />
+                            </button>
+                          </div>
+                        </div>
+                        <p className="text-sm text-center text-muted-foreground font-medium">
+                          📸 Voor
+                        </p>
+                      </div>
+
+                      {/* Na */}
+                      <div className="space-y-2">
+                        <div 
+                          className="relative rounded-lg overflow-hidden border-2 border-primary group cursor-pointer"
+                          onClick={() => setEnlargedImage(result.previewUrl || result.url)}
+                        >
+                          <img
+                            src={result.previewUrl || result.url}
+                            alt={`Na - Foto ${idx + 1}`}
+                            className="w-full h-auto object-contain max-h-64"
+                          />
+                          <div className="absolute top-2 right-2 flex gap-2">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleShare(result.previewUrl || result.url, 'Na schilderwerk')
+                              }}
+                              className="bg-black/60 p-1.5 rounded-full hover:bg-black/80 transition-colors"
+                              aria-label="Deel preview"
+                            >
+                              <Share2 className="w-4 h-4 text-white" />
+                            </button>
+                            <button
+                              onClick={() => setEnlargedImage(result.previewUrl || result.url)}
+                              className="bg-black/60 p-1.5 rounded-full hover:bg-black/80 transition-colors"
+                              aria-label="Vergroot preview"
+                            >
+                              <ZoomIn className="w-4 h-4 text-white" />
+                            </button>
+                          </div>
+                        </div>
+                        <p className="text-sm text-center text-primary font-medium">
+                          ✨ Na
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 p-3 bg-white rounded-lg">
+                <p className="text-xs text-center text-muted-foreground">
+                  ✨ <strong>Powered by AI</strong> - Deze previews zijn gegenereerd door AI op basis van uw gekozen specificaties.
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="bg-primary/10 rounded-lg p-4 text-center">
             <p className="text-foreground font-bold text-base mb-1">💰 Laagste Prijs Garantie</p>
             <p className="text-foreground text-sm">
