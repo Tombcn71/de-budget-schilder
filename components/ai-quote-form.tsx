@@ -68,7 +68,12 @@ const MEASUREMENT_UNITS: Record<SchilderwerkType, MeasurementUnit> = {
 
 // Helper: formateer prijs naar euro formaat
 const formatPrice = (amount: number): string => {
-  return `€ ${amount.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  return new Intl.NumberFormat('nl-NL', {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount)
 }
 
 // Verfkleuren opties
@@ -167,15 +172,6 @@ function calculateMultiItemPrice(
   return { min: Math.round(totalMin), max: Math.round(totalMax) }
 }
 
-function formatPrice(price: number): string {
-  return new Intl.NumberFormat('nl-NL', {
-    style: 'currency',
-    currency: 'EUR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }).format(price)
-}
-
 // ============================================================================
 // COMPONENT
 // ============================================================================
@@ -246,6 +242,13 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
       return
     }
 
+    // Email format validatie
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(formData.email)) {
+      alert('Vul een geldig email adres in (bijvoorbeeld: naam@voorbeeld.nl)')
+      return
+    }
+
     setIsSendingEmail(true)
 
     try {
@@ -267,18 +270,19 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
         }),
       })
 
-      const data = await response.json()
-
       if (!response.ok) {
+        const data = await response.json()
         throw new Error(data.error || 'Kon offerte niet verzenden')
       }
 
+      const data = await response.json()
       setEmailSent(true)
       console.log('✅ Prijsindicatie verzonden:', data)
 
     } catch (error: any) {
       console.error('❌ Offerte verzenden mislukt:', error)
-      alert('Er is iets misgegaan bij het verzenden. Probeer het opnieuw of neem contact op.')
+      const errorMessage = error.message || 'Er is iets misgegaan bij het verzenden.'
+      alert(`${errorMessage}\n\nProbeer het opnieuw of neem contact op via budgetgroep.nl@gmail.com`)
     } finally {
       setIsSendingEmail(false)
     }
@@ -929,6 +933,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                         value={formData.naam}
                         onChange={(e) => setFormData({ ...formData, naam: e.target.value })}
                         className="bg-background border h-11"
+                        required
                       />
                   </div>
 
@@ -940,6 +945,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="bg-background border h-11"
+                        required
                       />
                   </div>
 

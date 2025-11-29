@@ -25,6 +25,15 @@ export async function POST(request: Request) {
       )
     }
 
+    // Email format validatie
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(formData.email)) {
+      return NextResponse.json(
+        { error: 'Ongeldig email adres. Gebruik het formaat: naam@voorbeeld.nl' },
+        { status: 400 }
+      )
+    }
+
     // Build photo URLs
     const photoUrls = analysisResults?.map((r: any) => r.url) || []
     const previewUrls = analysisResults?.map((r: any) => r.previewUrl || r.url) || []
