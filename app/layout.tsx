@@ -15,13 +15,13 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "De Budgetschilder - Professioneel Schilderwerk voor de Laagste Prijs",
   description:
-    "Vindt u hetzelfde schilderwerk elders goedkoper? Dan gaan wij eronder! Direct een prijsindicatie met AI preview van uw geschilderde ruimte.",
+    "Goedkoper gevonden? Wij gaan eronder! Direct prijsindicatie + AI preview. Laagste prijs garantie schilderwerk.",
   generator: "v0.app",
   keywords: "schilder, schilderwerk, muren verven, plafond schilderen, kozijnen schilderen, binnen schilderen, buiten schilderen, schilder prijzen, schilderofferte",
   authors: [{ name: "De Budgetschilder" }],
   openGraph: {
     title: "De Budgetschilder - Professioneel Schilderwerk voor de Laagste Prijs",
-    description: "Vindt u hetzelfde schilderwerk elders goedkoper? Dan gaan wij eronder! Direct een prijsindicatie met AI preview.",
+    description: "Goedkoper gevonden? Wij gaan eronder! Direct prijsindicatie + AI preview. Laagste prijs garantie schilderwerk.",
     url: "https://debudgetschilder.nl",
     siteName: "De Budgetschilder",
     locale: "nl_NL",
