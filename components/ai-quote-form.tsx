@@ -189,6 +189,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
   const [isSendingEmail, setIsSendingEmail] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
   const scrollPositionRef = useRef<number>(0)
+  const formRef = useRef<HTMLDivElement>(null)
 
   const [formData, setFormData] = useState({
     projectType: "" as ProjectType | "",
@@ -211,27 +212,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
     ? calculateMultiItemPrice(formData.projectType, formData.items)
     : null
 
-  // Blokkeer ALL scrolling wanneer success scherm wordt getoond
-  useEffect(() => {
-    if (emailSent) {
-      const savedScroll = scrollPositionRef.current
-      
-      // Blokkeer body scroll
-      document.body.style.overflow = 'hidden'
-      document.body.style.position = 'fixed'
-      document.body.style.top = `-${savedScroll}px`
-      document.body.style.width = '100%'
-      
-      return () => {
-        // Herstel scroll bij cleanup
-        document.body.style.overflow = ''
-        document.body.style.position = ''
-        document.body.style.top = ''
-        document.body.style.width = ''
-        window.scrollTo(0, savedScroll)
-      }
-    }
-  }, [emailSent])
+  // Verwijderd - veroorzaakte frozen scherm
 
   const handleShare = async (imageUrl: string, title: string) => {
     try {
@@ -242,7 +223,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
         
         await navigator.share({
           title: title,
-          text: `Bekijk mijn huis in ${formData.verfkleur}!`,
+          text: `Bekijk mijn schilderwerk preview!`,
           files: [file]
         })
       } else {
@@ -316,9 +297,14 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
       
       // Bewaar scroll positie DIRECT
       scrollPositionRef.current = window.scrollY
-      
+
       setEmailSent(true)
       console.log('✅ Prijsindicatie verzonden:', data)
+      
+      // Scroll naar de top van het formulier na DOM update
+      setTimeout(() => {
+        formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 0)
 
     } catch (error: any) {
       console.error('❌ Offerte verzenden mislukt:', error)
@@ -423,6 +409,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
   const progressPercentage = 100 // Altijd 100%, geen stappen
 
   return (
+    <div ref={formRef}>
     <Card className={`p-4 sm:p-6 lg:p-8 bg-white shadow-2xl border-0 ${className}`}>
       {!emailSent ? (
         <>
@@ -957,52 +944,9 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   </div>
                 )}
 
-                {/* Contactgegevens */}
+          {/* AI Preview Upload Sectie */}
                 {formData.projectType && (
                   <div className="space-y-4">
-                    <h3 className="font-bold text-lg text-foreground">Uw contactgegevens</h3>
-                    <p className="text-sm text-muted-foreground">Vul uw gegevens in om deze prijsindicatie per email te ontvangen</p>
-
-                    <div>
-                      <Label className="text-foreground text-sm mb-2 block">Naam *</Label>
-                      <Input
-                        type="text"
-                        placeholder="Uw volledige naam"
-                        value={formData.naam}
-                        onChange={(e) => setFormData({ ...formData, naam: e.target.value })}
-                        className="bg-background border h-11"
-                        required
-                      />
-                  </div>
-
-                    <div>
-                      <Label className="text-foreground text-sm mb-2 block">Email *</Label>
-                      <Input
-                        type="email"
-                        placeholder="uw@email.nl"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="bg-background border h-11"
-                        required
-                      />
-                  </div>
-
-                    <div>
-                      <Label className="text-foreground text-sm mb-2 block">Telefoon (optioneel)</Label>
-                      <Input
-                        type="tel"
-                        placeholder="06 12345678"
-                        value={formData.telefoon}
-                        onChange={(e) => setFormData({ ...formData, telefoon: e.target.value })}
-                        className="bg-background border h-11"
-                      />
-                </div>
-                  </div>
-                )}
-
-          {/* AI Preview Upload Sectie */}
-                {formData.naam && formData.email && (
-                  <div className="space-y-4 pt-4 border-t border-border">
                     <div className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-lg p-4">
               <div className="flex items-start gap-2 mb-3">
                         <Sparkles className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
@@ -1029,13 +973,56 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                               ✨ {photos.length} foto{photos.length > 1 ? "'s" : ""} geselecteerd - AI preview wordt automatisch gegenereerd bij verzenden
                             </p>
                           </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
                 )}
               </div>
-            )}
+            </div>
+            </div>
+          )}
+
+                {/* Contactgegevens */}
+                {formData.projectType && (
+                  <div className="space-y-4">
+                    <h3 className="font-bold text-lg text-foreground">Uw contactgegevens</h3>
+                    <p className="text-sm text-muted-foreground">Vul uw gegevens in om deze prijsindicatie per email te ontvangen</p>
+
+                    <div>
+                      <Label className="text-foreground text-sm mb-2 block">Naam *</Label>
+                      <Input
+                        type="text"
+                        placeholder="Uw volledige naam"
+                        value={formData.naam}
+                        onChange={(e) => setFormData({ ...formData, naam: e.target.value })}
+                        className="bg-background border h-11"
+                        required
+                      />
+                </div>
+
+                    <div>
+                      <Label className="text-foreground text-sm mb-2 block">Email *</Label>
+                      <Input
+                        type="email"
+                        placeholder="uw@email.nl"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="bg-background border h-11"
+                        required
+                      />
+                </div>
+
+                    <div>
+                      <Label className="text-foreground text-sm mb-2 block">Telefoon (optioneel)</Label>
+                      <Input
+                        type="tel"
+                        placeholder="06 12345678"
+                        value={formData.telefoon}
+                        onChange={(e) => setFormData({ ...formData, telefoon: e.target.value })}
+                        className="bg-background border h-11"
+                      />
+              </div>
+                  </div>
+                )}
+            </div>
+          )}
 
             <div className="flex gap-2 pt-2 sm:pt-3">
                   <Button
@@ -1058,7 +1045,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                       </>
                     )}
                   </Button>
-              </div>
+            </div>
           </form>
         </>
       ) : (
@@ -1077,151 +1064,14 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                 ? 'U ontvangt uw prijsindicatie + gratis AI preview per email'
                 : 'U ontvangt uw prijsindicatie per email'}
             </p>
-            </div>
-
-          {/* Prijsindicatie & Opbouw */}
-          {priceRange && (
-            <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-6 border-2 border-primary/20 text-left">
-              <h3 className="font-bold text-xl text-foreground mb-4">Uw Prijs Indicatie</h3>
-              <div className="text-center mb-4">
-                <p className="text-5xl font-bold text-primary">
-                    {formatPrice(priceRange.min)}
-                  </p>
-                </div>
-              
-              {/* Prijsopbouw */}
-              <div className="bg-background rounded-lg p-4 space-y-2">
-                <p className="font-semibold text-sm text-foreground mb-3">Prijsopbouw:</p>
-                
-                {formData.items.muren.enabled && formData.items.muren.m2 && (
-                  <div className="flex justify-between text-sm border-b border-border pb-2">
-                    <span className="text-muted-foreground">
-                      Muren: {formData.items.muren.m2} m² × €12,50
-                    </span>
-                    <span className="font-medium text-foreground">
-                      {formatPrice(parseFloat(formData.items.muren.m2) * 12.50)}
-                    </span>
-                </div>
-                )}
-                
-                {formData.items.plafond.enabled && formData.items.plafond.m2 && (
-                  <div className="flex justify-between text-sm border-b border-border pb-2">
-                    <span className="text-muted-foreground">
-                      Plafond: {formData.items.plafond.m2} m² × €12,50
-                    </span>
-                    <span className="font-medium text-foreground">
-                      {formatPrice(parseFloat(formData.items.plafond.m2) * 12.50)}
-                    </span>
-              </div>
-                )}
-                
-                {formData.items.plinten.enabled && formData.items.plinten.m1 && (
-                  <div className="flex justify-between text-sm border-b border-border pb-2">
-                    <span className="text-muted-foreground">
-                      Plinten: {formData.items.plinten.m1} m¹ × €7,50
-                    </span>
-                    <span className="font-medium text-foreground">
-                      {formatPrice(parseFloat(formData.items.plinten.m1) * 7.50)}
-                    </span>
-            </div>
-          )}
-
-                {formData.items.lijstwerk.enabled && formData.items.lijstwerk.m1 && (
-                  <div className="flex justify-between text-sm border-b border-border pb-2">
-                    <span className="text-muted-foreground">
-                      Lijstwerk: {formData.items.lijstwerk.m1} m¹ × €7,50
-                    </span>
-                    <span className="font-medium text-foreground">
-                      {formatPrice(parseFloat(formData.items.lijstwerk.m1) * 7.50)}
-                    </span>
-            </div>
-                )}
-                
-                {formData.items.kozijnen.enabled && formData.items.kozijnen.m1 && (
-                  <div className="flex justify-between text-sm border-b border-border pb-2">
-                    <span className="text-muted-foreground">
-                      Kozijnen: {formData.items.kozijnen.m1} m¹ × {formData.projectType === 'buiten' ? '€12,50' : '€7,50'}
-                    </span>
-                    <span className="font-medium text-foreground">
-                      {formatPrice(parseFloat(formData.items.kozijnen.m1) * (formData.projectType === 'buiten' ? 12.50 : 7.50))}
-                    </span>
-            </div>
-                )}
-                
-                {formData.items.deuren.enabled && formData.items.deuren.aantal && (
-                  <div className="flex justify-between text-sm border-b border-border pb-2">
-                    <span className="text-muted-foreground">
-                      Deuren: {formData.items.deuren.aantal} × €65
-                    </span>
-                    <span className="font-medium text-foreground">
-                      {formatPrice(parseInt(formData.items.deuren.aantal) * 65)}
-                    </span>
-              </div>
-            )}
-                
-                <div className="flex justify-between text-base font-bold pt-3 border-t-2 border-primary">
-                  <span className="text-foreground">Totaal:</span>
-                  <span className="text-primary text-xl">{formatPrice(priceRange.min)}</span>
-            </div>
-          </div>
-
-              <div className="mt-4 bg-background rounded-lg p-3 space-y-1 text-xs">
-                <p className="text-muted-foreground">✓ Inclusief: Schuren + voorbehandeling</p>
-                <p className="text-muted-foreground">✓ Inclusief: 2 lagen afwerking</p>
-                <p className="text-muted-foreground">✓ Inclusief: A-merk verf</p>
-                <p className="text-muted-foreground mt-2">💡 Meerwerk: Houtrot reparatie vanaf €35/uur + materiaal</p>
-              </div>
-            </div>
-          )}
-
-          {/* Actie Buttons */}
-          <div className="space-y-3">
-            <Button
-              onClick={() => {
-                setPhotos([])
-                setAnalysisResults([])
-                setEmailSent(false)
-                setFormData({
-                  projectType: "",
-                  naam: "",
-                  email: "",
-                  telefoon: "",
-                  items: {
-                    muren: { enabled: false, m2: "", verfkleur: "" },
-                    plafond: { enabled: false, m2: "", verfkleur: "" },
-                    plinten: { enabled: false, m1: "", verfkleur: "" },
-                    lijstwerk: { enabled: false, m1: "", verfkleur: "" },
-                    kozijnen: { enabled: false, m1: "", verfkleur: "" },
-                    deuren: { enabled: false, aantal: "", verfkleur: "" },
-                  }
-                })
-              }}
-              variant="outline"
-              className="w-full h-12 font-semibold"
-            >
-              Nieuwe Prijsindicatie Maken
-            </Button>
-
-            <Button 
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-12 text-base"
-              asChild
-            >
-              <a 
-                href="https://calendly.com/budgetgroep/30min?month=2025-11"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                📞 Plan Gratis Adviesgesprek
-              </a>
-            </Button>
           </div>
 
           {/* AI Preview Sectie (als er previews zijn gegenereerd) */}
           {analysisResults.length > 0 && (
-            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 border-2 border-green-200">
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-6 border-2 border-green-200">
               <div className="flex items-center gap-2 mb-4">
                 <Sparkles className="w-6 h-6 text-green-600" />
-                <h3 className="font-bold text-xl text-foreground">Uw AI Preview</h3>
+                <h3 className="font-bold text-xl text-foreground">✨ Uw AI Preview</h3>
               </div>
               
               <div className="space-y-4">
@@ -1313,6 +1163,185 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
             </div>
           )}
 
+          {/* Prijsindicatie & Opbouw */}
+          {priceRange && (
+            <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-6 border-2 border-primary/20 text-left">
+              <h3 className="font-bold text-xl text-foreground mb-4">Uw Prijs Indicatie</h3>
+              <div className="text-center mb-4">
+                <p className="text-5xl font-bold text-primary">
+                    {formatPrice(priceRange.min)}
+            </p>
+          </div>
+
+              {/* Prijsopbouw */}
+              <div className="bg-background rounded-lg p-4 space-y-2">
+                <p className="font-semibold text-sm text-foreground mb-3">Prijsopbouw:</p>
+                
+                {formData.items.muren.enabled && formData.items.muren.m2 && (
+                  <div className="border-b border-border pb-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        Muren: {formData.items.muren.m2} m² × €12,50
+                      </span>
+                      <span className="font-medium text-foreground">
+                        {formatPrice(parseFloat(formData.items.muren.m2) * 12.50)}
+                      </span>
+          </div>
+                    {formData.items.muren.verfkleur && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Kleur: {formData.items.muren.verfkleur}
+                      </p>
+                    )}
+                </div>
+                )}
+                
+                {formData.items.plafond.enabled && formData.items.plafond.m2 && (
+                  <div className="border-b border-border pb-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        Plafond: {formData.items.plafond.m2} m² × €12,50
+                      </span>
+                      <span className="font-medium text-foreground">
+                        {formatPrice(parseFloat(formData.items.plafond.m2) * 12.50)}
+                      </span>
+            </div>
+                    {formData.items.plafond.verfkleur && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Kleur: {formData.items.plafond.verfkleur}
+              </p>
+                    )}
+            </div>
+          )}
+
+                {formData.items.plinten.enabled && formData.items.plinten.m1 && (
+                  <div className="border-b border-border pb-2">
+            <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        Plinten: {formData.items.plinten.m1} m¹ × €7,50
+                      </span>
+                      <span className="font-medium text-foreground">
+                        {formatPrice(parseFloat(formData.items.plinten.m1) * 7.50)}
+                      </span>
+          </div>
+                    {formData.items.plinten.verfkleur && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Kleur: {formData.items.plinten.verfkleur}
+                      </p>
+                    )}
+            </div>
+                )}
+
+                {formData.items.lijstwerk.enabled && formData.items.lijstwerk.m1 && (
+                  <div className="border-b border-border pb-2">
+            <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        Lijstwerk: {formData.items.lijstwerk.m1} m¹ × €7,50
+                      </span>
+                      <span className="font-medium text-foreground">
+                        {formatPrice(parseFloat(formData.items.lijstwerk.m1) * 7.50)}
+                      </span>
+          </div>
+                    {formData.items.lijstwerk.verfkleur && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Kleur: {formData.items.lijstwerk.verfkleur}
+                      </p>
+                    )}
+              </div>
+            )}
+                
+                {formData.items.kozijnen.enabled && formData.items.kozijnen.m1 && (
+                  <div className="border-b border-border pb-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        Kozijnen: {formData.items.kozijnen.m1} m¹ × {formData.projectType === 'buiten' ? '€12,50' : '€7,50'}
+                      </span>
+                      <span className="font-medium text-foreground">
+                        {formatPrice(parseFloat(formData.items.kozijnen.m1) * (formData.projectType === 'buiten' ? 12.50 : 7.50))}
+                      </span>
+              </div>
+                    {formData.items.kozijnen.verfkleur && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Kleur: {formData.items.kozijnen.verfkleur}
+              </p>
+                    )}
+            </div>
+          )}
+
+                {formData.items.deuren.enabled && formData.items.deuren.aantal && (
+                  <div className="border-b border-border pb-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        Deuren: {formData.items.deuren.aantal} × €65
+                      </span>
+                      <span className="font-medium text-foreground">
+                        {formatPrice(parseInt(formData.items.deuren.aantal) * 65)}
+                      </span>
+                    </div>
+                    {formData.items.deuren.verfkleur && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Kleur: {formData.items.deuren.verfkleur}
+                      </p>
+                    )}
+                  </div>
+                )}
+                
+                <div className="flex justify-between text-base font-bold pt-3 border-t-2 border-primary">
+                  <span className="text-foreground">Totaal:</span>
+                  <span className="text-primary text-xl">{formatPrice(priceRange.min)}</span>
+            </div>
+          </div>
+
+              <div className="mt-4 bg-background rounded-lg p-3 space-y-1 text-xs">
+                <p className="text-muted-foreground">✓ Inclusief: Schuren + voorbehandeling</p>
+                <p className="text-muted-foreground">✓ Inclusief: 2 lagen afwerking</p>
+                <p className="text-muted-foreground">✓ Inclusief: A-merk verf</p>
+                <p className="text-muted-foreground mt-2">💡 Meerwerk: Houtrot reparatie vanaf €35/uur + materiaal</p>
+              </div>
+            </div>
+          )}
+
+          {/* Actie Buttons */}
+          <div className="space-y-3">
+          <Button
+            onClick={() => {
+              setPhotos([])
+              setAnalysisResults([])
+              setEmailSent(false)
+              setFormData({
+                projectType: "",
+                naam: "",
+                email: "",
+                telefoon: "",
+                  items: {
+                    muren: { enabled: false, m2: "", verfkleur: "" },
+                    plafond: { enabled: false, m2: "", verfkleur: "" },
+                    plinten: { enabled: false, m1: "", verfkleur: "" },
+                    lijstwerk: { enabled: false, m1: "", verfkleur: "" },
+                    kozijnen: { enabled: false, m1: "", verfkleur: "" },
+                    deuren: { enabled: false, aantal: "", verfkleur: "" },
+                  }
+                })
+              }}
+              variant="outline"
+              className="w-full h-12 font-semibold"
+            >
+              Nieuwe Prijsindicatie Maken
+            </Button>
+
+            <Button 
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-12 text-base"
+              asChild
+            >
+              <a 
+                href="https://calendly.com/budgetgroep/30min?month=2025-11"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                📞 Plan Gratis Adviesgesprek
+              </a>
+          </Button>
+          </div>
+
           <div className="bg-primary/10 rounded-lg p-4 text-center">
             <p className="text-foreground font-bold text-base mb-1">💰 Laagste Prijs Garantie</p>
             <p className="text-foreground text-sm">
@@ -1362,5 +1391,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
         </div>
       )}
     </Card>
+    </div>
   )
 }
