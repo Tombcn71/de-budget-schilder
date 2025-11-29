@@ -194,18 +194,6 @@ Professioneel schilderwerk met laagste prijs garantie
       </div>
     </div>
 
-    ${analysisResults && analysisResults.length > 0 ? `
-    <!-- Voor & Na Preview -->
-    <div style="background-color: #f0fdf4; padding: 16px; border-radius: 6px; border-left: 4px solid #22c55e; margin-bottom: 25px;">
-      <p style="color: #166534; font-size: 14px; font-weight: 600; margin: 0 0 8px 0;">
-        ✨ AI Preview Gegenereerd
-      </p>
-      <p style="color: #166534; font-size: 13px; line-height: 1.6; margin: 0;">
-        We hebben een AI preview gemaakt van hoe uw geschilderde ruimte eruit gaat zien met uw gekozen kleuren. 
-        Bekijk de voor en na foto's hieronder.
-      </p>
-    </div>
-    ` : ''}
     
     <!-- Call to Action -->
     <div style="background-color: #fef3c7; padding: 24px; border-radius: 8px; text-align: center; margin-bottom: 20px; border: 2px solid #fde68a;">

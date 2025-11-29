@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -188,6 +188,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null)
   const [isSendingEmail, setIsSendingEmail] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
+  const scrollPositionRef = useRef<number>(0)
 
   const [formData, setFormData] = useState({
     projectType: "" as ProjectType | "",
@@ -210,10 +211,27 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
     ? calculateMultiItemPrice(formData.projectType, formData.items)
     : null
 
-  // Disabled - we don't need auto scroll anymore
-  // useEffect(() => {
-  //   window.scrollTo({ top: 0, behavior: 'auto' })
-  // }, [currentStep])
+  // Blokkeer ALL scrolling wanneer success scherm wordt getoond
+  useEffect(() => {
+    if (emailSent) {
+      const savedScroll = scrollPositionRef.current
+      
+      // Blokkeer body scroll
+      document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${savedScroll}px`
+      document.body.style.width = '100%'
+      
+      return () => {
+        // Herstel scroll bij cleanup
+        document.body.style.overflow = ''
+        document.body.style.position = ''
+        document.body.style.top = ''
+        document.body.style.width = ''
+        window.scrollTo(0, savedScroll)
+      }
+    }
+  }, [emailSent])
 
   const handleShare = async (imageUrl: string, title: string) => {
     try {
@@ -295,6 +313,10 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
       }
 
       const data = await response.json()
+      
+      // Bewaar scroll positie DIRECT
+      scrollPositionRef.current = window.scrollY
+      
       setEmailSent(true)
       console.log('✅ Prijsindicatie verzonden:', data)
 
@@ -366,8 +388,8 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
           } else {
             const genData = await generateRes.json()
             console.log('✅ AI preview ontvangen, heeft previewImage:', !!genData.previewImage)
-            results.push({
-              url,
+            results.push({ 
+              url, 
               previewUrl: genData.previewImage || url,  // API returned previewImage, niet previewUrl!
             })
           }
@@ -543,10 +565,10 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                   </Select>
                                 </>
                               )}
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                    </div>
+                  </div>
+              </div>
+            )}
 
                       {/* Plafond */}
                       {(formData.projectType === 'binnen' || formData.projectType === 'binnen_buiten') && (
@@ -569,8 +591,8 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                               <div className="font-semibold text-foreground text-sm">Plafond (m²) - €12,50/m²</div>
                               {formData.items.plafond.enabled && (
                                 <>
-                                  <Input
-                                    type="number"
+                  <Input
+                    type="number"
                                     placeholder="Aantal m²"
                                     value={formData.items.plafond.m2}
                                     onChange={(e) => {
@@ -583,9 +605,9 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                       })
                                     }}
                                     className="bg-background border h-9 text-sm"
-                                    min="1"
-                                  />
-                                  <Select
+                    min="1"
+                  />
+                  <Select
                                     value={formData.items.plafond.verfkleur}
                                     onValueChange={(value) => {
                                       setFormData({
@@ -599,24 +621,24 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                   >
                                     <SelectTrigger className="bg-background border h-9 text-sm">
                                       <SelectValue placeholder="Kies verfkleur" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {VERFKLEUREN.map((kleur) => (
-                                        <SelectItem key={kleur.value} value={kleur.value}>
-                                          <div className="flex items-center gap-2">
-                                            <div 
+                    </SelectTrigger>
+                    <SelectContent>
+                      {VERFKLEUREN.map((kleur) => (
+                        <SelectItem key={kleur.value} value={kleur.value}>
+                          <div className="flex items-center gap-2">
+                            <div 
                                               className="w-3 h-3 rounded border border-gray-300" 
-                                              style={{ backgroundColor: kleur.hex }}
-                                            />
+                              style={{ backgroundColor: kleur.hex }}
+                            />
                                             <span className="text-xs">{kleur.label}</span>
-                                          </div>
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                                 </>
                               )}
-                            </div>
+                </div>
                           </div>
                         </div>
                       )}
@@ -625,7 +647,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                       {(formData.projectType === 'binnen' || formData.projectType === 'binnen_buiten') && (
                         <div className={`p-3 border-2 rounded-lg ${formData.items.plinten.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
                           <div className="flex items-start gap-3">
-                            <Checkbox 
+                    <Checkbox
                               checked={formData.items.plinten.enabled}
                               onCheckedChange={(checked) => {
                                 setFormData({
@@ -682,7 +704,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                               style={{ backgroundColor: kleur.hex }}
                                             />
                                             <span className="text-xs">{kleur.label}</span>
-                                          </div>
+                  </div>
                                         </SelectItem>
                                       ))}
                                     </SelectContent>
@@ -698,7 +720,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                       {(formData.projectType === 'binnen' || formData.projectType === 'binnen_buiten') && (
                         <div className={`p-3 border-2 rounded-lg ${formData.items.lijstwerk.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
                           <div className="flex items-start gap-3">
-                            <Checkbox 
+                    <Checkbox
                               checked={formData.items.lijstwerk.enabled}
                               onCheckedChange={(checked) => {
                                 setFormData({
@@ -762,8 +784,8 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                   </Select>
                                 </>
                               )}
-                            </div>
-                    </div>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -900,7 +922,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                               style={{ backgroundColor: kleur.hex }}
                             />
                                           <span className="text-xs">{kleur.label}</span>
-                          </div>
+            </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -978,30 +1000,30 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   </div>
                 )}
 
-                {/* AI Preview Upload Sectie */}
+          {/* AI Preview Upload Sectie */}
                 {formData.naam && formData.email && (
                   <div className="space-y-4 pt-4 border-t border-border">
                     <div className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-lg p-4">
-                      <div className="flex items-start gap-2 mb-3">
+              <div className="flex items-start gap-2 mb-3">
                         <Sparkles className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                        <div>
-                          <h3 className="font-semibold text-base text-foreground mb-1">
+                <div>
+                  <h3 className="font-semibold text-base text-foreground mb-1">
                             🎨 Gratis AI Preview (Optioneel)
-                          </h3>
-                          <p className="text-xs text-muted-foreground">
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
                             Wilt u zien hoe het eruit gaat zien? Upload foto's van uw ruimte en ontvang automatisch een AI preview in uw gekozen kleuren!
-                          </p>
-                        </div>
-                      </div>
+                  </p>
+                </div>
+              </div>
 
                       <div className="space-y-3">
-                        <PhotoUpload 
-                          onPhotosChange={setPhotos}
-                          maxPhotos={5}
-                          minPhotos={0}
-                        />
-                        
-                        {photos.length > 0 && (
+                  <PhotoUpload 
+                    onPhotosChange={setPhotos}
+                    maxPhotos={5}
+                    minPhotos={0}
+                  />
+
+                {photos.length > 0 && (
                           <div className="bg-white rounded-lg p-3 border border-green-300">
                             <p className="text-xs text-green-700 font-medium">
                               ✨ {photos.length} foto{photos.length > 1 ? "'s" : ""} geselecteerd - AI preview wordt automatisch gegenereerd bij verzenden
@@ -1016,27 +1038,27 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
             )}
 
             <div className="flex gap-2 pt-2 sm:pt-3">
-                <Button
+                  <Button
                   type="button"
                 onClick={handleSubmitQuote}
                 disabled={isSendingEmail || isAnalyzing || !formData.naam || !formData.email || !priceRange}
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-12 text-base disabled:opacity-50"
               >
                 {isSendingEmail || isAnalyzing ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     {isAnalyzing ? 'AI Preview Genereren...' : 'Verzenden...'}
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-4 h-4 mr-2" />
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4 mr-2" />
                     {photos.length > 0 
                       ? `Verzenden met AI Preview (${photos.length} foto's)` 
                       : 'Ontvang Prijsindicatie per Email'}
-                  </>
-                )}
-              </Button>
-            </div>
+                      </>
+                    )}
+                  </Button>
+              </div>
           </form>
         </>
       ) : (
@@ -1055,7 +1077,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                 ? 'U ontvangt uw prijsindicatie + gratis AI preview per email'
                 : 'U ontvangt uw prijsindicatie per email'}
             </p>
-          </div>
+            </div>
 
           {/* Prijsindicatie & Opbouw */}
           {priceRange && (
@@ -1063,9 +1085,9 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
               <h3 className="font-bold text-xl text-foreground mb-4">Uw Prijs Indicatie</h3>
               <div className="text-center mb-4">
                 <p className="text-5xl font-bold text-primary">
-                  {formatPrice(priceRange.min)}
-                </p>
-              </div>
+                    {formatPrice(priceRange.min)}
+                  </p>
+                </div>
               
               {/* Prijsopbouw */}
               <div className="bg-background rounded-lg p-4 space-y-2">
@@ -1079,7 +1101,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                     <span className="font-medium text-foreground">
                       {formatPrice(parseFloat(formData.items.muren.m2) * 12.50)}
                     </span>
-                  </div>
+                </div>
                 )}
                 
                 {formData.items.plafond.enabled && formData.items.plafond.m2 && (
@@ -1090,7 +1112,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                     <span className="font-medium text-foreground">
                       {formatPrice(parseFloat(formData.items.plafond.m2) * 12.50)}
                     </span>
-                  </div>
+              </div>
                 )}
                 
                 {formData.items.plinten.enabled && formData.items.plinten.m1 && (
@@ -1101,9 +1123,9 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                     <span className="font-medium text-foreground">
                       {formatPrice(parseFloat(formData.items.plinten.m1) * 7.50)}
                     </span>
-                  </div>
-                )}
-                
+            </div>
+          )}
+
                 {formData.items.lijstwerk.enabled && formData.items.lijstwerk.m1 && (
                   <div className="flex justify-between text-sm border-b border-border pb-2">
                     <span className="text-muted-foreground">
@@ -1112,7 +1134,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                     <span className="font-medium text-foreground">
                       {formatPrice(parseFloat(formData.items.lijstwerk.m1) * 7.50)}
                     </span>
-                  </div>
+            </div>
                 )}
                 
                 {formData.items.kozijnen.enabled && formData.items.kozijnen.m1 && (
@@ -1123,7 +1145,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                     <span className="font-medium text-foreground">
                       {formatPrice(parseFloat(formData.items.kozijnen.m1) * (formData.projectType === 'buiten' ? 12.50 : 7.50))}
                     </span>
-                  </div>
+            </div>
                 )}
                 
                 {formData.items.deuren.enabled && formData.items.deuren.aantal && (
@@ -1134,14 +1156,14 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                     <span className="font-medium text-foreground">
                       {formatPrice(parseInt(formData.items.deuren.aantal) * 65)}
                     </span>
-                  </div>
-                )}
+              </div>
+            )}
                 
                 <div className="flex justify-between text-base font-bold pt-3 border-t-2 border-primary">
                   <span className="text-foreground">Totaal:</span>
                   <span className="text-primary text-xl">{formatPrice(priceRange.min)}</span>
-                </div>
-              </div>
+            </div>
+          </div>
 
               <div className="mt-4 bg-background rounded-lg p-3 space-y-1 text-xs">
                 <p className="text-muted-foreground">✓ Inclusief: Schuren + voorbehandeling</p>
