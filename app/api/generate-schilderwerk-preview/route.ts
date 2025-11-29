@@ -18,6 +18,14 @@ interface SchilderwerkSpecs {
   verfkleur: string;
   projectType: string;
   schilderwerkType: string;
+  items?: {
+    muren?: { enabled: boolean; m2?: string; verfkleur?: string };
+    plafond?: { enabled: boolean; m2?: string; verfkleur?: string };
+    plinten?: { enabled: boolean; m1?: string; verfkleur?: string };
+    lijstwerk?: { enabled: boolean; m1?: string; verfkleur?: string };
+    kozijnen?: { enabled: boolean; m1?: string; verfkleur?: string };
+    deuren?: { enabled: boolean; aantal?: string; verfkleur?: string };
+  };
 }
 
 export async function POST(request: Request) {
@@ -177,44 +185,73 @@ function buildSchilderwerkPrompt(specs: SchilderwerkSpecs): string {
 
   const kleurDesc = kleurDescriptions[specs.verfkleur] || specs.verfkleur;
   const projectDesc = projectTypeDescriptions[specs.projectType] || specs.projectType;
-  const werkDesc = schilderwerkTypeDescriptions[specs.schilderwerkType] || specs.schilderwerkType;
+  
+  // Determine which items to paint based on specs.items (new multi-item system)
+  const items = specs.items || {};
+  const paintMuren = items.muren?.enabled || specs.schilderwerkType === 'muren' || specs.schilderwerkType === 'volledige_kamer';
+  const paintPlafond = items.plafond?.enabled || specs.schilderwerkType === 'plafond' || specs.schilderwerkType === 'volledige_kamer';
+  const paintKozijnen = items.kozijnen?.enabled || specs.schilderwerkType === 'kozijnen';
+  const paintDeuren = items.deuren?.enabled || specs.schilderwerkType === 'deuren';
+  const paintPlinten = items.plinten?.enabled || specs.schilderwerkType === 'plinten' || specs.schilderwerkType === 'volledige_kamer';
+  const paintLijstwerk = items.lijstwerk?.enabled || specs.schilderwerkType === 'lijstwerk' || specs.schilderwerkType === 'volledige_kamer';
+  const paintGevel = specs.schilderwerkType === 'gevel';
 
-  return `Edit this photo: repaint the ${werkDesc} in ${kleurDesc} color for ${projectDesc}.
+  // Build list of what's being painted
+  const paintingList: string[] = [];
+  if (paintMuren) paintingList.push('muren');
+  if (paintPlafond) paintingList.push('plafond');
+  if (paintKozijnen) paintingList.push('kozijnen');
+  if (paintDeuren) paintingList.push('deuren');
+  if (paintPlinten) paintingList.push('plinten');
+  if (paintLijstwerk) paintingList.push('lijstwerk');
+  if (paintGevel) paintingList.push('gevel');
+  
+  const werkDesc = paintingList.join(', ') || 'selected surfaces';
+
+  return `Edit this photo: repaint the ${werkDesc} in their specified colors for ${projectDesc}.
+
+⚠️ CRITICAL INSTRUCTIONS:
+${paintPlafond ? `- The CEILING must be completely repainted - this is mandatory!` : ''}
+${paintMuren ? `- The WALLS must be completely repainted - this is mandatory!` : ''}
+${!paintPlafond && paintMuren ? `- DO NOT change the ceiling color - only paint walls!` : ''}
+${!paintMuren && paintPlafond ? `- DO NOT change the wall colors - only paint ceiling!` : ''}
 
 🎨 PAINTING TRANSFORMATION RULES:
 
 STEP 1 - IDENTIFY WHAT TO PAINT:
-${specs.schilderwerkType === 'muren' || specs.schilderwerkType === 'volledige_kamer' ? `
+${paintMuren ? `
 - Paint ALL visible walls/wall surfaces
-- Apply ${kleurDesc} paint color evenly
+- Apply ${items.muren?.verfkleur ? kleurDescriptions[items.muren.verfkleur] || items.muren.verfkleur : kleurDesc} paint color evenly
 - Keep wall texture (smooth/textured) exactly the same
 - Paint goes from floor to ceiling
 ` : ''}
-${specs.schilderwerkType === 'plafond' || specs.schilderwerkType === 'volledige_kamer' ? `
-- Paint the entire ceiling surface
-- Apply ${kleurDesc} paint color evenly
-- Keep ceiling texture exactly the same
+${paintPlafond ? `
+- Paint the ENTIRE CEILING surface (this is CRITICAL)
+- Apply ${items.plafond?.verfkleur ? kleurDescriptions[items.plafond.verfkleur] || items.plafond.verfkleur : kleurDesc} paint color to ALL ceiling areas
+- Keep ceiling texture exactly the same (smooth/textured/popcorn)
+- Paint EVERY visible part of the ceiling from wall to wall
+- DO NOT miss any ceiling sections
 ` : ''}
-${specs.schilderwerkType === 'kozijnen' ? `
+${paintKozijnen ? `
 - Paint ONLY the window frames/kozijnen
-- Apply ${kleurDesc} paint to all frame parts
+- Apply ${items.kozijnen?.verfkleur ? kleurDescriptions[items.kozijnen.verfkleur] || items.kozijnen.verfkleur : kleurDesc} paint to all frame parts
 - Keep glass clear and transparent
 - DO NOT paint the glass itself
 ` : ''}
-${specs.schilderwerkType === 'deuren' ? `
+${paintDeuren ? `
 - Paint ONLY the doors
-- Apply ${kleurDesc} paint to entire door surface
+- Apply ${items.deuren?.verfkleur ? kleurDescriptions[items.deuren.verfkleur] || items.deuren.verfkleur : kleurDesc} paint to entire door surface
 - Keep door handles/hardware unpainted (metal color)
 ` : ''}
-${specs.schilderwerkType === 'plinten' || specs.schilderwerkType === 'volledige_kamer' ? `
+${paintPlinten ? `
 - Paint all baseboards/plinten
-- Apply ${kleurDesc} paint evenly
+- Apply ${items.plinten?.verfkleur ? kleurDescriptions[items.plinten.verfkleur] || items.plinten.verfkleur : kleurDesc} paint evenly
 ` : ''}
-${specs.schilderwerkType === 'lijstwerk' || specs.schilderwerkType === 'volledige_kamer' ? `
+${paintLijstwerk ? `
 - Paint all crown molding/lijstwerk
-- Apply ${kleurDesc} paint evenly
+- Apply ${items.lijstwerk?.verfkleur ? kleurDescriptions[items.lijstwerk.verfkleur] || items.lijstwerk.verfkleur : kleurDesc} paint evenly
 ` : ''}
-${specs.schilderwerkType === 'gevel' ? `
+${paintGevel ? `
 - Paint the exterior facade/gevel
 - Apply ${kleurDesc} paint to entire outside wall surface
 - Keep windows, doors, and trim as they are
@@ -229,14 +266,18 @@ STEP 2 - APPLY PAINT PROFESSIONALLY:
 
 STEP 3 - PRESERVE EVERYTHING ELSE 100%:
 - DO NOT paint areas that shouldn't be painted:
-  ${specs.schilderwerkType !== 'gevel' ? '* Keep ceiling original if only walls are being painted' : ''}
-  ${specs.schilderwerkType !== 'muren' && specs.schilderwerkType !== 'volledige_kamer' ? '* Keep walls original if not specified to paint them' : ''}
+  ${!paintPlafond ? '* Keep ceiling COMPLETELY ORIGINAL - do not change ceiling color at all' : ''}
+  ${!paintMuren ? '* Keep walls COMPLETELY ORIGINAL - do not change wall color at all' : ''}
+  ${!paintKozijnen ? '* Keep window frames in their original color' : ''}
+  ${!paintDeuren ? '* Keep doors in their original color' : ''}
+  ${!paintPlinten ? '* Keep baseboards/plinten in their original color' : ''}
+  ${!paintLijstwerk ? '* Keep crown molding/lijstwerk in their original color' : ''}
   * Keep floors exactly the same
   * Keep furniture exactly the same (color, position, everything)
   * Keep decorations, pictures, lighting exactly the same
   * Keep windows and glass transparent and clean
   * Keep door handles, hinges, metal parts unpainted
-  ${specs.schilderwerkType === 'gevel' ? '* Keep roof, windows, doors in original colors' : ''}
+  ${paintGevel ? '* Keep roof, windows, doors in original colors' : ''}
 
 - Preserve all architectural details:
   * Same lighting and shadows
@@ -253,11 +294,13 @@ CRITICAL RULES:
 ✓ Keep room atmosphere and lighting the same
 
 FINAL QUALITY CHECK:
-✓ Is ONLY the ${werkDesc} painted in ${kleurDesc}? (must be YES)
+✓ Is ONLY the ${werkDesc} painted in the specified colors? (must be YES)
+${paintPlafond ? '✓ Is the ENTIRE ceiling painted? (must be YES)' : ''}
+${paintMuren ? '✓ Are ALL walls painted? (must be YES)' : ''}
 ✓ Is everything else unchanged? (must be YES)
 ✓ Does the paint look professional and even? (must be YES)
 ✓ Are the RAL color specifications correct? (must be YES)
 
-RESULT: Professional ${projectDesc} with ${werkDesc} freshly painted in ${kleurDesc}. Everything else perfectly preserved from original photo.`;
+RESULT: Professional ${projectDesc} with ${werkDesc} freshly painted. Everything else perfectly preserved from original photo.`;
 }
 
