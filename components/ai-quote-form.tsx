@@ -429,7 +429,8 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-6 h-6 lg:w-7 lg:h-7 text-primary" />
             <h2 className="font-bold text-base sm:text-lg lg:text-xl text-foreground">
-              Direct een prijsindicatie van uw schilderwerk.
+              <span className="sm:hidden">Directe prijs voor uw schilderwerk</span>
+              <span className="hidden sm:inline">Direct een prijsindicatie van uw schilderwerk</span>
             </h2>
           </div>
           <p className="text-xs sm:text-sm italic text-muted-foreground mb-3">
@@ -950,13 +951,13 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
 
                 {/* Prijs Indicatie */}
                 {priceRange && (
-                  <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-6 border-2 border-primary/20">
-                    <h3 className="font-bold text-xl text-foreground mb-3">Uw Instant Prijs Indicatie</h3>
+                  <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-4 sm:p-6 border-2 border-primary/20">
+                    <h3 className="font-bold text-lg sm:text-xl text-foreground mb-3">Uw Directe Prijs Indicatie</h3>
                     <div className="text-center mb-4">
-                      <p className="text-4xl font-bold text-primary">
+                      <p className="text-3xl sm:text-4xl font-bold text-primary">
                         {formatPrice(priceRange.min)}
                       </p>
-                      <p className="text-sm text-muted-foreground mt-1">Inclusief alle geselecteerde items</p>
+                      <p className="text-xs sm:text-sm text-muted-foreground mt-1">Inclusief alle geselecteerde items</p>
                     </div>
                     <div className="bg-background rounded-lg p-3 space-y-1 text-left text-xs">
                       <p className="text-muted-foreground font-semibold mb-2">Inbegrepen:</p>
@@ -1202,12 +1203,12 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
 
           {/* Prijsindicatie & Opbouw */}
           {priceRange && (
-            <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-6 border-2 border-primary/20 text-left">
-              <h3 className="font-bold text-xl text-foreground mb-4">Uw Prijs Indicatie</h3>
+            <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-4 sm:p-6 border-2 border-primary/20 text-left">
+              <h3 className="font-bold text-lg sm:text-xl text-foreground mb-4">Uw Directe Prijs Indicatie</h3>
               <div className="text-center mb-4">
-                <p className="text-5xl font-bold text-primary">
+                <p className="text-3xl sm:text-4xl lg:text-5xl font-bold text-primary">
                     {formatPrice(priceRange.min)}
-            </p>
+                </p>
           </div>
 
               {/* Prijsopbouw */}
@@ -1322,9 +1323,9 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   </div>
                 )}
                 
-                <div className="flex justify-between text-base font-bold pt-3 border-t-2 border-primary">
+                <div className="flex justify-between text-sm sm:text-base font-bold pt-3 border-t-2 border-primary">
                   <span className="text-foreground">Totaal:</span>
-                  <span className="text-primary text-xl">{formatPrice(priceRange.min)}</span>
+                  <span className="text-primary text-lg sm:text-xl">{formatPrice(priceRange.min)}</span>
             </div>
           </div>
 
