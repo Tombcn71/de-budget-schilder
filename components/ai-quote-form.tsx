@@ -564,21 +564,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                         ))}
                                       </SelectContent>
                                     </Select>
-                                    <Input
-                                      type="text"
-                                      placeholder="Of eigen kleur invullen (bijv. 'lichtblauw' of 'RAL 9001')"
-                                      value={!VERFKLEUREN.find(k => k.value === formData.items.muren.verfkleur) ? formData.items.muren.verfkleur : ''}
-                                      onChange={(e) => {
-                                        setFormData({
-                                          ...formData,
-                                          items: {
-                                            ...formData.items,
-                                            muren: { ...formData.items.muren, verfkleur: e.target.value }
-                                          }
-                                        })
-                                      }}
-                                      className="bg-background border h-9 text-xs"
-                                    />
                   </div>
                                 </>
                 )}
@@ -654,21 +639,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
-                                    <Input
-                                      type="text"
-                                      placeholder="Of eigen kleur invullen"
-                                      value={!VERFKLEUREN.find(k => k.value === formData.items.plafond.verfkleur) ? formData.items.plafond.verfkleur : ''}
-                                      onChange={(e) => {
-                                        setFormData({
-                                          ...formData,
-                                          items: {
-                                            ...formData.items,
-                                            plafond: { ...formData.items.plafond, verfkleur: e.target.value }
-                                          }
-                                        })
-                                      }}
-                                      className="bg-background border h-9 text-xs"
-                                    />
                   </div>
                                 </>
                 )}
@@ -744,21 +714,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
-                                    <Input
-                                      type="text"
-                                      placeholder="Of eigen kleur invullen"
-                                      value={!VERFKLEUREN.find(k => k.value === formData.items.plinten.verfkleur) ? formData.items.plinten.verfkleur : ''}
-                                      onChange={(e) => {
-                                        setFormData({
-                                          ...formData,
-                                          items: {
-                                            ...formData.items,
-                                            plinten: { ...formData.items.plinten, verfkleur: e.target.value }
-                                          }
-                                        })
-                                      }}
-                                      className="bg-background border h-9 text-xs"
-                                    />
                 </div>
                                 </>
                               )}
@@ -834,21 +789,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                         ))}
                                       </SelectContent>
                                     </Select>
-                                    <Input
-                                      type="text"
-                                      placeholder="Of eigen kleur invullen"
-                                      value={!VERFKLEUREN.find(k => k.value === formData.items.lijstwerk.verfkleur) ? formData.items.lijstwerk.verfkleur : ''}
-                                      onChange={(e) => {
-                                        setFormData({
-                                          ...formData,
-                                          items: {
-                                            ...formData.items,
-                                            lijstwerk: { ...formData.items.lijstwerk, verfkleur: e.target.value }
-                                          }
-                                        })
-                                      }}
-                                      className="bg-background border h-9 text-xs"
-                                    />
                                   </div>
                                 </>
                               )}
@@ -925,21 +865,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                       ))}
                                     </SelectContent>
                                   </Select>
-                                  <Input
-                                    type="text"
-                                    placeholder="Of eigen kleur invullen"
-                                    value={!VERFKLEUREN.find(k => k.value === formData.items.kozijnen.verfkleur) ? formData.items.kozijnen.verfkleur : ''}
-                                    onChange={(e) => {
-                                      setFormData({
-                                        ...formData,
-                                        items: {
-                                          ...formData.items,
-                                          kozijnen: { ...formData.items.kozijnen, verfkleur: e.target.value }
-                                        }
-                                      })
-                                    }}
-                                    className="bg-background border h-9 text-xs"
-                                  />
                                 </div>
                               </>
                             )}
@@ -1013,21 +938,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                         ))}
                       </SelectContent>
                     </Select>
-                    <Input
-                      type="text"
-                      placeholder="Of eigen kleur invullen"
-                      value={!VERFKLEUREN.find(k => k.value === formData.items.deuren.verfkleur) ? formData.items.deuren.verfkleur : ''}
-                      onChange={(e) => {
-                        setFormData({
-                          ...formData,
-                          items: {
-                            ...formData.items,
-                            deuren: { ...formData.items.deuren, verfkleur: e.target.value }
-                          }
-                        })
-                      }}
-                      className="bg-background border h-9 text-xs"
-                    />
                   </div>
                               </>
                             )}
