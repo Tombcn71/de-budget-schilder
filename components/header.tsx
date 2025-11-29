@@ -32,17 +32,12 @@ export function Header() {
           <div className="flex items-center gap-4 lg:gap-6">
             <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold text-sm lg:text-base" asChild>
               <a 
-                href="" 
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (typeof window !== 'undefined' && (window as any).Calendly) {
-                    (window as any).Calendly.initPopupWidget({url: 'https://calendly.com/tbvanreijn'});
-                  }
-                  return false;
-                }}
+                href="https://calendly.com/budgetgroep/30min?month=2025-11" 
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <span className="sm:hidden">Gratis Offerte</span>
-                <span className="hidden sm:inline">Gratis Offerte Aanvragen</span>
+                <span className="sm:hidden">Gratis Adviesgesprek</span>
+                <span className="hidden sm:inline">Gratis Adviesgesprek</span>
               </a>
             </Button>
           </div>

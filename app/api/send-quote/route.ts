@@ -37,26 +37,36 @@ export async function POST(request: Request) {
     }
     const projectTypeLabel = projectTypeLabels[formData.projectType] || formData.projectType
 
-    // Format schilderwerkType
-    const schilderwerkTypeLabels: Record<string, string> = {
-      'muren-binnen': 'Muren binnen',
-      'plafond-binnen': 'Plafond binnen',
-      'kozijnen-binnen': 'Kozijnen binnen',
-      'kozijnen-buiten': 'Kozijnen buiten',
-      'gevel-buiten': 'Gevel buiten',
-      'deuren': 'Deuren',
-      'plinten': 'Plinten',
-      'lijstwerk': 'Lijstwerk'
+    // Build items list from multi-item form
+    const items = formData.items || {}
+    const itemsText: string[] = []
+    const itemsHTML: string[] = []
+    
+    if (items.muren?.enabled && items.muren.m2) {
+      itemsText.push(`- Muren: ${items.muren.m2} m² (${items.muren.verfkleur || 'geen kleur gekozen'})`)
+      itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Muren</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.muren.m2} m² - ${items.muren.verfkleur || 'geen kleur'}</td></tr>`)
     }
-    const schilderwerkTypeLabel = schilderwerkTypeLabels[formData.schilderwerkType] || formData.schilderwerkType
+    if (items.plafond?.enabled && items.plafond.m2) {
+      itemsText.push(`- Plafond: ${items.plafond.m2} m² (${items.plafond.verfkleur || 'geen kleur gekozen'})`)
+      itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Plafond</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.plafond.m2} m² - ${items.plafond.verfkleur || 'geen kleur'}</td></tr>`)
+    }
+    if (items.plinten?.enabled && items.plinten.m1) {
+      itemsText.push(`- Plinten: ${items.plinten.m1} m¹ (${items.plinten.verfkleur || 'geen kleur gekozen'})`)
+      itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Plinten</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.plinten.m1} m¹ - ${items.plinten.verfkleur || 'geen kleur'}</td></tr>`)
+    }
+    if (items.lijstwerk?.enabled && items.lijstwerk.m1) {
+      itemsText.push(`- Lijstwerk: ${items.lijstwerk.m1} m¹ (${items.lijstwerk.verfkleur || 'geen kleur gekozen'})`)
+      itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Lijstwerk</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.lijstwerk.m1} m¹ - ${items.lijstwerk.verfkleur || 'geen kleur'}</td></tr>`)
+    }
+    if (items.kozijnen?.enabled && items.kozijnen.m1) {
+      itemsText.push(`- Kozijnen: ${items.kozijnen.m1} m¹ (${items.kozijnen.verfkleur || 'geen kleur gekozen'})`)
+      itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Kozijnen</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.kozijnen.m1} m¹ - ${items.kozijnen.verfkleur || 'geen kleur'}</td></tr>`)
+    }
+    if (items.deuren?.enabled && items.deuren.aantal) {
+      itemsText.push(`- Deuren: ${items.deuren.aantal} stuks (${items.deuren.verfkleur || 'geen kleur gekozen'})`)
+      itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Deuren</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.deuren.aantal} stuks - ${items.deuren.verfkleur || 'geen kleur'}</td></tr>`)
+    }
 
-    // Determine unit (m² or m¹)
-    const isLinearMeter = ['kozijnen-binnen', 'kozijnen-buiten', 'deuren', 'plinten', 'lijstwerk'].includes(formData.schilderwerkType)
-    const unitLabel = isLinearMeter ? 'strekkende meter' : 'vierkante meter'
-    const unitSymbol = isLinearMeter ? 'm¹' : 'm²'
-
-    // Calculate extras
-    const voorbereidingIncluded = formData.voorbereiding !== false
     const aantalLagen = formData.aantalLagen || 2
 
     // Create plain text version
@@ -74,19 +84,18 @@ ${formData.telefoon ? `Telefoon: ${formData.telefoon}` : ''}
 SCHILDERWERK GEGEVENS
 ---------------------
 Project type: ${projectTypeLabel}
-Werkzaamheden: ${schilderwerkTypeLabel}
-Oppervlakte: ${formData.oppervlakte} ${unitSymbol}
-Verfkleur: ${formData.verfkleur || 'Niet gespecificeerd'}
+Werkzaamheden:
+${itemsText.join('\n')}
 Aantal lagen: ${aantalLagen}
-${voorbereidingIncluded ? 'Inclusief: Voorbereiding (schuren, plamuren, etc.)' : ''}
+Inclusief: Voorbereiding (schuren + 2 lagen afwerking)
 
 PRIJSOVERZICHT
 --------------
-${priceRange ? `Prijsindicatie: EUR ${priceRange.min.toLocaleString('nl-NL')} - EUR ${priceRange.max.toLocaleString('nl-NL')}` : 'Prijsindicatie: Op aanvraag'}
+${priceRange ? `Prijsindicatie: EUR ${priceRange.min.toLocaleString('nl-NL')}` : 'Prijsindicatie: Op aanvraag'}
 
 VOLGENDE STAPPEN
 ----------------
-Plan uw gratis adviesgesprek: https://calendly.com/budgetgroep/30min
+Plan uw gratis adviesgesprek: https://calendly.com/budgetgroep/30min?month=2025-11
 
 Vragen? Bel ons of reply op deze email.
 
@@ -144,24 +153,16 @@ Professioneel schilderwerk met laagste prijs garantie
           <td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${projectTypeLabel}</td>
         </tr>
         <tr>
-          <td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Werkzaamheden</td>
-          <td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${schilderwerkTypeLabel}</td>
+          <td style="padding: 6px 0; color: #6b7280; font-size: 14px;" colspan="2"><strong>Werkzaamheden:</strong></td>
         </tr>
-        <tr>
-          <td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Oppervlakte</td>
-          <td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${formData.oppervlakte} ${unitSymbol}</td>
-        </tr>
-        <tr>
-          <td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Verfkleur</td>
-          <td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${formData.verfkleur || 'Niet gespecificeerd'}</td>
-        </tr>
+        ${itemsHTML.join('\n        ')}
         <tr>
           <td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Aantal lagen</td>
           <td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${aantalLagen}</td>
         </tr>
         <tr>
           <td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Voorbereiding</td>
-          <td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${voorbereidingIncluded ? '✅ Ja (schuren, plamuren)' : '❌ Nee'}</td>
+          <td style="padding: 6px 0; color: #1f2937; font-size: 14px;">✅ Ja (schuren + 2 lagen afwerking)</td>
         </tr>
       </table>
     </div>
@@ -172,16 +173,14 @@ Professioneel schilderwerk met laagste prijs garantie
       <div style="background-color: #fef3c7; padding: 20px; border-radius: 6px; border: 1px solid #fde68a;">
         ${priceRange ? `
         <p style="margin: 0 0 8px 0; color: #92400e; font-size: 14px;">Uw schilderwerk kost ongeveer:</p>
-        <p style="color: #78350f; font-size: 24px; font-weight: bold; margin: 0;">
-          €${priceRange.min.toLocaleString('nl-NL')} - €${priceRange.max.toLocaleString('nl-NL')}
+        <p style="color: #78350f; font-size: 32px; font-weight: bold; margin: 0;">
+          €${priceRange.min.toLocaleString('nl-NL')}
         </p>
         <p style="margin: 8px 0 0 0; color: #92400e; font-size: 13px;">
-          ${voorbereidingIncluded ? '✅ Inclusief voorbereiding<br>' : ''}
-          ✅ Inclusief ${aantalLagen} lagen verfwerk
+          ✅ Inclusief schuren + ${aantalLagen} lagen afwerking
         </p>
         ` : `
         <p style="margin: 0; color: #92400e; font-size: 16px; font-weight: 600;">Prijsindicatie op aanvraag</p>
-        <p style="margin: 8px 0 0 0; color: #92400e; font-size: 13px;">Bekijk uw offerte in deze email</p>
         `}
       </div>
     </div>
@@ -193,8 +192,8 @@ Professioneel schilderwerk met laagste prijs garantie
         ✨ AI Preview Gegenereerd
       </p>
       <p style="color: #166534; font-size: 13px; line-height: 1.6; margin: 0;">
-        We hebben een AI preview gemaakt van hoe uw geschilderde ruimte eruit gaat zien met de kleur ${formData.verfkleur}. 
-        Bekijk de voor en na foto's in uw dashboard of vraag om deze per email.
+        We hebben een AI preview gemaakt van hoe uw geschilderde ruimte eruit gaat zien met uw gekozen kleuren. 
+        Bekijk de voor en na foto's hieronder.
       </p>
     </div>
     ` : ''}
@@ -203,7 +202,7 @@ Professioneel schilderwerk met laagste prijs garantie
     <div style="background-color: #fef3c7; padding: 24px; border-radius: 8px; text-align: center; margin-bottom: 20px; border: 2px solid #fde68a;">
       <p style="color: #92400e; font-size: 16px; font-weight: 600; margin: 0 0 16px 0;">Volgende stap: Plan uw gratis adviesgesprek</p>
       <div style="margin-bottom: 16px;">
-        <a href="https://calendly.com/budgetgroep/30min" style="display: inline-block; background-color: #f97316; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">
+        <a href="https://calendly.com/budgetgroep/30min?month=2025-11" style="display: inline-block; background-color: #f97316; color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">
           Plan Adviesgesprek
         </a>
       </div>
@@ -246,7 +245,7 @@ Professioneel schilderwerk met laagste prijs garantie
     <!-- Alert Header -->
     <div style="background-color: #f97316; padding: 20px; text-align: center;">
       <h1 style="color: #ffffff; font-size: 24px; margin: 0 0 8px 0;">🔔 NIEUWE SCHILDERWERK AANVRAAG</h1>
-      <p style="color: #ffffff; font-size: 18px; margin: 0; font-weight: 600;">${formData.naam}${priceRange ? ` • €${priceRange.min.toLocaleString('nl-NL')} - €${priceRange.max.toLocaleString('nl-NL')}` : ''}</p>
+      <p style="color: #ffffff; font-size: 18px; margin: 0; font-weight: 600;">${formData.naam}${priceRange ? ` • €${priceRange.min.toLocaleString('nl-NL')}` : ''}</p>
     </div>
     
     <div style="padding: 30px;">
@@ -285,24 +284,16 @@ Professioneel schilderwerk met laagste prijs garantie
           <td style="padding: 8px 0; color: #1f2937; font-size: 14px;">${projectTypeLabel}</td>
         </tr>
         <tr>
-          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Werkzaamheden</td>
-          <td style="padding: 8px 0; color: #1f2937; font-size: 14px;">${schilderwerkTypeLabel}</td>
+          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;" colspan="2"><strong>Werkzaamheden:</strong></td>
         </tr>
-        <tr>
-          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Oppervlakte</td>
-          <td style="padding: 8px 0; color: #1f2937; font-size: 14px;">${formData.oppervlakte} ${unitSymbol}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Verfkleur</td>
-          <td style="padding: 8px 0; color: #1f2937; font-size: 14px;">${formData.verfkleur || 'Niet gespecificeerd'}</td>
-        </tr>
+        ${itemsHTML.join('\n        ')}
         <tr>
           <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Aantal lagen</td>
           <td style="padding: 8px 0; color: #1f2937; font-size: 14px;">${aantalLagen}</td>
         </tr>
         <tr>
           <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Voorbereiding</td>
-          <td style="padding: 8px 0; color: #1f2937; font-size: 14px;">${voorbereidingIncluded ? '✅ Ja (schuren, plamuren)' : '❌ Nee'}</td>
+          <td style="padding: 8px 0; color: #1f2937; font-size: 14px;">✅ Ja (schuren + 2 lagen afwerking)</td>
         </tr>
       </table>
       
@@ -336,8 +327,8 @@ Professioneel schilderwerk met laagste prijs garantie
       <div style="background-color: #fef3c7; padding: 20px; border-radius: 6px; border: 1px solid #fde68a;">
         <table style="width: 100%; border-collapse: collapse;">
           <tr>
-            <td style="padding: 6px 0; color: #78350f; font-size: 18px; font-weight: bold;">Prijsrange</td>
-            <td style="padding: 6px 0; color: #78350f; font-size: 18px; text-align: right; font-weight: bold;">EUR ${priceRange.min.toLocaleString('nl-NL')} - EUR ${priceRange.max.toLocaleString('nl-NL')}</td>
+            <td style="padding: 6px 0; color: #78350f; font-size: 18px; font-weight: bold;">Prijsindicatie</td>
+            <td style="padding: 6px 0; color: #78350f; font-size: 24px; text-align: right; font-weight: bold;">€${priceRange.min.toLocaleString('nl-NL')}</td>
           </tr>
         </table>
       </div>
@@ -379,12 +370,15 @@ Professioneel schilderwerk met laagste prijs garantie
     // ========================================
     // SEND TO BUSINESS
     // ========================================
+    // Build subject line summary
+    const itemsSummary = itemsText.length > 0 ? itemsText[0].replace('- ', '') : 'Diverse werkzaamheden'
+    
     console.log('📧 Verzenden naar bedrijf')
     const { data: businessData, error: businessError } = await resend.emails.send({
       from: 'De Budgetschilder <offerte@debudgetschilder.nl>',
       to: ['budgetgroep.nl@gmail.com'],
       replyTo: formData.email,
-      subject: `Nieuwe Aanvraag - ${formData.naam} - ${schilderwerkTypeLabel} ${formData.oppervlakte}${unitSymbol}${priceRange ? ` - €${priceRange.min.toLocaleString('nl-NL')}-€${priceRange.max.toLocaleString('nl-NL')}` : ''}`,
+      subject: `Nieuwe Aanvraag - ${formData.naam} - ${itemsSummary}${priceRange ? ` - €${priceRange.min.toLocaleString('nl-NL')}` : ''}`,
       html: businessEmail,
       text: textEmail,
     })

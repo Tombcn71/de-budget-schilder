@@ -31,26 +31,26 @@ type MeasurementUnit = 'm2' | 'm1' // m² of strekkende meter
 // Schilderwerk berekend per VIERKANTE METER (m²)
 const PRIJZEN_PER_M2 = {
   binnen: {
-    muren: { min: 12, max: 18 },           // €12-18 per m²
-    plafond: { min: 15, max: 22 },         // €15-22 per m²
-    volledige_kamer: { min: 450, max: 750 } // €450-750 per kamer (flat rate)
+    muren: { min: 12.50, max: 12.50 },           // €12,50 per m² (incl. schuren + 2 lagen)
+    plafond: { min: 12.50, max: 12.50 },         // €12,50 per m² (incl. schuren + 2 lagen)
+    volledige_kamer: { min: 450, max: 750 }      // €450-750 per kamer (flat rate)
   },
   buiten: {
-    gevel: { min: 25, max: 40 },           // €25-40 per m²
+    gevel: { min: 25, max: 40 },                 // €25-40 per m²
   }
 } as const
 
 // Schilderwerk berekend per STREKKENDE METER (m¹)
 const PRIJZEN_PER_M1 = {
   binnen: {
-    kozijnen: { min: 35, max: 55 },        // €35-55 per strekkende meter
-    deuren: { min: 45, max: 75 },          // €45-75 per strekkende meter (omtrek)
-    plinten: { min: 8, max: 15 },          // €8-15 per strekkende meter
-    lijstwerk: { min: 10, max: 18 },       // €10-18 per strekkende meter
+    kozijnen: { min: 7.50, max: 7.50 },          // €7,50 per meter (incl. schuren + 2 lagen)
+    deuren: { min: 65, max: 65 },                // €65 per stuk (incl. schuren + 2 lagen)
+    plinten: { min: 7.50, max: 7.50 },           // €7,50 per strekkende meter
+    lijstwerk: { min: 7.50, max: 7.50 },         // €7,50 per strekkende meter
   },
   buiten: {
-    kozijnen: { min: 45, max: 70 },        // €45-70 per strekkende meter
-    deuren: { min: 55, max: 90 },          // €55-90 per strekkende meter (omtrek)
+    kozijnen: { min: 12.50, max: 12.50 },        // €12,50 per meter (incl. schuren + 2 lagen)
+    deuren: { min: 65, max: 65 },                // €65 per stuk (incl. schuren + 2 lagen)
   }
 } as const
 
@@ -64,6 +64,11 @@ const MEASUREMENT_UNITS: Record<SchilderwerkType, MeasurementUnit> = {
   deuren: 'm1',
   plinten: 'm1',
   lijstwerk: 'm1',
+}
+
+// Helper: formateer prijs naar euro formaat
+const formatPrice = (amount: number): string => {
+  return `€ ${amount.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 // Verfkleuren opties
@@ -84,63 +89,82 @@ const VERFKLEUREN = [
 // CALCULATIE FUNCTIES
 // ============================================================================
 
-function calculatePriceRange(
+function calculateMultiItemPrice(
   projectType: ProjectType,
-  schilderwerkType: SchilderwerkType,
-  oppervlakte: number,
-  extraLagen: boolean
+  items: any
 ): PriceRange | null {
-  if (!oppervlakte || oppervlakte <= 0) return null
+  let totalMin = 0
+  let totalMax = 0
+  let hasItems = false
   
-  let minPrice = 0
-  let maxPrice = 0
-  
-  // Bepaal of we per m² of per strekkende meter rekenen
-  const unit = MEASUREMENT_UNITS[schilderwerkType]
-  
-  if (unit === 'm2') {
-    // Berekening per VIERKANTE METER
-    if (projectType === 'binnen' || projectType === 'binnen_buiten') {
-      const prijzen = PRIJZEN_PER_M2.binnen[schilderwerkType as keyof typeof PRIJZEN_PER_M2.binnen]
-      if (prijzen) {
-        minPrice += oppervlakte * prijzen.min
-        maxPrice += oppervlakte * prijzen.max
-      }
-    }
-    
-    if (projectType === 'buiten' || projectType === 'binnen_buiten') {
-      const prijzen = PRIJZEN_PER_M2.buiten[schilderwerkType as keyof typeof PRIJZEN_PER_M2.buiten]
-      if (prijzen) {
-        minPrice += oppervlakte * prijzen.min
-        maxPrice += oppervlakte * prijzen.max
-      }
-    }
-  } else {
-    // Berekening per STREKKENDE METER
-    if (projectType === 'binnen' || projectType === 'binnen_buiten') {
-      const prijzen = PRIJZEN_PER_M1.binnen[schilderwerkType as keyof typeof PRIJZEN_PER_M1.binnen]
-      if (prijzen) {
-        minPrice += oppervlakte * prijzen.min
-        maxPrice += oppervlakte * prijzen.max
-      }
-    }
-    
-    if (projectType === 'buiten' || projectType === 'binnen_buiten') {
-      const prijzen = PRIJZEN_PER_M1.buiten[schilderwerkType as keyof typeof PRIJZEN_PER_M1.buiten]
-      if (prijzen) {
-        minPrice += oppervlakte * prijzen.min
-        maxPrice += oppervlakte * prijzen.max
-      }
+  // Muren (binnen)
+  if (items.muren.enabled && items.muren.m2) {
+    const m2 = parseFloat(items.muren.m2)
+    if (m2 > 0) {
+      totalMin += m2 * PRIJZEN_PER_M2.binnen.muren.min
+      totalMax += m2 * PRIJZEN_PER_M2.binnen.muren.max
+      hasItems = true
     }
   }
   
-  // Extra laag verf +30%
-  if (extraLagen) {
-    minPrice = Math.round(minPrice * 1.30)
-    maxPrice = Math.round(maxPrice * 1.30)
+  // Plafond (binnen)
+  if (items.plafond.enabled && items.plafond.m2) {
+    const m2 = parseFloat(items.plafond.m2)
+    if (m2 > 0) {
+      totalMin += m2 * PRIJZEN_PER_M2.binnen.plafond.min
+      totalMax += m2 * PRIJZEN_PER_M2.binnen.plafond.max
+      hasItems = true
+    }
   }
   
-  return { min: Math.round(minPrice), max: Math.round(maxPrice) }
+  // Plinten (binnen)
+  if (items.plinten.enabled && items.plinten.m1) {
+    const m1 = parseFloat(items.plinten.m1)
+    if (m1 > 0) {
+      totalMin += m1 * PRIJZEN_PER_M1.binnen.plinten.min
+      totalMax += m1 * PRIJZEN_PER_M1.binnen.plinten.max
+      hasItems = true
+    }
+  }
+  
+  // Lijstwerk (binnen)
+  if (items.lijstwerk.enabled && items.lijstwerk.m1) {
+    const m1 = parseFloat(items.lijstwerk.m1)
+    if (m1 > 0) {
+      totalMin += m1 * PRIJZEN_PER_M1.binnen.lijstwerk.min
+      totalMax += m1 * PRIJZEN_PER_M1.binnen.lijstwerk.max
+      hasItems = true
+    }
+  }
+  
+  // Kozijnen (binnen/buiten afhankelijk van projectType)
+  if (items.kozijnen.enabled && items.kozijnen.m1) {
+    const m1 = parseFloat(items.kozijnen.m1)
+    if (m1 > 0) {
+      if (projectType === 'buiten') {
+        totalMin += m1 * PRIJZEN_PER_M1.buiten.kozijnen.min
+        totalMax += m1 * PRIJZEN_PER_M1.buiten.kozijnen.max
+      } else {
+        totalMin += m1 * PRIJZEN_PER_M1.binnen.kozijnen.min
+        totalMax += m1 * PRIJZEN_PER_M1.binnen.kozijnen.max
+      }
+      hasItems = true
+    }
+  }
+  
+  // Deuren (€65 per stuk)
+  if (items.deuren.enabled && items.deuren.aantal) {
+    const aantal = parseInt(items.deuren.aantal)
+    if (aantal > 0) {
+      totalMin += aantal * PRIJZEN_PER_M1.binnen.deuren.min
+      totalMax += aantal * PRIJZEN_PER_M1.binnen.deuren.max
+      hasItems = true
+    }
+  }
+  
+  if (!hasItems) return null
+  
+  return { min: Math.round(totalMin), max: Math.round(totalMax) }
 }
 
 function formatPrice(price: number): string {
@@ -161,7 +185,7 @@ interface AIQuoteFormProps {
 }
 
 export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
-  const [currentStep, setCurrentStep] = useState(1)
+  const [currentStep, setCurrentStep] = useState(1) // Altijd 1, geen stappen meer
   const [photos, setPhotos] = useState<File[]>([])
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisResults, setAnalysisResults] = useState<any[]>([])
@@ -171,24 +195,23 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
 
   const [formData, setFormData] = useState({
     projectType: "" as ProjectType | "",
-    schilderwerkType: "" as SchilderwerkType | "",
-    oppervlakte: "",
-    verfkleur: "",
-    extraLagen: false,
-    houtwerkReparatie: false,
     naam: "",
     email: "",
     telefoon: "",
+    // Multi-item systeem
+    items: {
+      muren: { enabled: false, m2: "", verfkleur: "" },
+      plafond: { enabled: false, m2: "", verfkleur: "" },
+      plinten: { enabled: false, m1: "", verfkleur: "" },
+      lijstwerk: { enabled: false, m1: "", verfkleur: "" },
+      kozijnen: { enabled: false, m1: "", verfkleur: "" },
+      deuren: { enabled: false, aantal: "", verfkleur: "" },
+    }
   })
 
-  // Bereken prijs automatisch
-  const priceRange = formData.oppervlakte && formData.projectType && formData.schilderwerkType
-    ? calculatePriceRange(
-        formData.projectType,
-        formData.schilderwerkType,
-        parseInt(formData.oppervlakte),
-        formData.extraLagen
-      )
+  // Bereken prijs automatisch voor alle geselecteerde items
+  const priceRange = formData.projectType
+    ? calculateMultiItemPrice(formData.projectType, formData.items)
     : null
 
   // Scroll to top when step changes
@@ -235,10 +258,8 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
             email: formData.email,
             telefoon: formData.telefoon,
             projectType: formData.projectType,
-            schilderwerkType: formData.schilderwerkType,
-            oppervlakte: formData.oppervlakte,
-            verfkleur: formData.verfkleur,
-            aantalLagen: formData.extraLagen ? 3 : 2,
+            items: formData.items,
+            aantalLagen: 2,
             voorbereiding: true,
           },
           analysisResults,
@@ -253,7 +274,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
       }
 
       setEmailSent(true)
-      console.log('✅ Offerte verzonden:', data)
+      console.log('✅ Prijsindicatie verzonden:', data)
 
     } catch (error: any) {
       console.error('❌ Offerte verzenden mislukt:', error)
@@ -266,8 +287,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
   const handleNext = async () => {
     if (currentStep === 1) {
       setCurrentStep(2)
-    } else if (currentStep === 2) {
-      setCurrentStep(3)
     }
   }
 
@@ -359,11 +378,11 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
     }
   }
 
-  const progressPercentage = (currentStep / 3) * 100
+  const progressPercentage = 100 // Altijd 100%, geen stappen
 
   return (
     <Card className={`p-4 sm:p-6 lg:p-8 bg-white shadow-2xl border-0 ${className}`}>
-      {currentStep < 3 ? (
+      {!emailSent ? (
         <>
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-6 h-6 lg:w-7 lg:h-7 text-primary" />
@@ -372,23 +391,8 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
             </h2>
           </div>
           <p className="text-xs sm:text-sm italic text-muted-foreground mb-3">
-            {currentStep === 1 && "Selecteer uw type schilderwerk"}
-            {currentStep === 2 && "Vul uw voorkeuren in"}
-            {currentStep === 3 && "Bekijk uw offerte en upload optioneel foto's voor AI preview"}
+            Selecteer uw schilderwerk, vul uw gegevens in en ontvang direct uw prijs + AI preview
           </p>
-
-          <div className="mb-4">
-            <div className="flex justify-between text-xs text-foreground mb-2">
-              <span className={currentStep >= 1 ? "font-bold" : ""}>Type werk</span>
-              <span className={currentStep >= 2 ? "font-bold" : ""}>Details</span>
-              <span className={currentStep >= 3 ? "font-bold" : ""}>Offerte</span>
-            </div>
-            <Progress 
-              value={progressPercentage} 
-              className="h-2 bg-muted" 
-              aria-label={`Stap ${currentStep} van 3`}
-            />
-          </div>
 
           <form className="space-y-4">
             {currentStep === 1 && (
@@ -444,550 +448,698 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   </div>
                 </div>
 
-                {/* Schilderwerk Type */}
+                {/* Schilderwerk Items - Multi-select met checkboxes */}
                 {formData.projectType && (
                   <div>
                     <Label className="text-foreground text-sm font-semibold mb-3 block">
-                      Wat wilt u laten schilderen? *
+                      Wat wilt u laten schilderen? * (Meerdere mogelijk)
                     </Label>
-                    <div className="grid grid-cols-1 gap-2">
-                      {formData.projectType === 'binnen' || formData.projectType === 'binnen_buiten' ? (
-                        <>
-                          <button
-                            type="button"
-                            onClick={() => setFormData({ ...formData, schilderwerkType: 'muren' })}
-                            className={`p-3 border-2 rounded-lg text-left transition-all ${
-                              formData.schilderwerkType === 'muren'
-                                ? 'border-primary bg-primary/5'
-                                : 'border-border hover:border-primary/50'
-                            }`}
-                          >
-                            <div className="font-semibold text-foreground text-sm">Muren (m²)</div>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setFormData({ ...formData, schilderwerkType: 'plafond' })}
-                            className={`p-3 border-2 rounded-lg text-left transition-all ${
-                              formData.schilderwerkType === 'plafond'
-                                ? 'border-primary bg-primary/5'
-                                : 'border-border hover:border-primary/50'
-                            }`}
-                          >
-                            <div className="font-semibold text-foreground text-sm">Plafond (m²)</div>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setFormData({ ...formData, schilderwerkType: 'volledige_kamer' })}
-                            className={`p-3 border-2 rounded-lg text-left transition-all ${
-                              formData.schilderwerkType === 'volledige_kamer'
-                                ? 'border-primary bg-primary/5'
-                                : 'border-border hover:border-primary/50'
-                            }`}
-                          >
-                            <div className="font-semibold text-foreground text-sm">Volledige kamer (m²)</div>
-                            <div className="text-xs text-muted-foreground mt-1">Muren, plafond en houtwerk</div>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setFormData({ ...formData, schilderwerkType: 'plinten' })}
-                            className={`p-3 border-2 rounded-lg text-left transition-all ${
-                              formData.schilderwerkType === 'plinten'
-                                ? 'border-primary bg-primary/5'
-                                : 'border-border hover:border-primary/50'
-                            }`}
-                          >
-                            <div className="font-semibold text-foreground text-sm">Plinten (m¹)</div>
-                            <div className="text-xs text-muted-foreground mt-1">Per strekkende meter</div>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setFormData({ ...formData, schilderwerkType: 'lijstwerk' })}
-                            className={`p-3 border-2 rounded-lg text-left transition-all ${
-                              formData.schilderwerkType === 'lijstwerk'
-                                ? 'border-primary bg-primary/5'
-                                : 'border-border hover:border-primary/50'
-                            }`}
-                          >
-                            <div className="font-semibold text-foreground text-sm">Lijstwerk (m¹)</div>
-                            <div className="text-xs text-muted-foreground mt-1">Per strekkende meter</div>
-                          </button>
-                        </>
-                      ) : null}
-                      
-                      <button
-                        type="button"
-                        onClick={() => setFormData({ ...formData, schilderwerkType: 'kozijnen' })}
-                        className={`p-3 border-2 rounded-lg text-left transition-all ${
-                          formData.schilderwerkType === 'kozijnen'
-                            ? 'border-primary bg-primary/5'
-                            : 'border-border hover:border-primary/50'
-                        }`}
-                      >
-                        <div className="font-semibold text-foreground text-sm">Kozijnen (m¹)</div>
-                        <div className="text-xs text-muted-foreground mt-1">Per strekkende meter</div>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setFormData({ ...formData, schilderwerkType: 'deuren' })}
-                        className={`p-3 border-2 rounded-lg text-left transition-all ${
-                          formData.schilderwerkType === 'deuren'
-                            ? 'border-primary bg-primary/5'
-                            : 'border-border hover:border-primary/50'
-                        }`}
-                      >
-                        <div className="font-semibold text-foreground text-sm">Deuren (m¹)</div>
-                        <div className="text-xs text-muted-foreground mt-1">Per strekkende meter (omtrek)</div>
-                      </button>
-                      
-                      {formData.projectType === 'buiten' || formData.projectType === 'binnen_buiten' ? (
-                        <button
-                          type="button"
-                          onClick={() => setFormData({ ...formData, schilderwerkType: 'gevel' })}
-                          className={`p-3 border-2 rounded-lg text-left transition-all ${
-                            formData.schilderwerkType === 'gevel'
-                              ? 'border-primary bg-primary/5'
-                              : 'border-border hover:border-primary/50'
-                          }`}
-                        >
-                          <div className="font-semibold text-foreground text-sm">Gevel (m²)</div>
-                        </button>
-                      ) : null}
+                    <div className="space-y-3">
+                      {/* Muren */}
+                      {(formData.projectType === 'binnen' || formData.projectType === 'binnen_buiten') && (
+                        <div className={`p-3 border-2 rounded-lg ${formData.items.muren.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                          <div className="flex items-start gap-3">
+                            <Checkbox 
+                              checked={formData.items.muren.enabled}
+                              onCheckedChange={(checked) => {
+                                setFormData({
+                                  ...formData,
+                                  items: {
+                                    ...formData.items,
+                                    muren: { ...formData.items.muren, enabled: !!checked }
+                                  }
+                                })
+                              }}
+                              className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                            />
+                            <div className="flex-1 space-y-2">
+                              <div className="font-semibold text-foreground text-sm">Muren (m²) - €12,50/m²</div>
+                              {formData.items.muren.enabled && (
+                                <>
+                                  <Input
+                                    type="number"
+                                    placeholder="Aantal m²"
+                                    value={formData.items.muren.m2}
+                                    onChange={(e) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          muren: { ...formData.items.muren, m2: e.target.value }
+                                        }
+                                      })
+                                    }}
+                                    className="bg-background border h-9 text-sm"
+                                    min="1"
+                                  />
+                                  <Select
+                                    value={formData.items.muren.verfkleur}
+                                    onValueChange={(value) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          muren: { ...formData.items.muren, verfkleur: value }
+                                        }
+                                      })
+                                    }}
+                                  >
+                                    <SelectTrigger className="bg-background border h-9 text-sm">
+                                      <SelectValue placeholder="Kies verfkleur" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {VERFKLEUREN.map((kleur) => (
+                                        <SelectItem key={kleur.value} value={kleur.value}>
+                                          <div className="flex items-center gap-2">
+                                            <div 
+                                              className="w-3 h-3 rounded border border-gray-300" 
+                                              style={{ backgroundColor: kleur.hex }}
+                                            />
+                                            <span className="text-xs">{kleur.label}</span>
+                                          </div>
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Plafond */}
+                      {(formData.projectType === 'binnen' || formData.projectType === 'binnen_buiten') && (
+                        <div className={`p-3 border-2 rounded-lg ${formData.items.plafond.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                          <div className="flex items-start gap-3">
+                            <Checkbox 
+                              checked={formData.items.plafond.enabled}
+                              onCheckedChange={(checked) => {
+                                setFormData({
+                                  ...formData,
+                                  items: {
+                                    ...formData.items,
+                                    plafond: { ...formData.items.plafond, enabled: !!checked }
+                                  }
+                                })
+                              }}
+                              className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                            />
+                            <div className="flex-1 space-y-2">
+                              <div className="font-semibold text-foreground text-sm">Plafond (m²) - €12,50/m²</div>
+                              {formData.items.plafond.enabled && (
+                                <>
+                                  <Input
+                                    type="number"
+                                    placeholder="Aantal m²"
+                                    value={formData.items.plafond.m2}
+                                    onChange={(e) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          plafond: { ...formData.items.plafond, m2: e.target.value }
+                                        }
+                                      })
+                                    }}
+                                    className="bg-background border h-9 text-sm"
+                                    min="1"
+                                  />
+                                  <Select
+                                    value={formData.items.plafond.verfkleur}
+                                    onValueChange={(value) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          plafond: { ...formData.items.plafond, verfkleur: value }
+                                        }
+                                      })
+                                    }}
+                                  >
+                                    <SelectTrigger className="bg-background border h-9 text-sm">
+                                      <SelectValue placeholder="Kies verfkleur" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {VERFKLEUREN.map((kleur) => (
+                                        <SelectItem key={kleur.value} value={kleur.value}>
+                                          <div className="flex items-center gap-2">
+                                            <div 
+                                              className="w-3 h-3 rounded border border-gray-300" 
+                                              style={{ backgroundColor: kleur.hex }}
+                                            />
+                                            <span className="text-xs">{kleur.label}</span>
+                                          </div>
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Plinten */}
+                      {(formData.projectType === 'binnen' || formData.projectType === 'binnen_buiten') && (
+                        <div className={`p-3 border-2 rounded-lg ${formData.items.plinten.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                          <div className="flex items-start gap-3">
+                            <Checkbox 
+                              checked={formData.items.plinten.enabled}
+                              onCheckedChange={(checked) => {
+                                setFormData({
+                                  ...formData,
+                                  items: {
+                                    ...formData.items,
+                                    plinten: { ...formData.items.plinten, enabled: !!checked }
+                                  }
+                                })
+                              }}
+                              className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                            />
+                            <div className="flex-1 space-y-2">
+                              <div className="font-semibold text-foreground text-sm">Plinten (m¹) - €7,50/m</div>
+                              {formData.items.plinten.enabled && (
+                                <>
+                                  <Input
+                                    type="number"
+                                    placeholder="Strekkende meter"
+                                    value={formData.items.plinten.m1}
+                                    onChange={(e) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          plinten: { ...formData.items.plinten, m1: e.target.value }
+                                        }
+                                      })
+                                    }}
+                                    className="bg-background border h-9 text-sm"
+                                    min="1"
+                                  />
+                                  <Select
+                                    value={formData.items.plinten.verfkleur}
+                                    onValueChange={(value) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          plinten: { ...formData.items.plinten, verfkleur: value }
+                                        }
+                                      })
+                                    }}
+                                  >
+                                    <SelectTrigger className="bg-background border h-9 text-sm">
+                                      <SelectValue placeholder="Kies verfkleur" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {VERFKLEUREN.map((kleur) => (
+                                        <SelectItem key={kleur.value} value={kleur.value}>
+                                          <div className="flex items-center gap-2">
+                                            <div 
+                                              className="w-3 h-3 rounded border border-gray-300" 
+                                              style={{ backgroundColor: kleur.hex }}
+                                            />
+                                            <span className="text-xs">{kleur.label}</span>
+                                          </div>
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </>
+                              )}
+                            </div>
                     </div>
                   </div>
                 )}
+
+                      {/* Lijstwerk */}
+                      {(formData.projectType === 'binnen' || formData.projectType === 'binnen_buiten') && (
+                        <div className={`p-3 border-2 rounded-lg ${formData.items.lijstwerk.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                          <div className="flex items-start gap-3">
+                            <Checkbox 
+                              checked={formData.items.lijstwerk.enabled}
+                              onCheckedChange={(checked) => {
+                                setFormData({
+                                  ...formData,
+                                  items: {
+                                    ...formData.items,
+                                    lijstwerk: { ...formData.items.lijstwerk, enabled: !!checked }
+                                  }
+                                })
+                              }}
+                              className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                            />
+                            <div className="flex-1 space-y-2">
+                              <div className="font-semibold text-foreground text-sm">Lijstwerk (m¹) - €7,50/m</div>
+                              {formData.items.lijstwerk.enabled && (
+                                <>
+                                  <Input
+                                    type="number"
+                                    placeholder="Strekkende meter"
+                                    value={formData.items.lijstwerk.m1}
+                                    onChange={(e) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          lijstwerk: { ...formData.items.lijstwerk, m1: e.target.value }
+                                        }
+                                      })
+                                    }}
+                                    className="bg-background border h-9 text-sm"
+                                    min="1"
+                                  />
+                                  <Select
+                                    value={formData.items.lijstwerk.verfkleur}
+                                    onValueChange={(value) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          lijstwerk: { ...formData.items.lijstwerk, verfkleur: value }
+                                        }
+                                      })
+                                    }}
+                                  >
+                                    <SelectTrigger className="bg-background border h-9 text-sm">
+                                      <SelectValue placeholder="Kies verfkleur" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {VERFKLEUREN.map((kleur) => (
+                                        <SelectItem key={kleur.value} value={kleur.value}>
+                                          <div className="flex items-center gap-2">
+                                            <div 
+                                              className="w-3 h-3 rounded border border-gray-300" 
+                                              style={{ backgroundColor: kleur.hex }}
+                                            />
+                                            <span className="text-xs">{kleur.label}</span>
+                                          </div>
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </>
+                              )}
+                            </div>
+                    </div>
               </div>
             )}
 
-            {currentStep === 2 && (
-              <div className="space-y-4">
-                {/* Oppervlakte */}
-                <div>
-                  <Label className="text-foreground text-sm mb-2 block">
-                    {formData.schilderwerkType && MEASUREMENT_UNITS[formData.schilderwerkType] === 'm1' 
-                      ? 'Lengte in strekkende meters (m¹) *'
-                      : 'Oppervlakte in vierkante meters (m²) *'
-                    }
-                  </Label>
+                      {/* Kozijnen */}
+                      <div className={`p-3 border-2 rounded-lg ${formData.items.kozijnen.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                        <div className="flex items-start gap-3">
+                          <Checkbox 
+                            checked={formData.items.kozijnen.enabled}
+                            onCheckedChange={(checked) => {
+                              setFormData({
+                                ...formData,
+                                items: {
+                                  ...formData.items,
+                                  kozijnen: { ...formData.items.kozijnen, enabled: !!checked }
+                                }
+                              })
+                            }}
+                            className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                          />
+                          <div className="flex-1 space-y-2">
+                            <div className="font-semibold text-foreground text-sm">
+                              Kozijnen (m¹) - {formData.projectType === 'buiten' ? '€12,50/m' : '€7,50/m'}
+              </div>
+                            {formData.items.kozijnen.enabled && (
+                              <>
                   <Input
                     type="number"
-                    placeholder={formData.schilderwerkType && MEASUREMENT_UNITS[formData.schilderwerkType] === 'm1' ? "Bijv. 25" : "Bijv. 50"}
-                    value={formData.oppervlakte}
-                    onChange={(e) => setFormData({ ...formData, oppervlakte: e.target.value })}
-                    className="bg-background border-0 h-11"
+                                  placeholder="Strekkende meter"
+                                  value={formData.items.kozijnen.m1}
+                                  onChange={(e) => {
+                                    setFormData({
+                                      ...formData,
+                                      items: {
+                                        ...formData.items,
+                                        kozijnen: { ...formData.items.kozijnen, m1: e.target.value }
+                                      }
+                                    })
+                                  }}
+                                  className="bg-background border h-9 text-sm"
                     min="1"
                   />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    💡 {formData.schilderwerkType && MEASUREMENT_UNITS[formData.schilderwerkType] === 'm1' 
-                      ? 'Strekkende meter = totale lengte (bijv. kozijnen omtrek, plint lengte)'
-                      : 'Vierkante meter = lengte × breedte'
-                    } - schat gerust, we bespreken de exacte maten later
-                  </p>
+                                <Select
+                                  value={formData.items.kozijnen.verfkleur}
+                                  onValueChange={(value) => {
+                                    setFormData({
+                                      ...formData,
+                                      items: {
+                                        ...formData.items,
+                                        kozijnen: { ...formData.items.kozijnen, verfkleur: value }
+                                      }
+                                    })
+                                  }}
+                                >
+                                  <SelectTrigger className="bg-background border h-9 text-sm">
+                                    <SelectValue placeholder="Kies verfkleur" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {VERFKLEUREN.map((kleur) => (
+                                      <SelectItem key={kleur.value} value={kleur.value}>
+                                        <div className="flex items-center gap-2">
+                                          <div 
+                                            className="w-3 h-3 rounded border border-gray-300" 
+                                            style={{ backgroundColor: kleur.hex }}
+                                          />
+                                          <span className="text-xs">{kleur.label}</span>
+                                        </div>
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                              </>
+                            )}
+                          </div>
+                        </div>
                 </div>
 
-                {/* Verfkleur */}
-                <div>
-                  <Label className="text-foreground text-sm mb-2 block">Gewenste verfkleur *</Label>
+                      {/* Deuren */}
+                      <div className={`p-3 border-2 rounded-lg ${formData.items.deuren.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                        <div className="flex items-start gap-3">
+                          <Checkbox 
+                            checked={formData.items.deuren.enabled}
+                            onCheckedChange={(checked) => {
+                              setFormData({
+                                ...formData,
+                                items: {
+                                  ...formData.items,
+                                  deuren: { ...formData.items.deuren, enabled: !!checked }
+                                }
+                              })
+                            }}
+                            className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                          />
+                          <div className="flex-1 space-y-2">
+                            <div className="font-semibold text-foreground text-sm">Deuren - €65 per stuk</div>
+                            {formData.items.deuren.enabled && (
+                              <>
+                  <Input
+                    type="number"
+                                  placeholder="Aantal deuren"
+                                  value={formData.items.deuren.aantal}
+                                  onChange={(e) => {
+                                    setFormData({
+                                      ...formData,
+                                      items: {
+                                        ...formData.items,
+                                        deuren: { ...formData.items.deuren, aantal: e.target.value }
+                                      }
+                                    })
+                                  }}
+                                  className="bg-background border h-9 text-sm"
+                    min="1"
+                  />
                   <Select
-                    value={formData.verfkleur}
-                    onValueChange={(value) => setFormData({ ...formData, verfkleur: value })}
-                  >
-                    <SelectTrigger className="bg-background border-0 h-11">
-                      <SelectValue placeholder="Kies een kleur" />
+                                  value={formData.items.deuren.verfkleur}
+                                  onValueChange={(value) => {
+                                    setFormData({
+                                      ...formData,
+                                      items: {
+                                        ...formData.items,
+                                        deuren: { ...formData.items.deuren, verfkleur: value }
+                                      }
+                                    })
+                                  }}
+                                >
+                                  <SelectTrigger className="bg-background border h-9 text-sm">
+                                    <SelectValue placeholder="Kies verfkleur" />
                     </SelectTrigger>
                     <SelectContent>
                       {VERFKLEUREN.map((kleur) => (
                         <SelectItem key={kleur.value} value={kleur.value}>
                           <div className="flex items-center gap-2">
                             <div 
-                              className="w-4 h-4 rounded border border-gray-300" 
+                                            className="w-3 h-3 rounded border border-gray-300" 
                               style={{ backgroundColor: kleur.hex }}
                             />
-                            <span>{kleur.label}</span>
+                                          <span className="text-xs">{kleur.label}</span>
                           </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
+                              </>
+                            )}
                 </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
-                {/* Extra opties */}
-                <div className="space-y-3">
-                  <Label className="text-foreground text-sm block">Extra opties</Label>
-                  
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="extraLagen"
-                      checked={formData.extraLagen}
-                      onCheckedChange={(checked) => setFormData({ ...formData, extraLagen: checked as boolean })}
-                      className="border-input data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                    />
-                    <label htmlFor="extraLagen" className="text-sm text-foreground cursor-pointer">
-                      Extra laag verf (+30%)
-                    </label>
+                {/* Prijs Indicatie */}
+                {priceRange && (
+                  <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-6 border-2 border-primary/20">
+                    <h3 className="font-bold text-xl text-foreground mb-3">Uw Instant Prijs Indicatie</h3>
+                    <div className="text-center mb-4">
+                      <p className="text-4xl font-bold text-primary">
+                        {formatPrice(priceRange.min)}
+                      </p>
+                      <p className="text-sm text-muted-foreground mt-1">Inclusief alle geselecteerde items</p>
+                    </div>
+                    <div className="bg-background rounded-lg p-3 space-y-1 text-left text-xs">
+                      <p className="text-muted-foreground font-semibold mb-2">Inbegrepen:</p>
+                      <p className="text-muted-foreground">✓ Professioneel schilderwerk</p>
+                      <p className="text-muted-foreground">✓ A-merk verf per item</p>
+                      <p className="text-muted-foreground">✓ Schuren + voorbehandeling</p>
+                      <p className="text-muted-foreground">✓ 2 lagen afwerking</p>
+                      <p className="text-muted-foreground text-xs mt-2">💡 Meerwerk: Houtrot reparatie vanaf €35/uur</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Contactgegevens */}
+                {formData.projectType && (
+                  <div className="space-y-4">
+                    <h3 className="font-bold text-lg text-foreground">Uw contactgegevens</h3>
+                    <p className="text-sm text-muted-foreground">Vul uw gegevens in om deze prijs indicatie per email te ontvangen + gratis AI preview</p>
+
+                    <div>
+                      <Label className="text-foreground text-sm mb-2 block">Naam *</Label>
+                      <Input
+                        type="text"
+                        placeholder="Uw volledige naam"
+                        value={formData.naam}
+                        onChange={(e) => setFormData({ ...formData, naam: e.target.value })}
+                        className="bg-background border h-11"
+                      />
                   </div>
 
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="houtwerkReparatie"
-                      checked={formData.houtwerkReparatie}
-                      onCheckedChange={(checked) => setFormData({ ...formData, houtwerkReparatie: checked as boolean })}
-                      className="border-input data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                    />
-                    <label htmlFor="houtwerkReparatie" className="text-sm text-foreground cursor-pointer">
-                      Houtwerkrot reparatie
-                    </label>
+                    <div>
+                      <Label className="text-foreground text-sm mb-2 block">Email *</Label>
+                      <Input
+                        type="email"
+                        placeholder="uw@email.nl"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="bg-background border h-11"
+                      />
                   </div>
+
+                    <div>
+                      <Label className="text-foreground text-sm mb-2 block">Telefoon (optioneel)</Label>
+                      <Input
+                        type="tel"
+                        placeholder="06 12345678"
+                        value={formData.telefoon}
+                        onChange={(e) => setFormData({ ...formData, telefoon: e.target.value })}
+                        className="bg-background border h-11"
+                      />
                 </div>
+                  </div>
+                )}
               </div>
             )}
 
             <div className="flex gap-2 pt-2 sm:pt-3">
-              {currentStep > 1 && (
                 <Button
                   type="button"
-                  onClick={handlePrevious}
-                  variant="outline"
-                  className="flex-1 bg-muted hover:bg-muted/90 text-foreground border-0 h-10 text-sm"
-                >
-                  <ChevronLeft className="w-4 h-4 mr-1" />
-                  Vorige
-                </Button>
-              )}
-              <Button
-                type="button"
-                onClick={handleNext}
-                disabled={
-                  (currentStep === 1 && (!formData.projectType || !formData.schilderwerkType)) ||
-                  (currentStep === 2 && (!formData.oppervlakte || !formData.verfkleur))
-                }
-                className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-10 text-sm disabled:opacity-50"
+                onClick={handleSubmitQuote}
+                disabled={isSendingEmail || !formData.naam || !formData.email || !priceRange}
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-12 text-base disabled:opacity-50"
               >
-                <>
-                  <span className="hidden sm:inline">{currentStep === 2 ? "Bekijk Offerte" : "Volgende"}</span>
-                  <span className="sm:hidden">{currentStep === 2 ? "Offerte" : "Volgende"}</span>
-                  {currentStep < 2 && <ChevronRight className="w-4 h-4 ml-1" />}
-                </>
+                {isSendingEmail ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Verzenden...
+                  </>
+                ) : (
+                  <>
+                    <Check className="w-4 h-4 mr-2" />
+                    Ontvang Prijs per Email + Gratis AI Preview
+                  </>
+                )}
               </Button>
             </div>
           </form>
         </>
       ) : (
-        <div className="text-center space-y-6">
-          {/* AI Preview Upload Sectie */}
-          {analysisResults.length === 0 && (
-            <div className="bg-primary/5 border-2 border-primary/20 rounded-lg p-4 text-left">
-              <div className="flex items-start gap-2 mb-3">
-                <Sparkles className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                <div>
-                  <h3 className="font-semibold text-base text-foreground mb-1">
-                    ✨ Upload foto's voor AI Preview (Optioneel)
-                  </h3>
-                  <p className="text-xs text-muted-foreground">
-                    Upload foto's van uw huis en zie direct hoe het eruit gaat zien in uw gekozen kleur!
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div>
-                  <Label className="text-foreground text-xs sm:text-sm font-medium mb-1 block">
-                    Upload foto's (0-5 foto's)
-                  </Label>
-                  <p className="text-xs text-muted-foreground mb-2">
-                    Foto's van muren, gevel of kozijnen die geschilderd worden
-                  </p>
-                  <PhotoUpload 
-                    onPhotosChange={setPhotos}
-                    maxPhotos={5}
-                    minPhotos={0}
-                  />
-                </div>
-
-                {photos.length > 0 && (
-                  <Button
-                    onClick={analyzePhotos}
-                    disabled={isAnalyzing}
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-11"
-                  >
-                    {isAnalyzing ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        AI Preview Genereren...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-4 h-4 mr-2" />
-                        Genereer AI Preview
-                      </>
-                    )}
-                  </Button>
-                )}
-              </div>
+        <div className="space-y-6">
+          {/* Success Banner */}
+          <div className="bg-green-50 border-2 border-green-200 rounded-lg p-6 text-center">
+            <div className="flex items-center justify-center gap-3 text-green-700 mb-3">
+              <Check className="w-8 h-8" />
+              <h2 className="font-bold text-2xl">Prijsindicatie Verzonden!</h2>
             </div>
-          )}
-
-          {/* Success banner na AI preview */}
-          {analysisResults.length > 0 && (
-            <div className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full mb-2">
-              <Check className="w-4 h-4" />
-              <span className="text-sm font-semibold">AI Preview Gegenereerd!</span>
-            </div>
-          )}
-
-          <h2 className="font-bold text-2xl text-foreground">Uw Instant Offerte:</h2>
-
-          {priceRange && (
-            <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-6 border-2 border-primary/20">
-              <div className="flex items-center justify-center gap-4 mb-4">
-                <div className="text-center">
-                  <p className="text-sm text-muted-foreground mb-1">Vanaf</p>
-                  <p className="text-4xl font-bold text-primary">
-                    {formatPrice(priceRange.min)}
-                  </p>
-                </div>
-                <div className="text-2xl text-muted-foreground">-</div>
-                <div className="text-center">
-                  <p className="text-sm text-muted-foreground mb-1">Tot</p>
-                  <p className="text-4xl font-bold text-primary">
-                    {formatPrice(priceRange.max)}
-                  </p>
-                </div>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Totale offerte voor {formData.oppervlakte} {formData.schilderwerkType && MEASUREMENT_UNITS[formData.schilderwerkType] === 'm1' ? 'm¹' : 'm²'} {formData.schilderwerkType}
-              </p>
-            </div>
-          )}
-
-          <div className="bg-background rounded-lg p-4 space-y-2 text-left">
-            <p className="text-xs text-muted-foreground mb-2">Inbegrepen in uw offerte:</p>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Professioneel schilderwerk</span>
-              <span className="font-medium">✓</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">A-merk verf ({formData.verfkleur})</span>
-              <span className="font-medium">✓</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Voorbehandeling oppervlak</span>
-              <span className="font-medium">✓</span>
-            </div>
-            {formData.houtwerkReparatie && (
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Houtwerkrot reparatie</span>
-                <span className="font-medium">✓</span>
-              </div>
-            )}
-            <div className="border-t border-border pt-2 mt-2">
-              <p className="text-xs text-muted-foreground">
-                ✓ Vanaf-prijs: standaard schilderwerk<br/>
-                ✓ Tot-prijs: inclusief extra voorbehandeling
-              </p>
-            </div>
-          </div>
-
-          {/* Voor & Na Vergelijking */}
-          {analysisResults.length > 0 && (
-            <div className="bg-background rounded-lg p-4 text-left border-2 border-primary/20">
-              <h3 className="font-semibold text-base text-foreground mb-3">
-                🎨 Voor & Na: Uw huis in {formData.verfkleur}
-              </h3>
-              <div className="space-y-6">
-                {analysisResults.map((result, idx) => (
-                  <div key={idx} className="space-y-3">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <div 
-                          className="relative rounded-lg overflow-hidden border-2 border-border group"
-                        >
-                          <img
-                            src={result.url}
-                            alt={`Huidige situatie ${idx + 1}`}
-                            className="w-full h-auto object-contain max-h-64 cursor-pointer"
-                            onClick={() => setEnlargedImage(result.url)}
-                          />
-                          <div className="absolute top-2 right-2 flex gap-2">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleShare(result.url, 'Huidige situatie')
-                              }}
-                              className="bg-black/60 p-1.5 rounded-full hover:bg-black/80 transition-colors"
-                              aria-label="Deel foto"
-                            >
-                              <Share2 className="w-4 h-4 text-white" />
-                            </button>
-                            <button
-                              onClick={() => setEnlargedImage(result.url)}
-                              className="bg-black/60 p-1.5 rounded-full hover:bg-black/80 transition-colors"
-                              aria-label="Vergroot foto"
-                            >
-                              <ZoomIn className="w-4 h-4 text-white" />
-                            </button>
-                          </div>
-                        </div>
-                        <p className="text-sm text-center text-muted-foreground font-medium">
-                          📸 Voor
-                        </p>
-                      </div>
-
-                      <div className="space-y-2">
-                        <div 
-                          className="relative rounded-lg overflow-hidden border-2 border-border group"
-                        >
-                          <img
-                            src={result.previewUrl || result.url}
-                            alt={`Na schilderwerk ${idx + 1}`}
-                            className="w-full h-auto object-contain max-h-64 cursor-pointer"
-                            onClick={() => setEnlargedImage(result.previewUrl || result.url)}
-                          />
-                          <div className="absolute top-2 right-2 flex gap-2">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleShare(result.previewUrl || result.url, 'Na schilderwerk')
-                              }}
-                              className="bg-black/60 p-1.5 rounded-full hover:bg-black/80 transition-colors"
-                              aria-label="Deel preview"
-                            >
-                              <Share2 className="w-4 h-4 text-white" />
-                            </button>
-                            <button
-                              onClick={() => setEnlargedImage(result.previewUrl || result.url)}
-                              className="bg-black/60 p-1.5 rounded-full hover:bg-black/80 transition-colors"
-                              aria-label="Vergroot preview"
-                            >
-                              <ZoomIn className="w-4 h-4 text-white" />
-                            </button>
-                          </div>
-                        </div>
-                        <p className="text-sm text-center text-primary font-medium">
-                          ✨ Na
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4 p-3 bg-primary/5 rounded-lg">
-                <p className="text-xs text-foreground text-center">
-                  ✨ <strong>Powered by AI</strong> - Deze previews zijn gegenereerd door AI op basis van uw gekozen specificaties.
-                </p>
-              </div>
-            </div>
-          )}
-
-          <div className="bg-primary/10 rounded-lg p-4">
-            <p className="text-foreground font-bold text-lg mb-2">💰 Laagste Prijs Garantie</p>
-            <p className="text-foreground text-sm">
-              Vindt u hetzelfde schilderwerk elders goedkoper? Dan betalen wij het verschil terug!
+            <p className="text-green-700 text-base mb-1">
+              Check uw inbox: <strong>{formData.email}</strong>
+            </p>
+            <p className="text-green-600 text-sm">
+              U ontvangt uw persoonlijke prijsindicatie + gratis AI preview per email
             </p>
           </div>
 
-          <div className="flex gap-3">
-            <Button 
-              className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-12 text-base"
-              onClick={(e) => {
-                e.preventDefault();
-                if (typeof window !== 'undefined' && (window as any).Calendly) {
-                  (window as any).Calendly.initPopupWidget({url: 'https://calendly.com/tbvanreijn'});
-                }
-              }}
-            >
-              📞 Gratis Adviesgesprek
-            </Button>
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-border" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-muted-foreground">Of vul uw gegevens in</span>
-            </div>
-          </div>
-
-          <div className="space-y-3 text-left">
-            <Label className="text-foreground text-sm">Uw gegevens voor offerte bevestiging:</Label>
-            <Input
-              placeholder="Naam"
-              value={formData.naam}
-              onChange={(e) => setFormData({ ...formData, naam: e.target.value })}
-              className="bg-background border-0 h-11"
-            />
-            <Input
-              type="email"
-              placeholder="E-mail"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="bg-background border-0 h-11"
-            />
-            <Input
-              type="tel"
-              placeholder="Telefoon"
-              value={formData.telefoon}
-              onChange={(e) => setFormData({ ...formData, telefoon: e.target.value })}
-              className="bg-background border-0 h-11"
-            />
-          </div>
-
-          {emailSent && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-              <div className="flex items-center justify-center gap-2 text-green-700 font-semibold">
-                <Check className="w-5 h-5" />
-                De offerte is verzonden naar uw email!
+          {/* Prijsindicatie & Opbouw */}
+          {priceRange && (
+            <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-6 border-2 border-primary/20 text-left">
+              <h3 className="font-bold text-xl text-foreground mb-4">Uw Prijs Indicatie</h3>
+              <div className="text-center mb-4">
+                <p className="text-5xl font-bold text-primary">
+                  {formatPrice(priceRange.min)}
+                </p>
               </div>
-              <p className="text-sm text-green-600 mt-2">
-                Check uw inbox voor de volledige offerte en AI preview.
-              </p>
+              
+              {/* Prijsopbouw */}
+              <div className="bg-background rounded-lg p-4 space-y-2">
+                <p className="font-semibold text-sm text-foreground mb-3">Prijsopbouw:</p>
+                
+                {formData.items.muren.enabled && formData.items.muren.m2 && (
+                  <div className="flex justify-between text-sm border-b border-border pb-2">
+                    <span className="text-muted-foreground">
+                      Muren: {formData.items.muren.m2} m² × €12,50
+                    </span>
+                    <span className="font-medium text-foreground">
+                      {formatPrice(parseFloat(formData.items.muren.m2) * 12.50)}
+                    </span>
+                  </div>
+                )}
+                
+                {formData.items.plafond.enabled && formData.items.plafond.m2 && (
+                  <div className="flex justify-between text-sm border-b border-border pb-2">
+                    <span className="text-muted-foreground">
+                      Plafond: {formData.items.plafond.m2} m² × €12,50
+                    </span>
+                    <span className="font-medium text-foreground">
+                      {formatPrice(parseFloat(formData.items.plafond.m2) * 12.50)}
+                    </span>
+                  </div>
+                )}
+                
+                {formData.items.plinten.enabled && formData.items.plinten.m1 && (
+                  <div className="flex justify-between text-sm border-b border-border pb-2">
+                    <span className="text-muted-foreground">
+                      Plinten: {formData.items.plinten.m1} m¹ × €7,50
+                    </span>
+                    <span className="font-medium text-foreground">
+                      {formatPrice(parseFloat(formData.items.plinten.m1) * 7.50)}
+                    </span>
+                  </div>
+                )}
+                
+                {formData.items.lijstwerk.enabled && formData.items.lijstwerk.m1 && (
+                  <div className="flex justify-between text-sm border-b border-border pb-2">
+                    <span className="text-muted-foreground">
+                      Lijstwerk: {formData.items.lijstwerk.m1} m¹ × €7,50
+                    </span>
+                    <span className="font-medium text-foreground">
+                      {formatPrice(parseFloat(formData.items.lijstwerk.m1) * 7.50)}
+                    </span>
+                  </div>
+                )}
+                
+                {formData.items.kozijnen.enabled && formData.items.kozijnen.m1 && (
+                  <div className="flex justify-between text-sm border-b border-border pb-2">
+                    <span className="text-muted-foreground">
+                      Kozijnen: {formData.items.kozijnen.m1} m¹ × {formData.projectType === 'buiten' ? '€12,50' : '€7,50'}
+                    </span>
+                    <span className="font-medium text-foreground">
+                      {formatPrice(parseFloat(formData.items.kozijnen.m1) * (formData.projectType === 'buiten' ? 12.50 : 7.50))}
+                    </span>
+                  </div>
+                )}
+                
+                {formData.items.deuren.enabled && formData.items.deuren.aantal && (
+                  <div className="flex justify-between text-sm border-b border-border pb-2">
+                    <span className="text-muted-foreground">
+                      Deuren: {formData.items.deuren.aantal} × €65
+                    </span>
+                    <span className="font-medium text-foreground">
+                      {formatPrice(parseInt(formData.items.deuren.aantal) * 65)}
+                    </span>
+                  </div>
+                )}
+                
+                <div className="flex justify-between text-base font-bold pt-3 border-t-2 border-primary">
+                  <span className="text-foreground">Totaal:</span>
+                  <span className="text-primary text-xl">{formatPrice(priceRange.min)}</span>
+                </div>
+              </div>
+
+              <div className="mt-4 bg-background rounded-lg p-3 space-y-1 text-xs">
+                <p className="text-muted-foreground">✓ Inclusief: Schuren + voorbehandeling</p>
+                <p className="text-muted-foreground">✓ Inclusief: 2 lagen afwerking</p>
+                <p className="text-muted-foreground">✓ Inclusief: A-merk verf</p>
+                <p className="text-muted-foreground mt-2">💡 Meerwerk: Houtrot reparatie vanaf €35/uur + materiaal</p>
+              </div>
             </div>
           )}
 
-          <Button 
-            type="button"
-            onClick={handleSubmitQuote}
-            disabled={isSendingEmail || emailSent || !formData.naam || !formData.email}
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-12 text-base disabled:opacity-50"
-          >
-            {isSendingEmail ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Offerte verzenden...
-              </>
-            ) : emailSent ? (
-              <>
-                <Check className="w-4 h-4 mr-2" />
-                Offerte verzonden!
-              </>
-            ) : (
-              'Verstuur Offerte Aanvraag'
-            )}
-          </Button>
+          {/* Actie Buttons */}
+          <div className="space-y-3">
+            <Button
+              onClick={() => {
+                setPhotos([])
+                setAnalysisResults([])
+                setEmailSent(false)
+                setFormData({
+                  projectType: "",
+                  naam: "",
+                  email: "",
+                  telefoon: "",
+                  items: {
+                    muren: { enabled: false, m2: "", verfkleur: "" },
+                    plafond: { enabled: false, m2: "", verfkleur: "" },
+                    plinten: { enabled: false, m1: "", verfkleur: "" },
+                    lijstwerk: { enabled: false, m1: "", verfkleur: "" },
+                    kozijnen: { enabled: false, m1: "", verfkleur: "" },
+                    deuren: { enabled: false, aantal: "", verfkleur: "" },
+                  }
+                })
+              }}
+              variant="outline"
+              className="w-full h-12 font-semibold"
+            >
+              Nieuwe Prijsindicatie Maken
+            </Button>
 
-          <Button
-            variant="ghost"
-            onClick={() => {
-              setCurrentStep(1)
-              setPhotos([])
-              setAnalysisResults([])
-              setEmailSent(false)
-              setFormData({
-                projectType: "",
-                schilderwerkType: "",
-                oppervlakte: "",
-                verfkleur: "",
-                extraLagen: false,
-                houtwerkReparatie: false,
-                naam: "",
-                email: "",
-                telefoon: "",
-              })
-            }}
-            className="text-foreground hover:text-foreground/80 hover:bg-transparent"
-          >
-            Nieuwe berekening starten
-          </Button>
+            <Button 
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-12 text-base"
+              asChild
+            >
+              <a 
+                href="https://calendly.com/budgetgroep/30min?month=2025-11"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                📞 Plan Gratis Adviesgesprek
+              </a>
+            </Button>
+          </div>
+
+          <div className="bg-primary/10 rounded-lg p-4 text-center">
+            <p className="text-foreground font-bold text-base mb-1">💰 Laagste Prijs Garantie</p>
+            <p className="text-foreground text-sm">
+              Vindt u hetzelfde schilderwerk elders goedkoper? Dan gaan wij eronder!
+            </p>
+          </div>
+
         </div>
       )}
 
