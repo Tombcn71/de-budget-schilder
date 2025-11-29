@@ -521,37 +521,54 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                     className="bg-background border h-9 text-sm"
                                     min="1"
                                   />
-                                  <Select
-                                    value={formData.items.muren.verfkleur}
-                                    onValueChange={(value) => {
-                                      setFormData({
-                                        ...formData,
-                                        items: {
-                                          ...formData.items,
-                                          muren: { ...formData.items.muren, verfkleur: value }
-                                        }
-                                      })
-                                    }}
-                                  >
-                                    <SelectTrigger className="bg-background border h-9 text-sm">
-                                      <SelectValue placeholder="Kies verfkleur" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {VERFKLEUREN.map((kleur) => (
-                                        <SelectItem key={kleur.value} value={kleur.value}>
-                                          <div className="flex items-center gap-2">
-                                            <div 
-                                              className="w-3 h-3 rounded border border-gray-300" 
-                                              style={{ backgroundColor: kleur.hex }}
-                                            />
-                                            <span className="text-xs">{kleur.label}</span>
-                                          </div>
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
+                                  <div className="space-y-2">
+                                    <Select
+                                      value={formData.items.muren.verfkleur}
+                                      onValueChange={(value) => {
+                                        setFormData({
+                                          ...formData,
+                                          items: {
+                                            ...formData.items,
+                                            muren: { ...formData.items.muren, verfkleur: value }
+                                          }
+                                        })
+                                      }}
+                                    >
+                                      <SelectTrigger className="bg-background border h-9 text-sm">
+                                        <SelectValue placeholder="Kies verfkleur" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {VERFKLEUREN.map((kleur) => (
+                                          <SelectItem key={kleur.value} value={kleur.value}>
+                                            <div className="flex items-center gap-2">
+                                              <div 
+                                                className="w-3 h-3 rounded border border-gray-300" 
+                                                style={{ backgroundColor: kleur.hex }}
+                                              />
+                                              <span className="text-xs">{kleur.label}</span>
+                    </div>
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                    <Input
+                                      type="text"
+                                      placeholder="Of eigen kleur invullen (bijv. 'lichtblauw' of 'RAL 9001')"
+                                      value={!VERFKLEUREN.find(k => k.value === formData.items.muren.verfkleur) ? formData.items.muren.verfkleur : ''}
+                                      onChange={(e) => {
+                                        setFormData({
+                                          ...formData,
+                                          items: {
+                                            ...formData.items,
+                                            muren: { ...formData.items.muren, verfkleur: e.target.value }
+                                          }
+                                        })
+                                      }}
+                                      className="bg-background border h-9 text-xs"
+                                    />
+                  </div>
                                 </>
-                              )}
+                )}
                     </div>
                   </div>
               </div>
@@ -594,41 +611,58 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                     className="bg-background border h-9 text-sm"
                     min="1"
                   />
+                                  <div className="space-y-2">
                   <Select
-                                    value={formData.items.plafond.verfkleur}
-                                    onValueChange={(value) => {
-                                      setFormData({
-                                        ...formData,
-                                        items: {
-                                          ...formData.items,
-                                          plafond: { ...formData.items.plafond, verfkleur: value }
-                                        }
-                                      })
-                                    }}
-                                  >
-                                    <SelectTrigger className="bg-background border h-9 text-sm">
-                                      <SelectValue placeholder="Kies verfkleur" />
+                                      value={formData.items.plafond.verfkleur}
+                                      onValueChange={(value) => {
+                                        setFormData({
+                                          ...formData,
+                                          items: {
+                                            ...formData.items,
+                                            plafond: { ...formData.items.plafond, verfkleur: value }
+                                          }
+                                        })
+                                      }}
+                                    >
+                                      <SelectTrigger className="bg-background border h-9 text-sm">
+                                        <SelectValue placeholder="Kies verfkleur" />
                     </SelectTrigger>
                     <SelectContent>
                       {VERFKLEUREN.map((kleur) => (
                         <SelectItem key={kleur.value} value={kleur.value}>
                           <div className="flex items-center gap-2">
                             <div 
-                                              className="w-3 h-3 rounded border border-gray-300" 
+                                                className="w-3 h-3 rounded border border-gray-300" 
                               style={{ backgroundColor: kleur.hex }}
                             />
-                                            <span className="text-xs">{kleur.label}</span>
-                          </div>
+                                              <span className="text-xs">{kleur.label}</span>
+                    </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
+                                    <Input
+                                      type="text"
+                                      placeholder="Of eigen kleur invullen"
+                                      value={!VERFKLEUREN.find(k => k.value === formData.items.plafond.verfkleur) ? formData.items.plafond.verfkleur : ''}
+                                      onChange={(e) => {
+                                        setFormData({
+                                          ...formData,
+                                          items: {
+                                            ...formData.items,
+                                            plafond: { ...formData.items.plafond, verfkleur: e.target.value }
+                                          }
+                                        })
+                                      }}
+                                      className="bg-background border h-9 text-xs"
+                                    />
+                  </div>
                                 </>
-                              )}
+                )}
                 </div>
                           </div>
-                        </div>
-                      )}
+              </div>
+            )}
 
                       {/* Plinten */}
                       {(formData.projectType === 'binnen' || formData.projectType === 'binnen_buiten') && (
@@ -651,8 +685,8 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                               <div className="font-semibold text-foreground text-sm">Plinten (m¹) - €7,50/m</div>
                               {formData.items.plinten.enabled && (
                                 <>
-                                  <Input
-                                    type="number"
+                  <Input
+                    type="number"
                                     placeholder="Strekkende meter"
                                     value={formData.items.plinten.m1}
                                     onChange={(e) => {
@@ -665,37 +699,54 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                       })
                                     }}
                                     className="bg-background border h-9 text-sm"
-                                    min="1"
-                                  />
-                                  <Select
-                                    value={formData.items.plinten.verfkleur}
-                                    onValueChange={(value) => {
-                                      setFormData({
-                                        ...formData,
-                                        items: {
-                                          ...formData.items,
-                                          plinten: { ...formData.items.plinten, verfkleur: value }
-                                        }
-                                      })
-                                    }}
-                                  >
-                                    <SelectTrigger className="bg-background border h-9 text-sm">
-                                      <SelectValue placeholder="Kies verfkleur" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {VERFKLEUREN.map((kleur) => (
-                                        <SelectItem key={kleur.value} value={kleur.value}>
-                                          <div className="flex items-center gap-2">
-                                            <div 
-                                              className="w-3 h-3 rounded border border-gray-300" 
-                                              style={{ backgroundColor: kleur.hex }}
-                                            />
-                                            <span className="text-xs">{kleur.label}</span>
-                  </div>
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
+                    min="1"
+                  />
+                                  <div className="space-y-2">
+                  <Select
+                                      value={formData.items.plinten.verfkleur}
+                                      onValueChange={(value) => {
+                                        setFormData({
+                                          ...formData,
+                                          items: {
+                                            ...formData.items,
+                                            plinten: { ...formData.items.plinten, verfkleur: value }
+                                          }
+                                        })
+                                      }}
+                                    >
+                                      <SelectTrigger className="bg-background border h-9 text-sm">
+                                        <SelectValue placeholder="Kies verfkleur" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {VERFKLEUREN.map((kleur) => (
+                        <SelectItem key={kleur.value} value={kleur.value}>
+                          <div className="flex items-center gap-2">
+                            <div 
+                                                className="w-3 h-3 rounded border border-gray-300" 
+                              style={{ backgroundColor: kleur.hex }}
+                            />
+                                              <span className="text-xs">{kleur.label}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                                    <Input
+                                      type="text"
+                                      placeholder="Of eigen kleur invullen"
+                                      value={!VERFKLEUREN.find(k => k.value === formData.items.plinten.verfkleur) ? formData.items.plinten.verfkleur : ''}
+                                      onChange={(e) => {
+                                        setFormData({
+                                          ...formData,
+                                          items: {
+                                            ...formData.items,
+                                            plinten: { ...formData.items.plinten, verfkleur: e.target.value }
+                                          }
+                                        })
+                                      }}
+                                      className="bg-background border h-9 text-xs"
+                                    />
+                </div>
                                 </>
                               )}
                             </div>
@@ -740,35 +791,52 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                     className="bg-background border h-9 text-sm"
                                     min="1"
                                   />
-                                  <Select
-                                    value={formData.items.lijstwerk.verfkleur}
-                                    onValueChange={(value) => {
-                                      setFormData({
-                                        ...formData,
-                                        items: {
-                                          ...formData.items,
-                                          lijstwerk: { ...formData.items.lijstwerk, verfkleur: value }
-                                        }
-                                      })
-                                    }}
-                                  >
-                                    <SelectTrigger className="bg-background border h-9 text-sm">
-                                      <SelectValue placeholder="Kies verfkleur" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {VERFKLEUREN.map((kleur) => (
-                                        <SelectItem key={kleur.value} value={kleur.value}>
-                                          <div className="flex items-center gap-2">
-                                            <div 
-                                              className="w-3 h-3 rounded border border-gray-300" 
-                                              style={{ backgroundColor: kleur.hex }}
-                                            />
-                                            <span className="text-xs">{kleur.label}</span>
-                                          </div>
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
+                                  <div className="space-y-2">
+                                    <Select
+                                      value={formData.items.lijstwerk.verfkleur}
+                                      onValueChange={(value) => {
+                                        setFormData({
+                                          ...formData,
+                                          items: {
+                                            ...formData.items,
+                                            lijstwerk: { ...formData.items.lijstwerk, verfkleur: value }
+                                          }
+                                        })
+                                      }}
+                                    >
+                                      <SelectTrigger className="bg-background border h-9 text-sm">
+                                        <SelectValue placeholder="Kies verfkleur" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {VERFKLEUREN.map((kleur) => (
+                                          <SelectItem key={kleur.value} value={kleur.value}>
+                                            <div className="flex items-center gap-2">
+                                              <div 
+                                                className="w-3 h-3 rounded border border-gray-300" 
+                                                style={{ backgroundColor: kleur.hex }}
+                                              />
+                                              <span className="text-xs">{kleur.label}</span>
+                  </div>
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                    <Input
+                                      type="text"
+                                      placeholder="Of eigen kleur invullen"
+                                      value={!VERFKLEUREN.find(k => k.value === formData.items.lijstwerk.verfkleur) ? formData.items.lijstwerk.verfkleur : ''}
+                                      onChange={(e) => {
+                                        setFormData({
+                                          ...formData,
+                                          items: {
+                                            ...formData.items,
+                                            lijstwerk: { ...formData.items.lijstwerk, verfkleur: e.target.value }
+                                          }
+                                        })
+                                      }}
+                                      className="bg-background border h-9 text-xs"
+                                    />
+                                  </div>
                                 </>
                               )}
                   </div>
@@ -814,35 +882,52 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                   className="bg-background border h-9 text-sm"
                     min="1"
                   />
-                                <Select
-                                  value={formData.items.kozijnen.verfkleur}
-                                  onValueChange={(value) => {
-                                    setFormData({
-                                      ...formData,
-                                      items: {
-                                        ...formData.items,
-                                        kozijnen: { ...formData.items.kozijnen, verfkleur: value }
-                                      }
-                                    })
-                                  }}
-                                >
-                                  <SelectTrigger className="bg-background border h-9 text-sm">
-                                    <SelectValue placeholder="Kies verfkleur" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    {VERFKLEUREN.map((kleur) => (
-                                      <SelectItem key={kleur.value} value={kleur.value}>
-                                        <div className="flex items-center gap-2">
-                                          <div 
-                                            className="w-3 h-3 rounded border border-gray-300" 
-                                            style={{ backgroundColor: kleur.hex }}
-                                          />
-                                          <span className="text-xs">{kleur.label}</span>
-                                        </div>
-                                      </SelectItem>
-                                    ))}
-                                  </SelectContent>
-                                </Select>
+                                <div className="space-y-2">
+                                  <Select
+                                    value={formData.items.kozijnen.verfkleur}
+                                    onValueChange={(value) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          kozijnen: { ...formData.items.kozijnen, verfkleur: value }
+                                        }
+                                      })
+                                    }}
+                                  >
+                                    <SelectTrigger className="bg-background border h-9 text-sm">
+                                      <SelectValue placeholder="Kies verfkleur" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {VERFKLEUREN.map((kleur) => (
+                                        <SelectItem key={kleur.value} value={kleur.value}>
+                                          <div className="flex items-center gap-2">
+                                            <div 
+                                              className="w-3 h-3 rounded border border-gray-300" 
+                                              style={{ backgroundColor: kleur.hex }}
+                                            />
+                                            <span className="text-xs">{kleur.label}</span>
+                                          </div>
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                  <Input
+                                    type="text"
+                                    placeholder="Of eigen kleur invullen"
+                                    value={!VERFKLEUREN.find(k => k.value === formData.items.kozijnen.verfkleur) ? formData.items.kozijnen.verfkleur : ''}
+                                    onChange={(e) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          kozijnen: { ...formData.items.kozijnen, verfkleur: e.target.value }
+                                        }
+                                      })
+                                    }}
+                                    className="bg-background border h-9 text-xs"
+                                  />
+                                </div>
                               </>
                             )}
                           </div>
@@ -885,35 +970,52 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                   className="bg-background border h-9 text-sm"
                     min="1"
                   />
-                  <Select
-                                  value={formData.items.deuren.verfkleur}
-                                  onValueChange={(value) => {
-                                    setFormData({
-                                      ...formData,
-                                      items: {
-                                        ...formData.items,
-                                        deuren: { ...formData.items.deuren, verfkleur: value }
-                                      }
-                                    })
-                                  }}
-                                >
-                                  <SelectTrigger className="bg-background border h-9 text-sm">
-                                    <SelectValue placeholder="Kies verfkleur" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {VERFKLEUREN.map((kleur) => (
-                        <SelectItem key={kleur.value} value={kleur.value}>
-                          <div className="flex items-center gap-2">
-                            <div 
-                                            className="w-3 h-3 rounded border border-gray-300" 
-                              style={{ backgroundColor: kleur.hex }}
-                            />
-                                          <span className="text-xs">{kleur.label}</span>
-            </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="space-y-2">
+                    <Select
+                      value={formData.items.deuren.verfkleur}
+                      onValueChange={(value) => {
+                        setFormData({
+                          ...formData,
+                          items: {
+                            ...formData.items,
+                            deuren: { ...formData.items.deuren, verfkleur: value }
+                          }
+                        })
+                      }}
+                    >
+                      <SelectTrigger className="bg-background border h-9 text-sm">
+                        <SelectValue placeholder="Kies verfkleur" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {VERFKLEUREN.map((kleur) => (
+                          <SelectItem key={kleur.value} value={kleur.value}>
+                            <div className="flex items-center gap-2">
+                              <div 
+                                className="w-3 h-3 rounded border border-gray-300" 
+                                style={{ backgroundColor: kleur.hex }}
+                              />
+                              <span className="text-xs">{kleur.label}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      type="text"
+                      placeholder="Of eigen kleur invullen"
+                      value={!VERFKLEUREN.find(k => k.value === formData.items.deuren.verfkleur) ? formData.items.deuren.verfkleur : ''}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          items: {
+                            ...formData.items,
+                            deuren: { ...formData.items.deuren, verfkleur: e.target.value }
+                          }
+                        })
+                      }}
+                      className="bg-background border h-9 text-xs"
+                    />
+                  </div>
                               </>
                             )}
                 </div>
@@ -1046,6 +1148,19 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                     )}
                   </Button>
             </div>
+
+            {/* Loading tekst tijdens AI generatie */}
+            {isAnalyzing && photos.length > 0 && (
+              <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Loader2 className="w-5 h-5 text-blue-600 animate-spin flex-shrink-0" />
+                  <div>
+                    <p className="text-blue-900 font-semibold text-sm">AI Preview wordt gegenereerd...</p>
+                    <p className="text-blue-700 text-xs mt-1">Dit duurt ongeveer 30 seconden per foto</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </form>
         </>
       ) : (

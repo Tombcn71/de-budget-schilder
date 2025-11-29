@@ -166,6 +166,17 @@ function buildSchilderwerkPrompt(specs: SchilderwerkSpecs): string {
     'blauw': 'elegant blauw (RAL 5014)'
   };
 
+  // Helper functie om kleur te beschrijven (ondersteunt custom kleuren)
+  const getKleurBeschrijving = (kleur: string | undefined): string => {
+    if (!kleur) return 'de opgegeven kleur';
+    // Check of het een preset kleur is
+    if (kleurDescriptions[kleur]) {
+      return kleurDescriptions[kleur];
+    }
+    // Custom kleur - gebruik letterlijk wat de gebruiker heeft ingevuld
+    return `"${kleur}" (user-specified custom color - interpret this color name naturally and apply it accurately)`;
+  };
+
   const projectTypeDescriptions: Record<string, string> = {
     'binnen': 'binnenschilderwerk',
     'buiten': 'buitenschilderwerk',
@@ -221,35 +232,41 @@ ${!paintMuren && paintPlafond ? `- DO NOT change the wall colors - only paint ce
 STEP 1 - IDENTIFY WHAT TO PAINT:
 ${paintMuren ? `
 - Paint ALL visible walls/wall surfaces
-- Apply ${items.muren?.verfkleur ? kleurDescriptions[items.muren.verfkleur] || items.muren.verfkleur : kleurDesc} paint color evenly
+- Apply ${getKleurBeschrijving(items.muren?.verfkleur)} paint color evenly
+- CRITICAL: The wall color MUST be ${getKleurBeschrijving(items.muren?.verfkleur)}
 - Keep wall texture (smooth/textured) exactly the same
 - Paint goes from floor to ceiling
 ` : ''}
 ${paintPlafond ? `
 - Paint the ENTIRE CEILING surface (this is CRITICAL)
-- Apply ${items.plafond?.verfkleur ? kleurDescriptions[items.plafond.verfkleur] || items.plafond.verfkleur : kleurDesc} paint color to ALL ceiling areas
+- Apply ${getKleurBeschrijving(items.plafond?.verfkleur)} paint color to ALL ceiling areas
+- CRITICAL: The ceiling color MUST be ${getKleurBeschrijving(items.plafond?.verfkleur)}
 - Keep ceiling texture exactly the same (smooth/textured/popcorn)
 - Paint EVERY visible part of the ceiling from wall to wall
 - DO NOT miss any ceiling sections
 ` : ''}
 ${paintKozijnen ? `
 - Paint ONLY the window frames/kozijnen
-- Apply ${items.kozijnen?.verfkleur ? kleurDescriptions[items.kozijnen.verfkleur] || items.kozijnen.verfkleur : kleurDesc} paint to all frame parts
+- Apply ${getKleurBeschrijving(items.kozijnen?.verfkleur)} paint to all frame parts
+- CRITICAL: The kozijnen color MUST be ${getKleurBeschrijving(items.kozijnen?.verfkleur)}
 - Keep glass clear and transparent
 - DO NOT paint the glass itself
 ` : ''}
 ${paintDeuren ? `
 - Paint ONLY the doors
-- Apply ${items.deuren?.verfkleur ? kleurDescriptions[items.deuren.verfkleur] || items.deuren.verfkleur : kleurDesc} paint to entire door surface
+- Apply ${getKleurBeschrijving(items.deuren?.verfkleur)} paint to entire door surface
+- CRITICAL: The door color MUST be ${getKleurBeschrijving(items.deuren?.verfkleur)}
 - Keep door handles/hardware unpainted (metal color)
 ` : ''}
 ${paintPlinten ? `
 - Paint all baseboards/plinten
-- Apply ${items.plinten?.verfkleur ? kleurDescriptions[items.plinten.verfkleur] || items.plinten.verfkleur : kleurDesc} paint evenly
+- Apply ${getKleurBeschrijving(items.plinten?.verfkleur)} paint evenly
+- CRITICAL: The plinten color MUST be ${getKleurBeschrijving(items.plinten?.verfkleur)}
 ` : ''}
 ${paintLijstwerk ? `
 - Paint all crown molding/lijstwerk
-- Apply ${items.lijstwerk?.verfkleur ? kleurDescriptions[items.lijstwerk.verfkleur] || items.lijstwerk.verfkleur : kleurDesc} paint evenly
+- Apply ${getKleurBeschrijving(items.lijstwerk?.verfkleur)} paint evenly
+- CRITICAL: The lijstwerk color MUST be ${getKleurBeschrijving(items.lijstwerk?.verfkleur)}
 ` : ''}
 ${paintGevel ? `
 - Paint the exterior facade/gevel
