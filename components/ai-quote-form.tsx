@@ -800,7 +800,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                       {/* Kozijnen */}
                       <div className={`p-3 border-2 rounded-lg ${formData.items.kozijnen.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
                         <div className="flex items-start gap-3">
-                          <Checkbox 
+                    <Checkbox
                             checked={formData.items.kozijnen.enabled}
                             onCheckedChange={(checked) => {
                               setFormData({
@@ -816,7 +816,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                           <div className="flex-1 space-y-2">
                             <div className="font-semibold text-foreground text-sm">
                               Kozijnen (m¹) - {formData.projectType === 'buiten' ? '€12,50/m' : '€7,50/m'}
-              </div>
+                  </div>
                             {formData.items.kozijnen.enabled && (
                               <>
                   <Input
@@ -860,12 +860,12 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                               style={{ backgroundColor: kleur.hex }}
                                             />
                                             <span className="text-xs">{kleur.label}</span>
-                                          </div>
+                </div>
                                         </SelectItem>
                                       ))}
                                     </SelectContent>
                                   </Select>
-                                </div>
+              </div>
                               </>
                             )}
                           </div>
@@ -933,7 +933,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                 style={{ backgroundColor: kleur.hex }}
                               />
                               <span className="text-xs">{kleur.label}</span>
-                            </div>
+            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -964,7 +964,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                       <p className="text-muted-foreground">✓ A-merk verf per item</p>
                       <p className="text-muted-foreground">✓ Schuren + voorbehandeling</p>
                       <p className="text-muted-foreground">✓ 2 lagen afwerking</p>
-                      <p className="text-muted-foreground text-xs mt-2">💡 Meerwerk: Houtrot reparatie vanaf €35/uur</p>
                     </div>
                   </div>
                 )}
@@ -1080,8 +1079,8 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   <div>
                     <p className="text-blue-900 font-semibold text-sm">AI Preview wordt gegenereerd...</p>
                     <p className="text-blue-700 text-xs mt-1">Dit duurt ongeveer 30 seconden per foto</p>
-                  </div>
-                </div>
+            </div>
+            </div>
               </div>
             )}
           </form>
@@ -1099,7 +1098,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
             </p>
             <p className="text-green-600 text-sm">
               {analysisResults.length > 0 
-                ? 'U ontvangt uw prijsindicatie + gratis AI preview per email'
+                ? 'U ontvangt uw prijsindicatie per email + ziet hieronder uw AI preview'
                 : 'U ontvangt uw prijsindicatie per email'}
             </p>
           </div>
@@ -1333,7 +1332,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                 <p className="text-muted-foreground">✓ Inclusief: Schuren + voorbehandeling</p>
                 <p className="text-muted-foreground">✓ Inclusief: 2 lagen afwerking</p>
                 <p className="text-muted-foreground">✓ Inclusief: A-merk verf</p>
-                <p className="text-muted-foreground mt-2">💡 Meerwerk: Houtrot reparatie vanaf €35/uur + materiaal</p>
               </div>
             </div>
           )}
