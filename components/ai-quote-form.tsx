@@ -204,6 +204,16 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
   const scrollPositionRef = useRef<number>(0)
   const formRef = useRef<HTMLDivElement>(null)
 
+  // Facebook Pixel: Track ViewContent when component loads
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'ViewContent', {
+        content_name: 'Schilderwerk Prijsindicatie Form',
+        content_category: 'Quote Form'
+      })
+    }
+  }, [])
+
   const [formData, setFormData] = useState({
     projectType: "" as ProjectType | "",
     naam: "",
@@ -224,6 +234,25 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
   const priceRange = formData.projectType
     ? calculateMultiItemPrice(formData.projectType, formData.items)
     : null
+
+  // Facebook Pixel: Track InitiateCheckout when price is calculated
+  useEffect(() => {
+    if (priceRange && typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'InitiateCheckout', {
+        content_name: 'Schilderwerk Quote Started',
+        value: priceRange.min,
+        currency: 'EUR',
+        num_items: [
+          formData.items.muren.enabled,
+          formData.items.plafond.enabled,
+          formData.items.plinten.enabled,
+          formData.items.lijstwerk.enabled,
+          formData.items.kozijnen.enabled,
+          formData.items.deuren.enabled
+        ].filter(Boolean).length
+      })
+    }
+  }, [priceRange?.min]) // Only track when price changes
 
   // Verwijderd - veroorzaakte frozen scherm
 
@@ -313,6 +342,16 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
 
       setEmailSent(true)
       console.log('✅ Prijsindicatie verzonden:', data)
+      
+      // Facebook Pixel: Track Lead conversion
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'Lead', {
+          content_name: 'Schilderwerk Offerte',
+          value: priceRange?.min || 0,
+          currency: 'EUR',
+          content_category: 'Schilderwerk'
+        })
+      }
       
       // Scroll naar de top van het formulier na DOM update
       setTimeout(() => {
