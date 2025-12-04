@@ -21,7 +21,7 @@ interface PriceRange {
 }
 
 type ProjectType = 'binnen' | 'buiten' | 'binnen_buiten'
-type SchilderwerkType = 'muren' | 'plafond' | 'kozijnen' | 'deuren' | 'plinten' | 'lijstwerk' | 'volledige_kamer' | 'gevel'
+type SchilderwerkType = 'muren' | 'plafond' | 'plinten' | 'lijstwerk' | 'binnenkozijn' | 'binnendeur' | 'buitenkozijn' | 'deurkozijn' | 'volledige_kamer' | 'gevel'
 type MeasurementUnit = 'm2' | 'm1' // m² of strekkende meter
 
 // ============================================================================
@@ -40,17 +40,18 @@ const PRIJZEN_PER_M2 = {
   }
 } as const
 
-// Schilderwerk berekend per STREKKENDE METER (m¹)
+// Schilderwerk berekend per STREKKENDE METER (m¹) of per STUK
 const PRIJZEN_PER_M1 = {
   binnen: {
-    kozijnen: { min: 12.50, max: 12.50 },        // €12,50 per meter (incl. schuren + 2 lagen)
-    deuren: { min: 125, max: 125 },              // €125 per stuk (incl. schuren + 2 lagen)
     plinten: { min: 7.50, max: 7.50 },           // €7,50 per strekkende meter
     lijstwerk: { min: 7.50, max: 7.50 },         // €7,50 per strekkende meter
+    binnenkozijn: { min: 100, max: 100 },        // €100 per stuk
+    binnendeur: { min: 100, max: 100 },          // €100 per stuk
+    deurkozijn: { min: 40, max: 40 },            // €40 per stuk
   },
   buiten: {
-    kozijnen: { min: 12.50, max: 12.50 },        // €12,50 per meter (incl. schuren + 2 lagen)
-    deuren: { min: 125, max: 125 },              // €125 per stuk (incl. schuren + 2 lagen)
+    buitenkozijn: { min: 125, max: 125 },        // €125 per stuk
+    buitendeur: { min: 125, max: 125 },          // €125 per stuk
   }
 } as const
 
@@ -60,10 +61,12 @@ const MEASUREMENT_UNITS: Record<SchilderwerkType, MeasurementUnit> = {
   plafond: 'm2',
   gevel: 'm2',
   volledige_kamer: 'm2',
-  kozijnen: 'm1',
-  deuren: 'm1',
   plinten: 'm1',
   lijstwerk: 'm1',
+  binnenkozijn: 'm1',
+  binnendeur: 'm1',
+  buitenkozijn: 'm1',
+  deurkozijn: 'm1',
 }
 
 // Helper: formateer prijs naar euro formaat
@@ -155,27 +158,52 @@ function calculateMultiItemPrice(
     }
   }
   
-  // Kozijnen (binnen/buiten afhankelijk van projectType)
-  if (items.kozijnen.enabled && items.kozijnen.m1) {
-    const m1 = parseFloat(items.kozijnen.m1)
-    if (m1 > 0) {
-      if (projectType === 'buiten') {
-        totalMin += m1 * PRIJZEN_PER_M1.buiten.kozijnen.min
-        totalMax += m1 * PRIJZEN_PER_M1.buiten.kozijnen.max
-      } else {
-        totalMin += m1 * PRIJZEN_PER_M1.binnen.kozijnen.min
-        totalMax += m1 * PRIJZEN_PER_M1.binnen.kozijnen.max
-      }
+  // Binnenkozijnen (€100 per stuk) - alleen binnen
+  if (items.binnenkozijnen?.enabled && items.binnenkozijnen?.aantal) {
+    const aantal = parseInt(items.binnenkozijnen.aantal)
+    if (aantal > 0) {
+      totalMin += aantal * PRIJZEN_PER_M1.binnen.binnenkozijn.min
+      totalMax += aantal * PRIJZEN_PER_M1.binnen.binnenkozijn.max
       hasItems = true
     }
   }
   
-  // Deuren (€125 per stuk)
-  if (items.deuren.enabled && items.deuren.aantal) {
-    const aantal = parseInt(items.deuren.aantal)
+  // Binnendeuren (€125 per stuk) - alleen binnen
+  if (items.binnendeuren?.enabled && items.binnendeuren?.aantal) {
+    const aantal = parseInt(items.binnendeuren.aantal)
     if (aantal > 0) {
-      totalMin += aantal * PRIJZEN_PER_M1.binnen.deuren.min
-      totalMax += aantal * PRIJZEN_PER_M1.binnen.deuren.max
+      totalMin += aantal * PRIJZEN_PER_M1.binnen.binnendeur.min
+      totalMax += aantal * PRIJZEN_PER_M1.binnen.binnendeur.max
+      hasItems = true
+    }
+  }
+  
+  // Deurkozijnen (€40 per stuk) - alleen binnen
+  if (items.deurkozijnen?.enabled && items.deurkozijnen?.aantal) {
+    const aantal = parseInt(items.deurkozijnen.aantal)
+    if (aantal > 0) {
+      totalMin += aantal * PRIJZEN_PER_M1.binnen.deurkozijn.min
+      totalMax += aantal * PRIJZEN_PER_M1.binnen.deurkozijn.max
+      hasItems = true
+    }
+  }
+  
+  // Buitenkozijnen (€125 per stuk) - alleen buiten
+  if (items.buitenkozijnen?.enabled && items.buitenkozijnen?.aantal) {
+    const aantal = parseInt(items.buitenkozijnen.aantal)
+    if (aantal > 0) {
+      totalMin += aantal * PRIJZEN_PER_M1.buiten.buitenkozijn.min
+      totalMax += aantal * PRIJZEN_PER_M1.buiten.buitenkozijn.max
+      hasItems = true
+    }
+  }
+  
+  // Buitendeuren (€150 per stuk) - alleen buiten
+  if (items.buitendeuren?.enabled && items.buitendeuren?.aantal) {
+    const aantal = parseInt(items.buitendeuren.aantal)
+    if (aantal > 0) {
+      totalMin += aantal * PRIJZEN_PER_M1.buiten.buitendeur.min
+      totalMax += aantal * PRIJZEN_PER_M1.buiten.buitendeur.max
       hasItems = true
     }
   }
@@ -221,12 +249,17 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
     telefoon: "",
     // Multi-item systeem
     items: {
+      // Binnen opties
       muren: { enabled: false, m2: "", verfkleur: "" },
       plafond: { enabled: false, m2: "", verfkleur: "" },
       plinten: { enabled: false, m1: "", verfkleur: "" },
       lijstwerk: { enabled: false, m1: "", verfkleur: "" },
-      kozijnen: { enabled: false, m1: "", verfkleur: "" },
-      deuren: { enabled: false, aantal: "", verfkleur: "" },
+      binnenkozijnen: { enabled: false, aantal: "", verfkleur: "" },
+      binnendeuren: { enabled: false, aantal: "", verfkleur: "" },
+      deurkozijnen: { enabled: false, aantal: "", verfkleur: "" },
+      // Buiten opties
+      buitenkozijnen: { enabled: false, aantal: "", verfkleur: "" },
+      buitendeuren: { enabled: false, aantal: "", verfkleur: "" },
     }
   })
 
@@ -247,8 +280,11 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
           formData.items.plafond.enabled,
           formData.items.plinten.enabled,
           formData.items.lijstwerk.enabled,
-          formData.items.kozijnen.enabled,
-          formData.items.deuren.enabled
+          formData.items.binnenkozijnen.enabled,
+          formData.items.binnendeuren.enabled,
+          formData.items.deurkozijnen.enabled,
+          formData.items.buitenkozijnen.enabled,
+          formData.items.buitendeuren.enabled
         ].filter(Boolean).length
       })
     }
@@ -837,53 +873,51 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
               </div>
             )}
 
-                      {/* Kozijnen */}
-                      <div className={`p-3 border-2 rounded-lg ${formData.items.kozijnen.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                      {/* Binnenkozijnen - alleen bij binnen of binnen_buiten */}
+                      {(formData.projectType === 'binnen' || formData.projectType === 'binnen_buiten') && (
+                        <div className={`p-3 border-2 rounded-lg ${formData.items.binnenkozijnen.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
                         <div className="flex items-start gap-3">
                     <Checkbox
-                            checked={formData.items.kozijnen.enabled}
+                              checked={formData.items.binnenkozijnen.enabled}
                             onCheckedChange={(checked) => {
                               setFormData({
                                 ...formData,
                                 items: {
                                   ...formData.items,
-                                  kozijnen: { ...formData.items.kozijnen, enabled: !!checked }
+                                    binnenkozijnen: { ...formData.items.binnenkozijnen, enabled: !!checked }
                                 }
                               })
                             }}
                             className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                           />
                           <div className="flex-1 space-y-2">
-                            <div className="font-semibold text-foreground text-sm">
-                              Kozijnen (m¹) - €12,50/m
-                  </div>
-                            {formData.items.kozijnen.enabled && (
+                              <div className="font-semibold text-foreground text-sm">Binnenkozijnen - €100 per stuk</div>
+                              {formData.items.binnenkozijnen.enabled && (
                               <>
                   <Input
                     type="number"
-                                  placeholder="Strekkende meter"
-                                  value={formData.items.kozijnen.m1}
+                                    placeholder="Aantal kozijnen"
+                                    value={formData.items.binnenkozijnen.aantal}
                                   onChange={(e) => {
                                     setFormData({
                                       ...formData,
                                       items: {
                                         ...formData.items,
-                                        kozijnen: { ...formData.items.kozijnen, m1: e.target.value }
+                                          binnenkozijnen: { ...formData.items.binnenkozijnen, aantal: e.target.value }
                                       }
                                     })
                                   }}
                                   className="bg-background border h-9 text-sm"
                     min="1"
                   />
-                                <div className="space-y-2">
                                   <Select
-                                    value={formData.items.kozijnen.verfkleur}
+                                    value={formData.items.binnenkozijnen.verfkleur}
                                     onValueChange={(value) => {
                                       setFormData({
                                         ...formData,
                                         items: {
                                           ...formData.items,
-                                          kozijnen: { ...formData.items.kozijnen, verfkleur: value }
+                                          binnenkozijnen: { ...formData.items.binnenkozijnen, verfkleur: value }
                                         }
                                       })
                                     }}
@@ -895,68 +929,65 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                                       {VERFKLEUREN.map((kleur) => (
                                         <SelectItem key={kleur.value} value={kleur.value}>
                                           <div className="flex items-center gap-2">
-                                            <div 
-                                              className="w-3 h-3 rounded border border-gray-300" 
-                                              style={{ backgroundColor: kleur.hex }}
-                                            />
+                                            <div className="w-3 h-3 rounded border border-gray-300" style={{ backgroundColor: kleur.hex }} />
                                             <span className="text-xs">{kleur.label}</span>
                 </div>
                                         </SelectItem>
                                       ))}
                                     </SelectContent>
                                   </Select>
-              </div>
                               </>
                             )}
                           </div>
                         </div>
                 </div>
+                      )}
 
-                      {/* Deuren */}
-                      <div className={`p-3 border-2 rounded-lg ${formData.items.deuren.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                      {/* Binnendeuren - alleen bij binnen of binnen_buiten */}
+                      {(formData.projectType === 'binnen' || formData.projectType === 'binnen_buiten') && (
+                        <div className={`p-3 border-2 rounded-lg ${formData.items.binnendeuren.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
                         <div className="flex items-start gap-3">
                           <Checkbox 
-                            checked={formData.items.deuren.enabled}
+                              checked={formData.items.binnendeuren.enabled}
                             onCheckedChange={(checked) => {
                               setFormData({
                                 ...formData,
                                 items: {
                                   ...formData.items,
-                                  deuren: { ...formData.items.deuren, enabled: !!checked }
+                                    binnendeuren: { ...formData.items.binnendeuren, enabled: !!checked }
                                 }
                               })
                             }}
                             className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                           />
                           <div className="flex-1 space-y-2">
-                            <div className="font-semibold text-foreground text-sm">Deuren - €125 per stuk</div>
-                            {formData.items.deuren.enabled && (
+                              <div className="font-semibold text-foreground text-sm">Binnendeuren - €100 per stuk</div>
+                              {formData.items.binnendeuren.enabled && (
                               <>
                   <Input
                     type="number"
                                   placeholder="Aantal deuren"
-                                  value={formData.items.deuren.aantal}
+                                    value={formData.items.binnendeuren.aantal}
                                   onChange={(e) => {
                                     setFormData({
                                       ...formData,
                                       items: {
                                         ...formData.items,
-                                        deuren: { ...formData.items.deuren, aantal: e.target.value }
+                                          binnendeuren: { ...formData.items.binnendeuren, aantal: e.target.value }
                                       }
                                     })
                                   }}
                                   className="bg-background border h-9 text-sm"
                     min="1"
                   />
-                  <div className="space-y-2">
                     <Select
-                      value={formData.items.deuren.verfkleur}
+                                    value={formData.items.binnendeuren.verfkleur}
                       onValueChange={(value) => {
                         setFormData({
                           ...formData,
                           items: {
                             ...formData.items,
-                            deuren: { ...formData.items.deuren, verfkleur: value }
+                                          binnendeuren: { ...formData.items.binnendeuren, verfkleur: value }
                           }
                         })
                       }}
@@ -968,22 +999,229 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                         {VERFKLEUREN.map((kleur) => (
                           <SelectItem key={kleur.value} value={kleur.value}>
                             <div className="flex items-center gap-2">
-                              <div 
-                                className="w-3 h-3 rounded border border-gray-300" 
-                                style={{ backgroundColor: kleur.hex }}
-                              />
+                                            <div className="w-3 h-3 rounded border border-gray-300" style={{ backgroundColor: kleur.hex }} />
+                                            <span className="text-xs">{kleur.label}</span>
+                                          </div>
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Buitenkozijnen - alleen bij buiten of binnen_buiten */}
+                      {(formData.projectType === 'buiten' || formData.projectType === 'binnen_buiten') && (
+                        <div className={`p-3 border-2 rounded-lg ${formData.items.buitenkozijnen.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                          <div className="flex items-start gap-3">
+                            <Checkbox
+                              checked={formData.items.buitenkozijnen.enabled}
+                              onCheckedChange={(checked) => {
+                                setFormData({
+                                  ...formData,
+                                  items: {
+                                    ...formData.items,
+                                    buitenkozijnen: { ...formData.items.buitenkozijnen, enabled: !!checked }
+                                  }
+                                })
+                              }}
+                              className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                            />
+                            <div className="flex-1 space-y-2">
+                              <div className="font-semibold text-foreground text-sm">Buitenkozijnen - €125 per stuk</div>
+                              {formData.items.buitenkozijnen.enabled && (
+                                <>
+                                  <Input
+                                    type="number"
+                                    placeholder="Aantal kozijnen"
+                                    value={formData.items.buitenkozijnen.aantal}
+                                    onChange={(e) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          buitenkozijnen: { ...formData.items.buitenkozijnen, aantal: e.target.value }
+                                        }
+                                      })
+                                    }}
+                                    className="bg-background border h-9 text-sm"
+                                    min="1"
+                                  />
+                                  <Select
+                                    value={formData.items.buitenkozijnen.verfkleur}
+                                    onValueChange={(value) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          buitenkozijnen: { ...formData.items.buitenkozijnen, verfkleur: value }
+                                        }
+                                      })
+                                    }}
+                                  >
+                                    <SelectTrigger className="bg-background border h-9 text-sm">
+                                      <SelectValue placeholder="Kies verfkleur" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {VERFKLEUREN.map((kleur) => (
+                                        <SelectItem key={kleur.value} value={kleur.value}>
+                                          <div className="flex items-center gap-2">
+                                            <div className="w-3 h-3 rounded border border-gray-300" style={{ backgroundColor: kleur.hex }} />
                               <span className="text-xs">{kleur.label}</span>
             </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
+                                </>
+                              )}
                   </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Deurkozijnen - alleen bij binnen of binnen_buiten */}
+                      {(formData.projectType === 'binnen' || formData.projectType === 'binnen_buiten') && (
+                        <div className={`p-3 border-2 rounded-lg ${formData.items.deurkozijnen.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                          <div className="flex items-start gap-3">
+                            <Checkbox
+                              checked={formData.items.deurkozijnen.enabled}
+                              onCheckedChange={(checked) => {
+                                setFormData({
+                                  ...formData,
+                                  items: {
+                                    ...formData.items,
+                                    deurkozijnen: { ...formData.items.deurkozijnen, enabled: !!checked }
+                                  }
+                                })
+                              }}
+                              className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                            />
+                            <div className="flex-1 space-y-2">
+                              <div className="font-semibold text-foreground text-sm">Deurkozijnen - €40 per stuk</div>
+                              {formData.items.deurkozijnen.enabled && (
+                                <>
+                                  <Input
+                                    type="number"
+                                    placeholder="Aantal deurkozijnen"
+                                    value={formData.items.deurkozijnen.aantal}
+                                    onChange={(e) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          deurkozijnen: { ...formData.items.deurkozijnen, aantal: e.target.value }
+                                        }
+                                      })
+                                    }}
+                                    className="bg-background border h-9 text-sm"
+                                    min="1"
+                                  />
+                                  <Select
+                                    value={formData.items.deurkozijnen.verfkleur}
+                                    onValueChange={(value) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          deurkozijnen: { ...formData.items.deurkozijnen, verfkleur: value }
+                                        }
+                                      })
+                                    }}
+                                  >
+                                    <SelectTrigger className="bg-background border h-9 text-sm">
+                                      <SelectValue placeholder="Kies verfkleur" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {VERFKLEUREN.map((kleur) => (
+                                        <SelectItem key={kleur.value} value={kleur.value}>
+                                          <div className="flex items-center gap-2">
+                                            <div className="w-3 h-3 rounded border border-gray-300" style={{ backgroundColor: kleur.hex }} />
+                                            <span className="text-xs">{kleur.label}</span>
+                                          </div>
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
                               </>
                             )}
                 </div>
                         </div>
                       </div>
+                      )}
+
+                      {/* Buitendeuren - alleen bij buiten of binnen_buiten */}
+                      {(formData.projectType === 'buiten' || formData.projectType === 'binnen_buiten') && (
+                        <div className={`p-3 border-2 rounded-lg ${formData.items.buitendeuren.enabled ? 'border-primary bg-primary/5' : 'border-border'}`}>
+                          <div className="flex items-start gap-3">
+                            <Checkbox
+                              checked={formData.items.buitendeuren.enabled}
+                              onCheckedChange={(checked) => {
+                                setFormData({
+                                  ...formData,
+                                  items: {
+                                    ...formData.items,
+                                    buitendeuren: { ...formData.items.buitendeuren, enabled: !!checked }
+                                  }
+                                })
+                              }}
+                              className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                            />
+                            <div className="flex-1 space-y-2">
+                              <div className="font-semibold text-foreground text-sm">Buitendeuren - €125 per stuk</div>
+                              {formData.items.buitendeuren.enabled && (
+                                <>
+                                  <Input
+                                    type="number"
+                                    placeholder="Aantal buitendeuren"
+                                    value={formData.items.buitendeuren.aantal}
+                                    onChange={(e) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          buitendeuren: { ...formData.items.buitendeuren, aantal: e.target.value }
+                                        }
+                                      })
+                                    }}
+                                    className="bg-background border h-9 text-sm"
+                                    min="1"
+                                  />
+                                  <Select
+                                    value={formData.items.buitendeuren.verfkleur}
+                                    onValueChange={(value) => {
+                                      setFormData({
+                                        ...formData,
+                                        items: {
+                                          ...formData.items,
+                                          buitendeuren: { ...formData.items.buitendeuren, verfkleur: value }
+                                        }
+                                      })
+                                    }}
+                                  >
+                                    <SelectTrigger className="bg-background border h-9 text-sm">
+                                      <SelectValue placeholder="Kies verfkleur" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {VERFKLEUREN.map((kleur) => (
+                                        <SelectItem key={kleur.value} value={kleur.value}>
+                                          <div className="flex items-center gap-2">
+                                            <div className="w-3 h-3 rounded border border-gray-300" style={{ backgroundColor: kleur.hex }} />
+                                            <span className="text-xs">{kleur.label}</span>
+                                          </div>
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -1326,37 +1564,91 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
               </div>
             )}
                 
-                {formData.items.kozijnen.enabled && formData.items.kozijnen.m1 && (
+                {formData.items.binnenkozijnen.enabled && formData.items.binnenkozijnen.aantal && (
                   <div className="border-b border-border pb-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">
-                        Kozijnen: {formData.items.kozijnen.m1} m¹ × €12,50
+                        Binnenkozijnen: {formData.items.binnenkozijnen.aantal} × €100
                       </span>
                       <span className="font-medium text-foreground">
-                        {formatPrice(parseFloat(formData.items.kozijnen.m1) * (formData.projectType === 'buiten' ? 12.50 : 7.50))}
+                        {formatPrice(parseInt(formData.items.binnenkozijnen.aantal) * 100)}
                       </span>
               </div>
-                    {formData.items.kozijnen.verfkleur && (
+                    {formData.items.binnenkozijnen.verfkleur && (
                       <p className="text-xs text-muted-foreground mt-1">
-                        Kleur: {formData.items.kozijnen.verfkleur}
+                        Kleur: {formData.items.binnenkozijnen.verfkleur}
               </p>
                     )}
             </div>
           )}
 
-                {formData.items.deuren.enabled && formData.items.deuren.aantal && (
+                {formData.items.binnendeuren.enabled && formData.items.binnendeuren.aantal && (
                   <div className="border-b border-border pb-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">
-                        Deuren: {formData.items.deuren.aantal} × €125
+                        Binnendeuren: {formData.items.binnendeuren.aantal} × €100
                       </span>
                       <span className="font-medium text-foreground">
-                        {formatPrice(parseInt(formData.items.deuren.aantal) * 125)}
+                        {formatPrice(parseInt(formData.items.binnendeuren.aantal) * 100)}
                       </span>
                     </div>
-                    {formData.items.deuren.verfkleur && (
+                    {formData.items.binnendeuren.verfkleur && (
                       <p className="text-xs text-muted-foreground mt-1">
-                        Kleur: {formData.items.deuren.verfkleur}
+                        Kleur: {formData.items.binnendeuren.verfkleur}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {formData.items.buitenkozijnen.enabled && formData.items.buitenkozijnen.aantal && (
+                  <div className="border-b border-border pb-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        Buitenkozijnen: {formData.items.buitenkozijnen.aantal} × €125
+                      </span>
+                      <span className="font-medium text-foreground">
+                        {formatPrice(parseInt(formData.items.buitenkozijnen.aantal) * 125)}
+                      </span>
+                    </div>
+                    {formData.items.buitenkozijnen.verfkleur && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Kleur: {formData.items.buitenkozijnen.verfkleur}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {formData.items.deurkozijnen.enabled && formData.items.deurkozijnen.aantal && (
+                  <div className="border-b border-border pb-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        Deurkozijnen: {formData.items.deurkozijnen.aantal} × €40
+                      </span>
+                      <span className="font-medium text-foreground">
+                        {formatPrice(parseInt(formData.items.deurkozijnen.aantal) * 40)}
+                      </span>
+                    </div>
+                    {formData.items.deurkozijnen.verfkleur && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Kleur: {formData.items.deurkozijnen.verfkleur}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {formData.items.buitendeuren.enabled && formData.items.buitendeuren.aantal && (
+                  <div className="border-b border-border pb-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">
+                        Buitendeuren: {formData.items.buitendeuren.aantal} × €125
+                      </span>
+                      <span className="font-medium text-foreground">
+                        {formatPrice(parseInt(formData.items.buitendeuren.aantal) * 125)}
+                      </span>
+                    </div>
+                    {formData.items.buitendeuren.verfkleur && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Kleur: {formData.items.buitendeuren.verfkleur}
                       </p>
                     )}
                   </div>
@@ -1388,15 +1680,18 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                 naam: "",
                 email: "",
                 telefoon: "",
-                  items: {
-                    muren: { enabled: false, m2: "", verfkleur: "" },
-                    plafond: { enabled: false, m2: "", verfkleur: "" },
-                    plinten: { enabled: false, m1: "", verfkleur: "" },
-                    lijstwerk: { enabled: false, m1: "", verfkleur: "" },
-                    kozijnen: { enabled: false, m1: "", verfkleur: "" },
-                    deuren: { enabled: false, aantal: "", verfkleur: "" },
-                  }
-                })
+                items: {
+                  muren: { enabled: false, m2: "", verfkleur: "" },
+                  plafond: { enabled: false, m2: "", verfkleur: "" },
+                  plinten: { enabled: false, m1: "", verfkleur: "" },
+                  lijstwerk: { enabled: false, m1: "", verfkleur: "" },
+                  binnenkozijnen: { enabled: false, aantal: "", verfkleur: "" },
+                  binnendeuren: { enabled: false, aantal: "", verfkleur: "" },
+                  deurkozijnen: { enabled: false, aantal: "", verfkleur: "" },
+                  buitenkozijnen: { enabled: false, aantal: "", verfkleur: "" },
+                  buitendeuren: { enabled: false, aantal: "", verfkleur: "" },
+                }
+              })
               }}
               variant="outline"
               className="w-full h-12 font-semibold"

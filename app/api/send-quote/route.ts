@@ -46,34 +46,147 @@ export async function POST(request: Request) {
     }
     const projectTypeLabel = projectTypeLabels[formData.projectType] || formData.projectType
 
-    // Build items list from multi-item form
+    // Build items list from multi-item form with price calculations
     const items = formData.items || {}
     const itemsText: string[] = []
     const itemsHTML: string[] = []
+    const priceBreakdownHTML: string[] = []
+    const priceBreakdownText: string[] = []
+    
+    // Prijzen constanten
+    const PRIJZEN = {
+      muren: 12.50,
+      plafond: 13.50,
+      plinten: 7.50,
+      lijstwerk: 7.50,
+      binnenkozijnen: 100,
+      binnendeuren: 100,
+      deurkozijnen: 40,
+      buitenkozijnen: 125,
+      buitendeuren: 125,
+    }
+    
+    const formatEuro = (amount: number) => `€${amount.toLocaleString('nl-NL')}`
     
     if (items.muren?.enabled && items.muren.m2) {
+      const subtotal = parseFloat(items.muren.m2) * PRIJZEN.muren
       itemsText.push(`- Muren: ${items.muren.m2} m² (${items.muren.verfkleur || 'geen kleur gekozen'})`)
       itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Muren</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.muren.m2} m² - ${items.muren.verfkleur || 'geen kleur'}</td></tr>`)
+      priceBreakdownText.push(`- Muren: ${items.muren.m2} m² × €12,50 = ${formatEuro(subtotal)} (${items.muren.verfkleur || 'geen kleur'})`)
+      priceBreakdownHTML.push(`
+        <tr>
+          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Muren: ${items.muren.m2} m² × €12,50</td>
+          <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right; font-weight: 600;">${formatEuro(subtotal)}</td>
+        </tr>
+        <tr><td colspan="2" style="padding: 0 0 8px 0; color: #9ca3af; font-size: 12px; border-bottom: 1px solid #e5e7eb;">Kleur: ${items.muren.verfkleur || 'geen kleur'}</td></tr>
+      `)
     }
     if (items.plafond?.enabled && items.plafond.m2) {
+      const subtotal = parseFloat(items.plafond.m2) * PRIJZEN.plafond
       itemsText.push(`- Plafond: ${items.plafond.m2} m² (${items.plafond.verfkleur || 'geen kleur gekozen'})`)
       itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Plafond</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.plafond.m2} m² - ${items.plafond.verfkleur || 'geen kleur'}</td></tr>`)
+      priceBreakdownText.push(`- Plafond: ${items.plafond.m2} m² × €13,50 = ${formatEuro(subtotal)} (${items.plafond.verfkleur || 'geen kleur'})`)
+      priceBreakdownHTML.push(`
+        <tr>
+          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Plafond: ${items.plafond.m2} m² × €13,50</td>
+          <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right; font-weight: 600;">${formatEuro(subtotal)}</td>
+        </tr>
+        <tr><td colspan="2" style="padding: 0 0 8px 0; color: #9ca3af; font-size: 12px; border-bottom: 1px solid #e5e7eb;">Kleur: ${items.plafond.verfkleur || 'geen kleur'}</td></tr>
+      `)
     }
     if (items.plinten?.enabled && items.plinten.m1) {
+      const subtotal = parseFloat(items.plinten.m1) * PRIJZEN.plinten
       itemsText.push(`- Plinten: ${items.plinten.m1} m¹ (${items.plinten.verfkleur || 'geen kleur gekozen'})`)
       itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Plinten</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.plinten.m1} m¹ - ${items.plinten.verfkleur || 'geen kleur'}</td></tr>`)
+      priceBreakdownText.push(`- Plinten: ${items.plinten.m1} m¹ × €7,50 = ${formatEuro(subtotal)} (${items.plinten.verfkleur || 'geen kleur'})`)
+      priceBreakdownHTML.push(`
+        <tr>
+          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Plinten: ${items.plinten.m1} m¹ × €7,50</td>
+          <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right; font-weight: 600;">${formatEuro(subtotal)}</td>
+        </tr>
+        <tr><td colspan="2" style="padding: 0 0 8px 0; color: #9ca3af; font-size: 12px; border-bottom: 1px solid #e5e7eb;">Kleur: ${items.plinten.verfkleur || 'geen kleur'}</td></tr>
+      `)
     }
     if (items.lijstwerk?.enabled && items.lijstwerk.m1) {
+      const subtotal = parseFloat(items.lijstwerk.m1) * PRIJZEN.lijstwerk
       itemsText.push(`- Lijstwerk: ${items.lijstwerk.m1} m¹ (${items.lijstwerk.verfkleur || 'geen kleur gekozen'})`)
       itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Lijstwerk</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.lijstwerk.m1} m¹ - ${items.lijstwerk.verfkleur || 'geen kleur'}</td></tr>`)
+      priceBreakdownText.push(`- Lijstwerk: ${items.lijstwerk.m1} m¹ × €7,50 = ${formatEuro(subtotal)} (${items.lijstwerk.verfkleur || 'geen kleur'})`)
+      priceBreakdownHTML.push(`
+        <tr>
+          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Lijstwerk: ${items.lijstwerk.m1} m¹ × €7,50</td>
+          <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right; font-weight: 600;">${formatEuro(subtotal)}</td>
+        </tr>
+        <tr><td colspan="2" style="padding: 0 0 8px 0; color: #9ca3af; font-size: 12px; border-bottom: 1px solid #e5e7eb;">Kleur: ${items.lijstwerk.verfkleur || 'geen kleur'}</td></tr>
+      `)
     }
-    if (items.kozijnen?.enabled && items.kozijnen.m1) {
-      itemsText.push(`- Kozijnen: ${items.kozijnen.m1} m¹ (${items.kozijnen.verfkleur || 'geen kleur gekozen'})`)
-      itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Kozijnen</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.kozijnen.m1} m¹ - ${items.kozijnen.verfkleur || 'geen kleur'}</td></tr>`)
+    // Binnen kozijnen & deuren
+    if (items.binnenkozijnen?.enabled && items.binnenkozijnen.aantal) {
+      const subtotal = parseInt(items.binnenkozijnen.aantal) * PRIJZEN.binnenkozijnen
+      itemsText.push(`- Binnenkozijnen: ${items.binnenkozijnen.aantal} stuks (${items.binnenkozijnen.verfkleur || 'geen kleur gekozen'})`)
+      itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Binnenkozijnen</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.binnenkozijnen.aantal} stuks × €100 - ${items.binnenkozijnen.verfkleur || 'geen kleur'}</td></tr>`)
+      priceBreakdownText.push(`- Binnenkozijnen: ${items.binnenkozijnen.aantal} × €100 = ${formatEuro(subtotal)} (${items.binnenkozijnen.verfkleur || 'geen kleur'})`)
+      priceBreakdownHTML.push(`
+        <tr>
+          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Binnenkozijnen: ${items.binnenkozijnen.aantal} × €100</td>
+          <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right; font-weight: 600;">${formatEuro(subtotal)}</td>
+        </tr>
+        <tr><td colspan="2" style="padding: 0 0 8px 0; color: #9ca3af; font-size: 12px; border-bottom: 1px solid #e5e7eb;">Kleur: ${items.binnenkozijnen.verfkleur || 'geen kleur'}</td></tr>
+      `)
     }
-    if (items.deuren?.enabled && items.deuren.aantal) {
-      itemsText.push(`- Deuren: ${items.deuren.aantal} stuks (${items.deuren.verfkleur || 'geen kleur gekozen'})`)
-      itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Deuren</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.deuren.aantal} stuks - ${items.deuren.verfkleur || 'geen kleur'}</td></tr>`)
+    if (items.binnendeuren?.enabled && items.binnendeuren.aantal) {
+      const subtotal = parseInt(items.binnendeuren.aantal) * PRIJZEN.binnendeuren
+      itemsText.push(`- Binnendeuren: ${items.binnendeuren.aantal} stuks (${items.binnendeuren.verfkleur || 'geen kleur gekozen'})`)
+      itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Binnendeuren</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.binnendeuren.aantal} stuks × €100 - ${items.binnendeuren.verfkleur || 'geen kleur'}</td></tr>`)
+      priceBreakdownText.push(`- Binnendeuren: ${items.binnendeuren.aantal} × €100 = ${formatEuro(subtotal)} (${items.binnendeuren.verfkleur || 'geen kleur'})`)
+      priceBreakdownHTML.push(`
+        <tr>
+          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Binnendeuren: ${items.binnendeuren.aantal} × €100</td>
+          <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right; font-weight: 600;">${formatEuro(subtotal)}</td>
+        </tr>
+        <tr><td colspan="2" style="padding: 0 0 8px 0; color: #9ca3af; font-size: 12px; border-bottom: 1px solid #e5e7eb;">Kleur: ${items.binnendeuren.verfkleur || 'geen kleur'}</td></tr>
+      `)
+    }
+    // Deurkozijnen (binnen)
+    if (items.deurkozijnen?.enabled && items.deurkozijnen.aantal) {
+      const subtotal = parseInt(items.deurkozijnen.aantal) * PRIJZEN.deurkozijnen
+      itemsText.push(`- Deurkozijnen: ${items.deurkozijnen.aantal} stuks (${items.deurkozijnen.verfkleur || 'geen kleur gekozen'})`)
+      itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Deurkozijnen</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.deurkozijnen.aantal} stuks × €40 - ${items.deurkozijnen.verfkleur || 'geen kleur'}</td></tr>`)
+      priceBreakdownText.push(`- Deurkozijnen: ${items.deurkozijnen.aantal} × €40 = ${formatEuro(subtotal)} (${items.deurkozijnen.verfkleur || 'geen kleur'})`)
+      priceBreakdownHTML.push(`
+        <tr>
+          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Deurkozijnen: ${items.deurkozijnen.aantal} × €40</td>
+          <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right; font-weight: 600;">${formatEuro(subtotal)}</td>
+        </tr>
+        <tr><td colspan="2" style="padding: 0 0 8px 0; color: #9ca3af; font-size: 12px; border-bottom: 1px solid #e5e7eb;">Kleur: ${items.deurkozijnen.verfkleur || 'geen kleur'}</td></tr>
+      `)
+    }
+    // Buiten kozijnen & deuren
+    if (items.buitenkozijnen?.enabled && items.buitenkozijnen.aantal) {
+      const subtotal = parseInt(items.buitenkozijnen.aantal) * PRIJZEN.buitenkozijnen
+      itemsText.push(`- Buitenkozijnen: ${items.buitenkozijnen.aantal} stuks (${items.buitenkozijnen.verfkleur || 'geen kleur gekozen'})`)
+      itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Buitenkozijnen</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.buitenkozijnen.aantal} stuks × €125 - ${items.buitenkozijnen.verfkleur || 'geen kleur'}</td></tr>`)
+      priceBreakdownText.push(`- Buitenkozijnen: ${items.buitenkozijnen.aantal} × €125 = ${formatEuro(subtotal)} (${items.buitenkozijnen.verfkleur || 'geen kleur'})`)
+      priceBreakdownHTML.push(`
+        <tr>
+          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Buitenkozijnen: ${items.buitenkozijnen.aantal} × €125</td>
+          <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right; font-weight: 600;">${formatEuro(subtotal)}</td>
+        </tr>
+        <tr><td colspan="2" style="padding: 0 0 8px 0; color: #9ca3af; font-size: 12px; border-bottom: 1px solid #e5e7eb;">Kleur: ${items.buitenkozijnen.verfkleur || 'geen kleur'}</td></tr>
+      `)
+    }
+    if (items.buitendeuren?.enabled && items.buitendeuren.aantal) {
+      const subtotal = parseInt(items.buitendeuren.aantal) * PRIJZEN.buitendeuren
+      itemsText.push(`- Buitendeuren: ${items.buitendeuren.aantal} stuks (${items.buitendeuren.verfkleur || 'geen kleur gekozen'})`)
+      itemsHTML.push(`<tr><td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Buitendeuren</td><td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${items.buitendeuren.aantal} stuks × €125 - ${items.buitendeuren.verfkleur || 'geen kleur'}</td></tr>`)
+      priceBreakdownText.push(`- Buitendeuren: ${items.buitendeuren.aantal} × €125 = ${formatEuro(subtotal)} (${items.buitendeuren.verfkleur || 'geen kleur'})`)
+      priceBreakdownHTML.push(`
+        <tr>
+          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Buitendeuren: ${items.buitendeuren.aantal} × €125</td>
+          <td style="padding: 8px 0; color: #1f2937; font-size: 14px; text-align: right; font-weight: 600;">${formatEuro(subtotal)}</td>
+        </tr>
+        <tr><td colspan="2" style="padding: 0 0 8px 0; color: #9ca3af; font-size: 12px; border-bottom: 1px solid #e5e7eb;">Kleur: ${items.buitendeuren.verfkleur || 'geen kleur'}</td></tr>
+      `)
     }
 
     const aantalLagen = formData.aantalLagen || 2
@@ -90,17 +203,15 @@ Naam: ${formData.naam}
 Email: ${formData.email}
 ${formData.telefoon ? `Telefoon: ${formData.telefoon}` : ''}
 
-SCHILDERWERK GEGEVENS
----------------------
-Project type: ${projectTypeLabel}
-Werkzaamheden:
-${itemsText.join('\n')}
-Aantal lagen: ${aantalLagen}
-Inclusief: Voorbereiding (schuren + 2 lagen afwerking)
+PROJECT
+-------
+Type: ${projectTypeLabel}
 
-PRIJSOVERZICHT
---------------
-${priceRange ? `Prijsindicatie: EUR ${priceRange.min.toLocaleString('nl-NL')}` : 'Prijsindicatie: Op aanvraag'}
+UW PRIJS INDICATIE
+------------------
+${priceBreakdownText.join('\n')}
+
+TOTAAL: ${priceRange ? `EUR ${priceRange.min.toLocaleString('nl-NL')}` : 'Op aanvraag'}
 
 VOLGENDE STAPPEN
 ----------------
@@ -153,45 +264,21 @@ Professioneel schilderwerk met laagste prijs garantie
       </table>
     </div>
     
-    <!-- Schilderwerk Details -->
+    <!-- Prijsopbouw -->
     <div style="margin-bottom: 25px;">
-      <h2 style="color: #1f2937; font-size: 18px; margin: 0 0 12px 0; border-left: 4px solid #f97316; padding-left: 12px;">Uw Opgave</h2>
+      <h2 style="color: #1f2937; font-size: 18px; margin: 0 0 12px 0; border-left: 4px solid #f97316; padding-left: 12px;">Uw Prijs Indicatie</h2>
+      <div style="background-color: #f9fafb; padding: 16px; border-radius: 6px; border: 1px solid #e5e7eb;">
       <table style="width: 100%; border-collapse: collapse;">
-        <tr>
-          <td style="padding: 6px 0; color: #6b7280; font-size: 14px; width: 40%;">Project type</td>
-          <td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${projectTypeLabel}</td>
-        </tr>
-        <tr>
-          <td style="padding: 6px 0; color: #6b7280; font-size: 14px;" colspan="2"><strong>Werkzaamheden:</strong></td>
-        </tr>
-        ${itemsHTML.join('\n        ')}
-        <tr>
-          <td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Aantal lagen</td>
-          <td style="padding: 6px 0; color: #1f2937; font-size: 14px;">${aantalLagen}</td>
-        </tr>
-        <tr>
-          <td style="padding: 6px 0; color: #6b7280; font-size: 14px;">Voorbereiding</td>
-          <td style="padding: 6px 0; color: #1f2937; font-size: 14px;">✅ Ja (schuren + 2 lagen afwerking)</td>
+          ${priceBreakdownHTML.join('')}
+          <tr style="border-top: 2px solid #f97316;">
+            <td style="padding: 12px 0 0 0; color: #1f2937; font-size: 16px; font-weight: bold;">Totaal:</td>
+            <td style="padding: 12px 0 0 0; color: #f97316; font-size: 20px; text-align: right; font-weight: bold;">${priceRange ? `€${priceRange.min.toLocaleString('nl-NL')}` : 'Op aanvraag'}</td>
         </tr>
       </table>
     </div>
-    
-    <!-- Prijs Indicatie -->
-    <div style="margin-bottom: 25px;">
-      <h2 style="color: #1f2937; font-size: 18px; margin: 0 0 12px 0; border-left: 4px solid #f97316; padding-left: 12px;">Prijs Indicatie</h2>
-      <div style="background-color: #fef3c7; padding: 20px; border-radius: 6px; border: 1px solid #fde68a;">
-        ${priceRange ? `
-        <p style="margin: 0 0 8px 0; color: #92400e; font-size: 14px;">Uw schilderwerk kost ongeveer:</p>
-        <p style="color: #78350f; font-size: 32px; font-weight: bold; margin: 0;">
-          €${priceRange.min.toLocaleString('nl-NL')}
-        </p>
-        <p style="margin: 8px 0 0 0; color: #92400e; font-size: 13px;">
-          ✅ Inclusief schuren + ${aantalLagen} lagen afwerking
-        </p>
-        ` : `
-        <p style="margin: 0; color: #92400e; font-size: 16px; font-weight: 600;">Prijsindicatie op aanvraag</p>
-        `}
-      </div>
+      <p style="margin: 12px 0 0 0; color: #6b7280; font-size: 13px;">
+        ✅ Inclusief: Schuren + voorbehandeling + 2 lagen afwerking + verf en materialen
+      </p>
     </div>
 
     
@@ -273,26 +360,10 @@ Professioneel schilderwerk met laagste prijs garantie
         ` : ''}
       </table>
       
-      <!-- Aanvraag Details -->
-      <h2 style="color: #1f2937; font-size: 18px; margin: 0 0 12px 0; border-left: 4px solid #f97316; padding-left: 12px;">Aanvraag Details</h2>
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;">
-        <tr>
-          <td style="padding: 8px 0; color: #6b7280; font-size: 14px; width: 40%;">Project type</td>
-          <td style="padding: 8px 0; color: #1f2937; font-size: 14px;">${projectTypeLabel}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;" colspan="2"><strong>Werkzaamheden:</strong></td>
-        </tr>
-        ${itemsHTML.join('\n        ')}
-        <tr>
-          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Aantal lagen</td>
-          <td style="padding: 8px 0; color: #1f2937; font-size: 14px;">${aantalLagen}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px 0; color: #6b7280; font-size: 14px;">Voorbereiding</td>
-          <td style="padding: 8px 0; color: #1f2937; font-size: 14px;">✅ Ja (schuren + 2 lagen afwerking)</td>
-        </tr>
-      </table>
+      <!-- Project Type -->
+      <p style="margin: 0 0 20px 0; padding: 12px; background-color: #f3f4f6; border-radius: 6px; color: #4b5563; font-size: 14px;">
+        <strong>Project type:</strong> ${projectTypeLabel}
+      </p>
       
       <!-- Foto's -->
       ${analysisResults && analysisResults.length > 0 ? `
@@ -318,18 +389,17 @@ Professioneel schilderwerk met laagste prijs garantie
       </div>
       ` : ''}
       
-      <!-- Prijs -->
-      ${priceRange ? `
-      <h2 style="color: #1f2937; font-size: 18px; margin: 0 0 12px 0; border-left: 4px solid #f97316; padding-left: 12px;">Prijsindicatie (naar klant gestuurd)</h2>
-      <div style="background-color: #fef3c7; padding: 20px; border-radius: 6px; border: 1px solid #fde68a;">
+      <!-- Prijsopbouw -->
+      <h2 style="color: #1f2937; font-size: 18px; margin: 0 0 12px 0; border-left: 4px solid #f97316; padding-left: 12px;">Prijs Indicatie (naar klant gestuurd)</h2>
+      <div style="background-color: #f9fafb; padding: 16px; border-radius: 6px; border: 1px solid #e5e7eb; margin-bottom: 25px;">
         <table style="width: 100%; border-collapse: collapse;">
-          <tr>
-            <td style="padding: 6px 0; color: #78350f; font-size: 18px; font-weight: bold;">Prijsindicatie</td>
-            <td style="padding: 6px 0; color: #78350f; font-size: 24px; text-align: right; font-weight: bold;">€${priceRange.min.toLocaleString('nl-NL')}</td>
+          ${priceBreakdownHTML.join('')}
+          <tr style="border-top: 2px solid #f97316;">
+            <td style="padding: 12px 0 0 0; color: #1f2937; font-size: 16px; font-weight: bold;">Totaal:</td>
+            <td style="padding: 12px 0 0 0; color: #f97316; font-size: 20px; text-align: right; font-weight: bold;">${priceRange ? `€${priceRange.min.toLocaleString('nl-NL')}` : 'Op aanvraag'}</td>
           </tr>
         </table>
       </div>
-      ` : ''}
       
     </div>
     
