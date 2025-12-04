@@ -31,8 +31,8 @@ type MeasurementUnit = 'm2' | 'm1' // m² of strekkende meter
 // Schilderwerk berekend per VIERKANTE METER (m²)
 const PRIJZEN_PER_M2 = {
   binnen: {
-    muren: { min: 12.50, max: 12.50 },           // €12,50 per m² (incl. schuren + 2 lagen)
-    plafond: { min: 12.50, max: 12.50 },         // €12,50 per m² (incl. schuren + 2 lagen)
+    muren: { min: 15, max: 15 },                  // €15 per m² (incl. schuren + 2 lagen)
+    plafond: { min: 17, max: 17 },                // €17 per m² (incl. schuren + 2 lagen)
     volledige_kamer: { min: 450, max: 750 }      // €450-750 per kamer (flat rate)
   },
   buiten: {
@@ -43,14 +43,14 @@ const PRIJZEN_PER_M2 = {
 // Schilderwerk berekend per STREKKENDE METER (m¹)
 const PRIJZEN_PER_M1 = {
   binnen: {
-    kozijnen: { min: 7.50, max: 7.50 },          // €7,50 per meter (incl. schuren + 2 lagen)
-    deuren: { min: 65, max: 65 },                // €65 per stuk (incl. schuren + 2 lagen)
+    kozijnen: { min: 12.50, max: 12.50 },        // €12,50 per meter (incl. schuren + 2 lagen)
+    deuren: { min: 125, max: 125 },              // €125 per stuk (incl. schuren + 2 lagen)
     plinten: { min: 7.50, max: 7.50 },           // €7,50 per strekkende meter
     lijstwerk: { min: 7.50, max: 7.50 },         // €7,50 per strekkende meter
   },
   buiten: {
     kozijnen: { min: 12.50, max: 12.50 },        // €12,50 per meter (incl. schuren + 2 lagen)
-    deuren: { min: 65, max: 65 },                // €65 per stuk (incl. schuren + 2 lagen)
+    deuren: { min: 125, max: 125 },              // €125 per stuk (incl. schuren + 2 lagen)
   }
 } as const
 
@@ -170,7 +170,7 @@ function calculateMultiItemPrice(
     }
   }
   
-  // Deuren (€65 per stuk)
+  // Deuren (€125 per stuk)
   if (items.deuren.enabled && items.deuren.aantal) {
     const aantal = parseInt(items.deuren.aantal)
     if (aantal > 0) {
@@ -468,12 +468,12 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-6 h-6 lg:w-7 lg:h-7 text-primary" />
             <h2 className="font-bold text-base sm:text-lg lg:text-xl text-foreground">
-              <span className="sm:hidden">Directe prijs voor uw schilderwerk</span>
-              <span className="hidden sm:inline">Direct een prijsindicatie van uw schilderwerk</span>
+              <span className="sm:hidden">Direct prijsindicatie + AI preview</span>
+              <span className="hidden sm:inline">Direct een prijsindicatie en gratis AI preview</span>
             </h2>
           </div>
           <p className="text-xs sm:text-sm italic text-muted-foreground mb-3">
-            Selecteer uw schilderwerk en ontvang direct uw prijs per email
+            Vul dit formulier in en zie direct uw prijsindicatie
           </p>
 
           <form className="space-y-4">
@@ -555,7 +555,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                               className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                             />
                             <div className="flex-1 space-y-2">
-                              <div className="font-semibold text-foreground text-sm">Muren (m²) - €12,50/m²</div>
+                              <div className="font-semibold text-foreground text-sm">Muren (m²) - €15/m²</div>
                               {formData.items.muren.enabled && (
                                 <>
                                   <Input
@@ -630,7 +630,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                               className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                             />
                             <div className="flex-1 space-y-2">
-                              <div className="font-semibold text-foreground text-sm">Plafond (m²) - €12,50/m²</div>
+                              <div className="font-semibold text-foreground text-sm">Plafond (m²) - €17/m²</div>
                               {formData.items.plafond.enabled && (
                                 <>
                   <Input
@@ -855,7 +855,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                           />
                           <div className="flex-1 space-y-2">
                             <div className="font-semibold text-foreground text-sm">
-                              Kozijnen (m¹) - {formData.projectType === 'buiten' ? '€12,50/m' : '€7,50/m'}
+                              Kozijnen (m¹) - €12,50/m
                   </div>
                             {formData.items.kozijnen.enabled && (
                               <>
@@ -929,7 +929,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                             className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                           />
                           <div className="flex-1 space-y-2">
-                            <div className="font-semibold text-foreground text-sm">Deuren - €65 per stuk</div>
+                            <div className="font-semibold text-foreground text-sm">Deuren - €125 per stuk</div>
                             {formData.items.deuren.enabled && (
                               <>
                   <Input
@@ -1001,7 +1001,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                     <div className="bg-background rounded-lg p-3 space-y-1 text-left text-xs">
                       <p className="text-muted-foreground font-semibold mb-2">Inbegrepen:</p>
                       <p className="text-muted-foreground">✓ Professioneel schilderwerk</p>
-                      <p className="text-muted-foreground">✓ A-merk verf per item</p>
+                      <p className="text-muted-foreground">✓ Verf en materialen</p>
                       <p className="text-muted-foreground">✓ Schuren + voorbehandeling</p>
                       <p className="text-muted-foreground">✓ 2 lagen afwerking</p>
                     </div>
@@ -1258,10 +1258,10 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   <div className="border-b border-border pb-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">
-                        Muren: {formData.items.muren.m2} m² × €12,50
+                        Muren: {formData.items.muren.m2} m² × €15
                       </span>
                       <span className="font-medium text-foreground">
-                        {formatPrice(parseFloat(formData.items.muren.m2) * 12.50)}
+                        {formatPrice(parseFloat(formData.items.muren.m2) * 15)}
                       </span>
           </div>
                     {formData.items.muren.verfkleur && (
@@ -1276,10 +1276,10 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   <div className="border-b border-border pb-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">
-                        Plafond: {formData.items.plafond.m2} m² × €12,50
+                        Plafond: {formData.items.plafond.m2} m² × €17
                       </span>
                       <span className="font-medium text-foreground">
-                        {formatPrice(parseFloat(formData.items.plafond.m2) * 12.50)}
+                        {formatPrice(parseFloat(formData.items.plafond.m2) * 17)}
                       </span>
             </div>
                     {formData.items.plafond.verfkleur && (
@@ -1330,7 +1330,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   <div className="border-b border-border pb-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">
-                        Kozijnen: {formData.items.kozijnen.m1} m¹ × {formData.projectType === 'buiten' ? '€12,50' : '€7,50'}
+                        Kozijnen: {formData.items.kozijnen.m1} m¹ × €12,50
                       </span>
                       <span className="font-medium text-foreground">
                         {formatPrice(parseFloat(formData.items.kozijnen.m1) * (formData.projectType === 'buiten' ? 12.50 : 7.50))}
@@ -1348,10 +1348,10 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   <div className="border-b border-border pb-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">
-                        Deuren: {formData.items.deuren.aantal} × €65
+                        Deuren: {formData.items.deuren.aantal} × €125
                       </span>
                       <span className="font-medium text-foreground">
-                        {formatPrice(parseInt(formData.items.deuren.aantal) * 65)}
+                        {formatPrice(parseInt(formData.items.deuren.aantal) * 125)}
                       </span>
                     </div>
                     {formData.items.deuren.verfkleur && (
@@ -1371,7 +1371,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
               <div className="mt-4 bg-background rounded-lg p-3 space-y-1 text-xs">
                 <p className="text-muted-foreground">✓ Inclusief: Schuren + voorbehandeling</p>
                 <p className="text-muted-foreground">✓ Inclusief: 2 lagen afwerking</p>
-                <p className="text-muted-foreground">✓ Inclusief: A-merk verf</p>
+                <p className="text-muted-foreground">✓ Inclusief: Verf en materialen</p>
               </div>
             </div>
           )}
@@ -1419,7 +1419,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
           </div>
 
           <div className="bg-primary/10 rounded-lg p-4 text-center">
-            <p className="text-foreground font-bold text-base mb-1">💰 Laagste Prijs Garantie</p>
+            <p className="text-foreground font-bold text-base mb-1">💰 Prijs Match Garantie</p>
             <p className="text-foreground text-sm">
               Vindt u hetzelfde schilderwerk elders goedkoper? Dan gaan wij eronder!
             </p>

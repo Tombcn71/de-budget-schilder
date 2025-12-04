@@ -14,25 +14,25 @@ export function HowItWorks() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12 max-w-7xl mx-auto">
           <div className="text-center">
             <div className="text-6xl lg:text-7xl font-bold text-primary mb-4">01</div>
-            <h3 className="text-lg lg:text-xl font-bold text-foreground mb-3">Upload & Preview</h3>
+            <h3 className="text-lg lg:text-xl font-bold text-foreground mb-3">Vul het formulier in</h3>
             <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">
-              Upload foto's van uw huis en kies uw gewenste verfkleur. Onze AI laat direct zien hoe uw huis eruit gaat zien en berekent de prijs.
+              Vul het formulier in met uw oppervlaktes en krijg binnen 30 seconden een prijsindicatie.
             </p>
           </div>
 
           <div className="text-center">
             <div className="text-6xl lg:text-7xl font-bold text-primary mb-4">02</div>
-            <h3 className="text-lg lg:text-xl font-bold text-foreground mb-3">Offerte bevestigen</h3>
+            <h3 className="text-lg lg:text-xl font-bold text-foreground mb-3">Plan een gratis adviesgesprek</h3>
             <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">
-              Tevreden met de preview en prijs? Bevestig de offerte en kies een startdatum die u uitkomt.
+              Plan een gratis adviesgesprek via onze planner om uw wensen te bespreken.
             </p>
           </div>
 
           <div className="text-center">
             <div className="text-6xl lg:text-7xl font-bold text-primary mb-4">03</div>
-            <h3 className="text-lg lg:text-xl font-bold text-foreground mb-3">Professioneel Schilderwerk</h3>
+            <h3 className="text-lg lg:text-xl font-bold text-foreground mb-3">Uw huis wordt geschilderd</h3>
             <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">
-              Ons ervaren schilderteam zorgt voor een perfecte afwerking met hoogwaardige materialen en vakmanschap.
+              Uw huis wordt professioneel geverfd/geschilderd wanneer het u uitkomt.
             </p>
           </div>
 

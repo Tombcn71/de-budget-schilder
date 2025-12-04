@@ -4,59 +4,70 @@ import { useState } from "react"
 import { ChevronDown } from "lucide-react"
 import Link from "next/link"
 
-const faqs = [
+const defaultFaqs = [
   {
-    question: "Hoe werkt de AI preview voor mijn geschilderde huis?",
-    answer: "Upload gewoon een foto van uw huidige gevel of kamer, kies uw gewenste verfkleur, en onze AI toont binnen enkele seconden hoe uw huis eruit gaat zien na het schilderwerk. Zo kunt u verschillende kleuren uitproberen voordat u een definitieve keuze maakt!"
+    question: "Wat kost een schilder per m2?",
+    answer: "Muren schilderen kost €15 per m², plafonds €17 per m². Plinten en lijstwerk kosten €7,50 per strekkende meter, kozijnen €12,50 per m¹ en deuren lakken €125 per deur. Vul ons formulier in voor een directe prijsindicatie."
   },
   {
-    question: "Wat kost het om mijn huis te laten schilderen?",
-    answer: "De kosten variëren afhankelijk van het oppervlak, de staat van het houtwerk en het aantal lagen. Gebruik onze calculator bovenaan de pagina om direct een exacte prijsindicatie te krijgen op basis van uw specifieke situatie."
+    question: "Hoeveel kost het om een woonkamer te schilderen?",
+    answer: "Een gemiddelde woonkamer van 25m² muren kost ongeveer €375 voor de muren. Met plafond (20m² = €340) en plinten (15m¹ = €112) komt u op circa €827. Vul het formulier in met uw exacte afmetingen voor een nauwkeurige prijsindicatie."
   },
   {
-    question: "Welke verfmerken gebruiken jullie?",
-    answer: "Wij werken uitsluitend met A-merken zoals Sigma, Sikkens, Histor en Flexa. Deze merken bieden de beste kwaliteit, dekking en duurzaamheid voor zowel binnen- als buitenschilderwerk."
+    question: "Wat kost het om kozijnen te laten schilderen?",
+    answer: "Kozijnen schilderen kost €12,50 per strekkende meter. Een standaard raamkozijn van 2 meter kost dus €25. Deuren lakken kost €125 per deur. Vul het formulier in voor een directe prijsindicatie."
   },
   {
-    question: "Hoe lang duurt het om mijn huis te schilderen?",
-    answer: "Een gemiddelde tussenwoning buitenschilderen duurt 5-7 werkdagen, afhankelijk van het weer en de staat van het houtwerk. Binnenschilderwerk van één kamer is vaak binnen 1-2 dagen klaar. Grotere projecten plannen we in overleg."
+    question: "Hoe lang duurt het om een kamer te schilderen?",
+    answer: "Een gemiddelde slaapkamer is binnen 1 dag klaar. Een woonkamer met muren, plafond en plinten duurt 1-2 dagen. Dit is inclusief voorbereiden, gronden en afwerken."
   },
   {
-    question: "Wordt het houtwerk ook gerepareerd?",
-    answer: "Ja! Wij repareren houtwerkrot en beschadigingen voordat we gaan schilderen. Dit is essentieel voor een duurzaam resultaat. Rotte delen worden vervangen of gerepareerd met epoxyhoutreparatie."
+    question: "Wanneer is de beste tijd om je huis te schilderen?",
+    answer: "Binnenschilderwerk kan het hele jaar door. Voor buitenschilderwerk is april tot oktober ideaal, bij droog weer en temperaturen boven 10°C. In de winter is binnenschilderwerk de beste optie."
   },
   {
-    question: "Krijg ik garantie op het schilderwerk?",
-    answer: "Ja, wij geven standaard 5 jaar garantie op ons buitenschilderwerk en 3 jaar op binnenschilderwerk. Dit geldt bij gebruik van de juiste voorbehandeling en kwaliteitsverf. De garantie dekt afschilferen, verkleuring en andere materiaalgebreken."
+    question: "Hoeveel lagen verf heb ik nodig?",
+    answer: "Voor een goede dekking zijn meestal 2 lagen nodig. Bij een forse kleurverandering (bijv. donker naar licht) kunnen 3 lagen nodig zijn. Wij adviseren altijd het juiste aantal lagen voor een perfect resultaat."
   },
   {
-    question: "Welke voorbereiding is nodig voor het schilderen?",
-    answer: "Voor buitenschilderwerk: alle ondergrond wordt geschuurd, ontvetten en indien nodig geïmpregneerd. Rotte delen worden gerepareerd. Voor binnenschilderwerk: meubels afdekken, gaten en scheuren vullen, schuren en stofvrij maken. Wij verzorgen alle voorbereidingen."
+    question: "Kan ik over behang schilderen?",
+    answer: "Technisch kan het, maar wij raden aan behang te verwijderen voor het beste resultaat. Geschilderd behang kan gaan loslaten en geeft een minder strak eindresultaat."
   },
   {
-    question: "Kan ik ook alleen de kozijnen laten schilderen?",
-    answer: "Jazeker! Wij schilderen ook alleen kozijnen, deuren, dakgoten, gevelbetimmering of andere specifieke onderdelen. Gebruik onze calculator om een gerichte offerte te krijgen voor uw specifieke wens."
+    question: "Moet ik meubels verwijderen voor schilderwerk?",
+    answer: "Grote meubels hoeven niet weg, maar moeten wel naar het midden van de kamer worden verplaatst. Wij dekken alles zorgvuldig af. Kleine spullen en schilderijen moeten wel worden verwijderd."
   },
   {
-    question: "Werken jullie ook in de winter?",
-    answer: "Buitenschilderwerk is seizoensgebonden. We schilderen buiten bij temperaturen boven 5°C en droog weer. Voor binnenschilderwerk zijn we het hele jaar door beschikbaar. Plan buitenwerk idealiter tussen april en oktober."
+    question: "Hoe snel kan een schilder beginnen?",
+    answer: "Vul het formulier in voor een directe prijsindicatie en plan vervolgens een gratis adviesgesprek in via onze planner."
   },
   {
-    question: "Hoeveel m² kan ik schilderen met 1 liter verf?",
-    answer: "Dit hangt af van de verf en ondergrond. Gemiddeld: 1 liter dekkende muurverf = 8-10 m², 1 liter lak voor houtwerk = 10-12 m². Wij berekenen de benodigde hoeveelheid nauwkeurig bij de offerte."
+    question: "Wat is het verschil tussen latex en acrylaat verf?",
+    answer: "Latex is goedkoper maar minder duurzaam. Acrylaat verf is wasbaar, slijtvaster en ideaal voor intensief gebruikte ruimtes zoals keukens, badkamers en kinderkamers."
   },
   {
-    question: "Moet ik eerst een voorstrijkmiddel gebruiken?",
-    answer: "Voor nieuw of kaal hout is een voorstrijkmiddel (primer/grondverf) essentieel. Dit zorgt voor betere hechting en bescherming. Voor eerder geverfd houtwerk in goede staat is dit vaak niet nodig. Wij adviseren wat in uw situatie het beste is."
+    question: "Hoe lang moet verf drogen?",
+    answer: "Muurverf is na 2-4 uur stofdroog en na 24 uur overschilderbaar. Lakverf voor houtwerk heeft 6-8 uur nodig om stofdroog te zijn en 16-24 uur voor de volgende laag."
   },
   {
-    question: "Hoe vaak moet ik mijn huis laten schilderen?",
-    answer: "Buitenschilderwerk: elke 8-12 jaar afhankelijk van ligging (zon, wind, regen) en kwaliteit vorige schilderbeurt. Binnenschilderwerk: elke 5-10 jaar of bij verandering van kleur/stijl. Regelmatig onderhoud verlengt de levensduur."
+    question: "Wat kost het om een plafond te schilderen?",
+    answer: "Plafond schilderen kost €17 per m². Een plafond van 20m² kost dus €340. Vul het formulier in met uw afmetingen voor een directe prijsindicatie voor uw plafond."
   }
 ]
 
-export function FAQ() {
+interface FAQProps {
+  location?: string
+  customFaqs?: Array<{ question: string; answer: string }>
+}
+
+export function FAQ({ location, customFaqs }: FAQProps = {}) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  
+  const faqs = customFaqs || defaultFaqs
+  const title = location ? `Veelgestelde vragen over schilderwerk in ${location}` : "Veelgestelde vragen"
+  const subtitle = location 
+    ? `Vind snel antwoord op vragen over schilderwerk in ${location}`
+    : "Vind snel antwoord op de meest gestelde vragen over ons schilderwerk en diensten"
 
   const toggleQuestion = (index: number) => {
     setOpenIndex(openIndex === index ? null : index)
@@ -68,10 +79,10 @@ export function FAQ() {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Veelgestelde vragen
+              {title}
             </h2>
             <p className="text-gray-600">
-              Vind snel antwoord op de meest gestelde vragen over ons schilderwerk en diensten
+              {subtitle}
             </p>
           </div>
 

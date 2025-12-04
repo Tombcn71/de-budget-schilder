@@ -5,6 +5,7 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import "./globals.css"
+import { localBusinessSchema, faqSchema, websiteSchema } from "@/lib/schema"
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -13,24 +14,24 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: "De Budgetschilder - Professioneel Schilderwerk voor de Laagste Prijs",
+  title: "Schilder Haaglanden met Prijs Match Garantie",
   description:
-    "Goedkoper gevonden? Wij gaan eronder! Direct prijsindicatie + AI preview. Laagste prijs garantie schilderwerk.",
+    "Schilder Haaglanden nodig? Prijs Match Garantie. Direct prijsindicatie. Actief in Den Haag, Delft, Zoetermeer en meer.",
   generator: "v0.app",
-  keywords: "schilder, schilderwerk, muren verven, plafond schilderen, kozijnen schilderen, binnen schilderen, buiten schilderen, schilder prijzen, schilderofferte",
+  keywords: "schilder den haag, schilderwerk den haag, schilder haaglanden, schilder delft, schilder zoetermeer, schilder rijswijk, schilder westland, schilder scheveningen, binnen schilderen den haag, buiten schilderen den haag, kozijnen schilderen den haag, schilder prijzen den haag, goedkope schilder den haag, schildersbedrijf den haag, huis laten schilderen den haag, woning schilderen den haag, muren verven den haag, plafond schilderen den haag, schilder leidschendam, schilder voorburg",
   authors: [{ name: "De Budgetschilder" }],
   openGraph: {
-    title: "De Budgetschilder - Professioneel Schilderwerk voor de Laagste Prijs",
-    description: "Goedkoper gevonden? Wij gaan eronder! Direct prijsindicatie + AI preview. Laagste prijs garantie schilderwerk.",
+    title: "Schilder Haaglanden | De Budgetschilder - Prijs Match Garantie",
+    description: "Schilder in Haaglanden nodig? Scherpere prijs gevonden? Wij matchen deze direct! Direct prijsindicatie. Actief in 23 gemeentes: Den Haag, Delft, Leiden, Zoetermeer, Rijswijk en heel Haaglanden.",
     url: "https://debudgetschilder.nl",
-    siteName: "De Budgetschilder",
+    siteName: "De Budgetschilder Haaglanden",
     locale: "nl_NL",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "De Budgetschilder - Professioneel Schilderwerk voor de Laagste Prijs",
-    description: "Vindt u hetzelfde schilderwerk elders goedkoper? Dan gaan wij eronder!",
+    title: "Schilder Haaglanden | De Budgetschilder - Prijs Match Garantie",
+    description: "Schilder in Haaglanden nodig? 23 gemeentes, één prijs match garantie. Den Haag, Delft, Leiden, Zoetermeer en meer!",
   },
   robots: {
     index: true,
@@ -43,6 +44,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  alternates: {
+    canonical: "https://debudgetschilder.nl"
+  }
 }
 
 export default function RootLayout({
@@ -56,6 +60,20 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.pexels.com" />
         <link rel="preconnect" href="https://assets.calendly.com" />
         <link rel="dns-prefetch" href="https://assets.calendly.com" />
+        
+        {/* Structured Data for SEO and AI Overviews */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
         
         {/* Facebook Pixel */}
         <script

@@ -1,7 +1,17 @@
 import { AIQuoteForm } from "@/components/ai-quote-form"
 import Image from "next/image"
 
-export function HeroAI() {
+interface HeroAIProps {
+  location?: string
+  title?: string
+  description?: string
+}
+
+export function HeroAI({ location, title, description }: HeroAIProps = {}) {
+  const defaultTitle = "Professioneel schilderwerk met Prijs Match Garantie."
+  const defaultDescriptionMobile = "Professioneel schilderwerk tegen de scherpste prijs. Scherpere prijs gevonden? Wij matchen deze direct!"
+  const defaultDescriptionDesktop = "Professioneel schilderwerk in heel Haaglanden tegen de scherpste prijs. Den Haag, Zoetermeer, Westland, Delft, Rijswijk en meer. Scherpere prijs gevonden? Wij matchen deze direct!"
+  
   return (
     <section className="relative min-h-[500px] lg:min-h-[600px] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
@@ -22,29 +32,31 @@ export function HeroAI() {
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-start">
           <div className="text-center lg:text-left">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-3 lg:mb-6 leading-tight text-balance">
-              Professioneel schilderwerk met laagste prijs garantie.
+              {title || defaultTitle}
             </h1>
 
             <p className="text-sm sm:text-base sm:hidden text-white mb-4 leading-relaxed">
-              Upload een foto en zie direct met AI hoe uw huis eruit ziet met uw nieuwe verfkleur!
+              {description || defaultDescriptionMobile}
             </p>
 
             <p className="hidden sm:block text-base sm:text-lg md:text-xl text-white mb-6 leading-relaxed text-pretty">
-              Krijg direct een prijsindicatie en zie met AI hoe uw huis eruit gaat zien met uw nieuwe verfkleur. Vindt u goedkoper? Wij betalen het verschil!
+              {description || defaultDescriptionDesktop}
             </p>
 
             <div className="inline-block bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full mb-4">
               <p className="text-md sm:text-lg font-semibold text-white">
-                🏆 Laagste Prijs Garantie Schilderwerk
+                🏆 Prijs Match Garantie {location && `${location}`}
               </p>
             </div>
 
             <div className="hidden sm:flex flex-wrap gap-3 md:gap-4 text-sm md:text-base text-white">
-              <span>Binnen</span>
+              <span>Muren</span>
               <span>|</span>
-              <span>Buiten</span>
+              <span>Plafonds</span>
               <span>|</span>
-              <span>Houtwerkrot</span>
+              <span>Kozijnen</span>
+              <span>|</span>
+              <span>Deuren</span>
             </div>
           </div>
 
