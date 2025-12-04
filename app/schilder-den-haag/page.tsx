@@ -178,8 +178,8 @@ export default function DenHaagPage() {
               Transparante prijzen voor binnen schilderwerk in Den Haag:
             </p>
             <ul className="space-y-2 text-muted-foreground mb-6">
-              <li>• <strong>Muren schilderen:</strong> €15 per m²</li>
-              <li>• <strong>Plafond schilderen:</strong> €17 per m²</li>
+              <li>• <strong>Muren schilderen:</strong> €12,50 per m²</li>
+              <li>• <strong>Plafond schilderen:</strong> €13,50 per m²</li>
               <li>• <strong>Kozijnen schilderen:</strong> €12,50 per m¹</li>
               <li>• <strong>Plinten schilderen:</strong> €7,50 per m¹</li>
               <li>• <strong>Lijstwerk schilderen:</strong> €7,50 per m¹</li>
@@ -206,7 +206,7 @@ export default function DenHaagPage() {
         customFaqs={[
           {
             question: "Wat kost een schilder in Den Haag?",
-            answer: "Bij De Budgetschilder hanteren wij vaste prijzen voor Den Haag: muren €15/m², plafonds €17/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per stuk. Vul het formulier in en krijg binnen 30 seconden een prijsindicatie."
+            answer: "Bij De Budgetschilder hanteren wij vaste prijzen voor Den Haag: muren €12,50/m², plafonds €13,50/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per stuk. Vul het formulier in en krijg binnen 30 seconden een prijsindicatie."
           },
           {
             question: "Welke schilder is het goedkoopst in Den Haag?",
@@ -218,7 +218,7 @@ export default function DenHaagPage() {
           },
           {
             question: "Hoeveel kost het om een woonkamer te schilderen in Den Haag?",
-            answer: "Een gemiddelde woonkamer kost voor muren €15/m² en plafond €17/m². Inclusief plinten en lijstwerk €7,50/m¹. Vul het formulier in voor uw prijsindicatie."
+            answer: "Een gemiddelde woonkamer kost voor muren €12,50/m² en plafond €13,50/m². Inclusief plinten en lijstwerk €7,50/m¹. Vul het formulier in voor uw prijsindicatie."
           },
           {
             question: "Kan ik ook alleen kozijnen laten schilderen in Den Haag?",
@@ -230,7 +230,7 @@ export default function DenHaagPage() {
           },
           {
             question: "Werken jullie ook in Scheveningen?",
-            answer: "Ja, Scheveningen is onderdeel van Den Haag en wij werken daar veel. Dezelfde vaste prijzen: €15/m² voor muren, €17/m² voor plafonds, €12,50/m voor kozijnen en €125 per deur."
+            answer: "Ja, Scheveningen is onderdeel van Den Haag en wij werken daar veel. Dezelfde vaste prijzen: €12,50/m² voor muren, €13,50/m² voor plafonds, €12,50/m voor kozijnen en €125 per deur."
           },
           {
             question: "Wat is de prijs match garantie?",

@@ -31,8 +31,8 @@ type MeasurementUnit = 'm2' | 'm1' // m² of strekkende meter
 // Schilderwerk berekend per VIERKANTE METER (m²)
 const PRIJZEN_PER_M2 = {
   binnen: {
-    muren: { min: 15, max: 15 },                  // €15 per m² (incl. schuren + 2 lagen)
-    plafond: { min: 17, max: 17 },                // €17 per m² (incl. schuren + 2 lagen)
+    muren: { min: 12.50, max: 12.50 },           // €12,50 per m² (incl. schuren + 2 lagen)
+    plafond: { min: 13.50, max: 13.50 },         // €13,50 per m² (incl. schuren + 2 lagen)
     volledige_kamer: { min: 450, max: 750 }      // €450-750 per kamer (flat rate)
   },
   buiten: {
@@ -555,7 +555,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                               className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                             />
                             <div className="flex-1 space-y-2">
-                              <div className="font-semibold text-foreground text-sm">Muren (m²) - €15/m²</div>
+                              <div className="font-semibold text-foreground text-sm">Muren (m²) - €12,50/m²</div>
                               {formData.items.muren.enabled && (
                                 <>
                                   <Input
@@ -630,7 +630,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                               className="mt-1 border-2 border-gray-600 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                             />
                             <div className="flex-1 space-y-2">
-                              <div className="font-semibold text-foreground text-sm">Plafond (m²) - €17/m²</div>
+                              <div className="font-semibold text-foreground text-sm">Plafond (m²) - €13,50/m²</div>
                               {formData.items.plafond.enabled && (
                                 <>
                   <Input
@@ -1258,10 +1258,10 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   <div className="border-b border-border pb-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">
-                        Muren: {formData.items.muren.m2} m² × €15
+                        Muren: {formData.items.muren.m2} m² × €12,50
                       </span>
                       <span className="font-medium text-foreground">
-                        {formatPrice(parseFloat(formData.items.muren.m2) * 15)}
+                        {formatPrice(parseFloat(formData.items.muren.m2) * 12.50)}
                       </span>
           </div>
                     {formData.items.muren.verfkleur && (
@@ -1276,10 +1276,10 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   <div className="border-b border-border pb-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">
-                        Plafond: {formData.items.plafond.m2} m² × €17
+                        Plafond: {formData.items.plafond.m2} m² × €13,50
                       </span>
                       <span className="font-medium text-foreground">
-                        {formatPrice(parseFloat(formData.items.plafond.m2) * 17)}
+                        {formatPrice(parseFloat(formData.items.plafond.m2) * 13.50)}
                       </span>
             </div>
                     {formData.items.plafond.verfkleur && (

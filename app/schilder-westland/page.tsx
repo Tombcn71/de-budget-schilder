@@ -71,8 +71,8 @@ export default function WestlandPage() {
             <h3 className="text-2xl font-bold mb-4">Prijzen Schilderwerk Westland</h3>
             <p className="text-muted-foreground mb-3">Vaste prijzen binnen schilderwerk:</p>
             <ul className="space-y-2 text-muted-foreground mb-6">
-              <li>• <strong>Muren schilderen:</strong> €17 per m²</li>
-              <li>• <strong>Plafond schilderen:</strong> €17 per m²</li>
+              <li>• <strong>Muren schilderen:</strong> €13,50 per m²</li>
+              <li>• <strong>Plafond schilderen:</strong> €13,50 per m²</li>
               <li>• <strong>Kozijnen schilderen:</strong> €12,50 per m¹</li>
               <li>• <strong>Plinten schilderen:</strong> €7,50 per m¹</li>
               <li>• <strong>Lijstwerk schilderen:</strong> €7,50 per m¹</li>
@@ -87,7 +87,7 @@ export default function WestlandPage() {
         customFaqs={[
           {
             question: "Wat kost een schilder in Westland?",
-            answer: "Vaste prijzen voor Westland: muren €15/m², plafonds €17/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per deur. Deze prijzen gelden voor alle kernen."
+            answer: "Vaste prijzen voor Westland: muren €12,50/m², plafonds €13,50/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per deur. Deze prijzen gelden voor alle kernen."
           },
           {
             question: "Werken jullie in alle kernen van Westland?",
@@ -95,7 +95,7 @@ export default function WestlandPage() {
           },
           {
             question: "Hoeveel kost het om een woonkamer te schilderen in Naaldwijk?",
-            answer: "Een gemiddelde woonkamer van 25m² muren kost €375. Met plafond (20m² = €340) en plinten (15m¹ = €112) komt u op circa €827. Vul het formulier in voor uw prijsindicatie."
+            answer: "Een gemiddelde woonkamer van 25m² muren kost €312. Met plafond (20m² = €270) en plinten (15m¹ = €112) komt u op circa €694. Vul het formulier in voor uw prijsindicatie."
           },
           {
             question: "Wat kost het om kozijnen te schilderen in Monster?",
@@ -107,7 +107,7 @@ export default function WestlandPage() {
           },
           {
             question: "Wat kost een plafond schilderen in 's-Gravenzande?",
-            answer: "Plafond schilderen kost €17 per m² in heel Westland. Een plafond van 20m² kost dus €340. Vul het formulier in voor uw prijsindicatie."
+            answer: "Plafond schilderen kost €13,50 per m² in heel Westland. Een plafond van 20m² kost dus €270. Vul het formulier in voor uw prijsindicatie."
           },
           {
             question: "Werken jullie ook aan oudere woningen in De Lier?",

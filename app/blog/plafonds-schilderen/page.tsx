@@ -77,13 +77,13 @@ export default function PlafondsSchilderenBlog() {
 
               <h2 className="text-3xl font-bold mt-12 mb-6">Wat kost plafond schilderen in Haaglanden?</h2>
               <p>
-                Bij De Budgetschilder betaal je <strong>€17 per m²</strong> voor het professioneel schilderen van plafonds in heel Haaglanden. Deze prijs geldt voor alle gemeentes: Den Haag, Delft, Zoetermeer, Rijswijk, Westland en meer.
+                Bij De Budgetschilder betaal je <strong>€13,50 per m²</strong> voor het professioneel schilderen van plafonds in heel Haaglanden. Deze prijs geldt voor alle gemeentes: Den Haag, Delft, Zoetermeer, Rijswijk, Westland en meer.
               </p>
 
               <div className="bg-primary/10 p-6 rounded-lg my-8">
                 <h3 className="text-2xl font-bold mb-4">Voorbeeld: Slaapkamer plafond</h3>
                 <p className="mb-2">Een gemiddelde slaapkamer van 15m² plafondoppervlak:</p>
-                <p className="text-2xl font-bold text-primary">15m² × €17 = €225</p>
+                <p className="text-2xl font-bold text-primary">15m² × €13,50 = €225</p>
               </div>
 
               <h2 className="text-3xl font-bold mt-12 mb-6">Hoe lang duurt plafond schilderen?</h2>

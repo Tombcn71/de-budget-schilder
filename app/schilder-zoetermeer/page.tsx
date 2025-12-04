@@ -100,8 +100,8 @@ export default function ZoetermeerPage() {
               <h4 className="text-xl font-bold mb-3">Prijzen Schilderwerk Zoetermeer</h4>
               <p className="text-muted-foreground mb-3">Binnen schilderwerk met vaste prijzen:</p>
               <ul className="space-y-2 text-muted-foreground mb-6">
-                <li>• <strong>Muren:</strong> €17 per m²</li>
-                <li>• <strong>Plafond:</strong> €17 per m²</li>
+                <li>• <strong>Muren:</strong> €13,50 per m²</li>
+                <li>• <strong>Plafond:</strong> €13,50 per m²</li>
                 <li>• <strong>Kozijnen:</strong> €12,50 per m¹</li>
                 <li>• <strong>Plinten:</strong> €7,50 per m¹</li>
                 <li>• <strong>Lijstwerk:</strong> €7,50 per m¹</li>
@@ -125,7 +125,7 @@ export default function ZoetermeerPage() {
         customFaqs={[
           {
             question: "Wat kost een schilder in Zoetermeer?",
-            answer: "Onze vaste prijzen voor Zoetermeer: muren €15/m², plafonds €17/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per stuk. Deze prijzen gelden voor alle wijken van Zoetermeer."
+            answer: "Onze vaste prijzen voor Zoetermeer: muren €12,50/m², plafonds €13,50/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per stuk. Deze prijzen gelden voor alle wijken van Zoetermeer."
           },
           {
             question: "In welke wijken van Zoetermeer werken jullie?",

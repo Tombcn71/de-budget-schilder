@@ -91,8 +91,8 @@ export default function Home() {
               <div className="bg-muted/30 p-6 rounded-lg border border-border">
                 <h3 className="text-xl font-bold mb-4 text-foreground">Vaste Prijzen Binnen Schilderwerk</h3>
                 <ul className="space-y-2 text-muted-foreground">
-                  <li className="flex justify-between"><span>Muren schilderen</span><strong className="text-foreground">€15/m²</strong></li>
-                  <li className="flex justify-between"><span>Plafond schilderen</span><strong className="text-foreground">€17/m²</strong></li>
+                  <li className="flex justify-between"><span>Muren schilderen</span><strong className="text-foreground">€12,50/m²</strong></li>
+                  <li className="flex justify-between"><span>Plafond schilderen</span><strong className="text-foreground">€13,50/m²</strong></li>
                   <li className="flex justify-between"><span>Kozijnen schilderen</span><strong className="text-foreground">€12,50/m¹</strong></li>
                   <li className="flex justify-between"><span>Plinten schilderen</span><strong className="text-foreground">€7,50/m¹</strong></li>
                   <li className="flex justify-between"><span>Lijstwerk schilderen</span><strong className="text-foreground">€7,50/m¹</strong></li>

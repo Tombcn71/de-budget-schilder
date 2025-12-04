@@ -96,8 +96,8 @@ export default function DelftPage() {
               Vaste prijzen voor binnen schilderwerk in Delft:
             </p>
             <ul className="space-y-2 text-muted-foreground mb-6">
-              <li>• <strong>Muren schilderen:</strong> €17 per m²</li>
-              <li>• <strong>Plafond schilderen:</strong> €17 per m²</li>
+              <li>• <strong>Muren schilderen:</strong> €13,50 per m²</li>
+              <li>• <strong>Plafond schilderen:</strong> €13,50 per m²</li>
               <li>• <strong>Kozijnen schilderen:</strong> €12,50 per m¹</li>
               <li>• <strong>Plinten schilderen:</strong> €7,50 per m¹</li>
               <li>• <strong>Lijstwerk schilderen:</strong> €7,50 per m¹</li>
@@ -124,7 +124,7 @@ export default function DelftPage() {
         customFaqs={[
           {
             question: "Wat kost een schilder in Delft?",
-            answer: "Bij De Budgetschilder hanteren wij vaste prijzen voor Delft: muren €15/m², plafonds €17/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per stuk. Deze prijzen gelden voor alle wijken van Delft."
+            answer: "Bij De Budgetschilder hanteren wij vaste prijzen voor Delft: muren €12,50/m², plafonds €13,50/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per stuk. Deze prijzen gelden voor alle wijken van Delft."
           },
           {
             question: "Werken jullie in alle wijken van Delft?",

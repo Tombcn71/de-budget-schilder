@@ -157,7 +157,7 @@ export const faqSchema = {
       "name": "Wat kost een schilder per m2 in Haaglanden?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Muren schilderen kost €15 per m², plafonds €17 per m². Plinten en lijstwerk kosten €7,50 per strekkende meter, kozijnen €12,50 per m¹ en deuren lakken €125 per deur. Deze prijzen gelden voor heel Haaglanden: Den Haag, Delft, Zoetermeer, Westland, Rijswijk en alle andere gemeentes."
+        "text": "Muren schilderen kost €12,50 per m², plafonds €13,50 per m². Plinten en lijstwerk kosten €7,50 per strekkende meter, kozijnen €12,50 per m¹ en deuren lakken €125 per deur. Deze prijzen gelden voor heel Haaglanden: Den Haag, Delft, Zoetermeer, Westland, Rijswijk en alle andere gemeentes."
       }
     },
     {
@@ -165,7 +165,7 @@ export const faqSchema = {
       "name": "Hoeveel kost het om een woonkamer te schilderen?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Een gemiddelde woonkamer van 25m² muren kost ongeveer €375 voor de muren. Met plafond (20m² = €340) en plinten (15m¹ = €112) komt u op circa €827. Vul het formulier in op debudgetschilder.nl met uw exacte afmetingen voor een nauwkeurige prijsindicatie."
+        "text": "Een gemiddelde woonkamer van 25m² muren kost ongeveer €312 voor de muren. Met plafond (20m² = €270) en plinten (15m¹ = €112) komt u op circa €694. Vul het formulier in op debudgetschilder.nl met uw exacte afmetingen voor een nauwkeurige prijsindicatie."
       }
     },
     {
@@ -205,7 +205,7 @@ export const faqSchema = {
       "name": "Wat kost het om een plafond te schilderen?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Plafond schilderen kost €17 per m². Een plafond van 20m² kost dus €340. Vul het formulier in op debudgetschilder.nl met uw afmetingen voor een directe prijsindicatie."
+        "text": "Plafond schilderen kost €13,50 per m². Een plafond van 20m² kost dus €270. Vul het formulier in op debudgetschilder.nl met uw afmetingen voor een directe prijsindicatie."
       }
     },
     {

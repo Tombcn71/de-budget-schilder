@@ -70,13 +70,13 @@ export default function MurenSchilderenBlog() {
 
               <h2 className="text-3xl font-bold mt-12 mb-6">Wat kost muren schilderen in Haaglanden?</h2>
               <p>
-                Bij De Budgetschilder betaal je <strong>€15 per m²</strong> voor het professioneel schilderen van muren in heel Haaglanden. Deze prijs geldt voor Den Haag, Delft, Zoetermeer, Rijswijk, Westland en alle andere gemeentes in de regio.
+                Bij De Budgetschilder betaal je <strong>€12,50 per m²</strong> voor het professioneel schilderen van muren in heel Haaglanden. Deze prijs geldt voor Den Haag, Delft, Zoetermeer, Rijswijk, Westland en alle andere gemeentes in de regio.
               </p>
 
               <div className="bg-primary/10 p-6 rounded-lg my-8">
                 <h3 className="text-2xl font-bold mb-4">Voorbeeld: Woonkamer schilderen</h3>
                 <p className="mb-2">Een gemiddelde woonkamer van 25m² muuroppervlak:</p>
-                <p className="text-2xl font-bold text-primary">25m² × €15 = €375</p>
+                <p className="text-2xl font-bold text-primary">25m² × €12,50 = €312,50</p>
               </div>
 
               <h2 className="text-3xl font-bold mt-12 mb-6">Tips voor het beste resultaat</h2>

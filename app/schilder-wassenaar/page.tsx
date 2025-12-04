@@ -50,8 +50,8 @@ export default function WassenaarPage() {
 
             <h3 className="text-2xl font-bold mb-4">Prijzen Schilderwerk Wassenaar</h3>
             <ul className="space-y-2 text-muted-foreground mb-6">
-              <li>• <strong>Muren schilderen:</strong> €17 per m²</li>
-              <li>• <strong>Plafond schilderen:</strong> €17 per m²</li>
+              <li>• <strong>Muren schilderen:</strong> €13,50 per m²</li>
+              <li>• <strong>Plafond schilderen:</strong> €13,50 per m²</li>
               <li>• <strong>Kozijnen schilderen:</strong> €12,50 per m¹</li>
               <li>• <strong>Plinten schilderen:</strong> €7,50 per m¹</li>
               <li>• <strong>Lijstwerk schilderen:</strong> €7,50 per m¹</li>
@@ -66,7 +66,7 @@ export default function WassenaarPage() {
         customFaqs={[
           {
             question: "Wat kost een schilder in Wassenaar?",
-            answer: "Vaste prijzen voor Wassenaar: muren €15/m², plafonds €17/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per deur. Dezelfde prijzen voor villa's en appartementen."
+            answer: "Vaste prijzen voor Wassenaar: muren €12,50/m², plafonds €13,50/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per deur. Dezelfde prijzen voor villa's en appartementen."
           },
           {
             question: "Werken jullie ook aan villa's in Wassenaar?",
@@ -74,7 +74,7 @@ export default function WassenaarPage() {
           },
           {
             question: "Hoeveel kost het om een villa te schilderen in Wassenaar?",
-            answer: "De kosten hangen af van de oppervlaktes. Muren €15/m², plafonds €17/m². Een grote villa kan €3.000-€8.000 kosten afhankelijk van de grootte. Vul het formulier in voor uw prijsindicatie."
+            answer: "De kosten hangen af van de oppervlaktes. Muren €12,50/m², plafonds €13,50/m². Een grote villa kan €3.000-€8.000 kosten afhankelijk van de grootte. Vul het formulier in voor uw prijsindicatie."
           },
           {
             question: "Wat kost het om kozijnen te schilderen in Wassenaar?",
@@ -90,7 +90,7 @@ export default function WassenaarPage() {
           },
           {
             question: "Wat kost een plafond schilderen in Wassenaar?",
-            answer: "Plafond schilderen kost €17 per m² in Wassenaar. Een plafond van 20m² kost dus €340. Hoge plafonds zijn geen probleem."
+            answer: "Plafond schilderen kost €13,50 per m² in Wassenaar. Een plafond van 20m² kost dus €270. Hoge plafonds zijn geen probleem."
           },
           {
             question: "Kunnen jullie ook buitenschilderwerk aan in Wassenaar?",

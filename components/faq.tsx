@@ -7,11 +7,11 @@ import Link from "next/link"
 const defaultFaqs = [
   {
     question: "Wat kost een schilder per m2?",
-    answer: "Muren schilderen kost €15 per m², plafonds €17 per m². Plinten en lijstwerk kosten €7,50 per strekkende meter, kozijnen €12,50 per m¹ en deuren lakken €125 per deur. Vul ons formulier in voor een directe prijsindicatie."
+    answer: "Muren schilderen kost €12,50 per m², plafonds €13,50 per m². Plinten en lijstwerk kosten €7,50 per strekkende meter, kozijnen €12,50 per m¹ en deuren lakken €125 per deur. Vul ons formulier in voor een directe prijsindicatie."
   },
   {
     question: "Hoeveel kost het om een woonkamer te schilderen?",
-    answer: "Een gemiddelde woonkamer van 25m² muren kost ongeveer €375 voor de muren. Met plafond (20m² = €340) en plinten (15m¹ = €112) komt u op circa €827. Vul het formulier in met uw exacte afmetingen voor een nauwkeurige prijsindicatie."
+    answer: "Een gemiddelde woonkamer van 25m² muren kost ongeveer €312 voor de muren. Met plafond (20m² = €270) en plinten (15m¹ = €112) komt u op circa €694. Vul het formulier in met uw exacte afmetingen voor een nauwkeurige prijsindicatie."
   },
   {
     question: "Wat kost het om kozijnen te laten schilderen?",
@@ -51,7 +51,7 @@ const defaultFaqs = [
   },
   {
     question: "Wat kost het om een plafond te schilderen?",
-    answer: "Plafond schilderen kost €17 per m². Een plafond van 20m² kost dus €340. Vul het formulier in met uw afmetingen voor een directe prijsindicatie voor uw plafond."
+    answer: "Plafond schilderen kost €13,50 per m². Een plafond van 20m² kost dus €270. Vul het formulier in met uw afmetingen voor een directe prijsindicatie voor uw plafond."
   }
 ]
 

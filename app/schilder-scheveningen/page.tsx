@@ -91,8 +91,8 @@ export default function ScheveningenPage() {
             <h3 className="text-2xl font-bold mb-4">Prijzen Schilderwerk Scheveningen</h3>
             <p className="text-muted-foreground mb-3">Vaste prijzen binnen schilderwerk:</p>
             <ul className="space-y-2 text-muted-foreground mb-6">
-              <li>• <strong>Muren schilderen:</strong> €17 per m²</li>
-              <li>• <strong>Plafond schilderen:</strong> €17 per m²</li>
+              <li>• <strong>Muren schilderen:</strong> €13,50 per m²</li>
+              <li>• <strong>Plafond schilderen:</strong> €13,50 per m²</li>
               <li>• <strong>Kozijnen schilderen:</strong> €12,50 per m¹</li>
               <li>• <strong>Plinten schilderen:</strong> €7,50 per m¹</li>
               <li>• <strong>Lijstwerk schilderen:</strong> €7,50 per m¹</li>
@@ -110,7 +110,7 @@ export default function ScheveningenPage() {
         customFaqs={[
           {
             question: "Wat kost een schilder in Scheveningen?",
-            answer: "Vaste prijzen voor binnen schilderwerk in Scheveningen: muren €15/m², plafonds €17/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per deur."
+            answer: "Vaste prijzen voor binnen schilderwerk in Scheveningen: muren €12,50/m², plafonds €13,50/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per deur."
           },
           {
             question: "Werken jullie in alle delen van Scheveningen?",
@@ -118,7 +118,7 @@ export default function ScheveningenPage() {
           },
           {
             question: "Hoeveel kost het om een woonkamer te schilderen in Scheveningen?",
-            answer: "Een gemiddelde woonkamer van 25m² muren kost €375. Met plafond (20m² = €340) en plinten (15m¹ = €112) komt u op circa €827. Vul het formulier in voor uw prijsindicatie."
+            answer: "Een gemiddelde woonkamer van 25m² muren kost €312. Met plafond (20m² = €270) en plinten (15m¹ = €112) komt u op circa €694. Vul het formulier in voor uw prijsindicatie."
           },
           {
             question: "Wat kost het om kozijnen te schilderen in Scheveningen?",
@@ -130,11 +130,11 @@ export default function ScheveningenPage() {
           },
           {
             question: "Wat kost een plafond schilderen in Scheveningen?",
-            answer: "Plafond schilderen kost €17 per m² in Scheveningen. Een plafond van 20m² kost dus €340. Vul het formulier in voor uw prijsindicatie."
+            answer: "Plafond schilderen kost €13,50 per m² in Scheveningen. Een plafond van 20m² kost dus €270. Vul het formulier in voor uw prijsindicatie."
           },
           {
             question: "Werken jullie ook in Duindorp?",
-            answer: "Ja, Duindorp is onderdeel van Scheveningen en wij werken daar veel. Dezelfde vaste prijzen: €15/m² voor muren, €17/m² voor plafonds."
+            answer: "Ja, Duindorp is onderdeel van Scheveningen en wij werken daar veel. Dezelfde vaste prijzen: €12,50/m² voor muren, €13,50/m² voor plafonds."
           },
           {
             question: "Kan ik alleen plinten laten schilderen in Scheveningen?",
