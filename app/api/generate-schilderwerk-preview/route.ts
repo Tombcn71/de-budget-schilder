@@ -23,8 +23,13 @@ interface SchilderwerkSpecs {
     plafond?: { enabled: boolean; m2?: string; verfkleur?: string };
     plinten?: { enabled: boolean; m1?: string; verfkleur?: string };
     lijstwerk?: { enabled: boolean; m1?: string; verfkleur?: string };
-    kozijnen?: { enabled: boolean; m1?: string; verfkleur?: string };
-    deuren?: { enabled: boolean; aantal?: string; verfkleur?: string };
+    // Binnen
+    binnenkozijnen?: { enabled: boolean; aantal?: string; verfkleur?: string };
+    binnendeuren?: { enabled: boolean; aantal?: string; verfkleur?: string };
+    deurkozijnen?: { enabled: boolean; aantal?: string; verfkleur?: string };
+    // Buiten
+    buitenkozijnen?: { enabled: boolean; aantal?: string; verfkleur?: string };
+    buitendeuren?: { enabled: boolean; aantal?: string; verfkleur?: string };
   };
 }
 
@@ -214,20 +219,28 @@ function buildSchilderwerkPrompt(specs: SchilderwerkSpecs): string {
   const items = specs.items || {};
   const paintMuren = items.muren?.enabled || specs.schilderwerkType === 'muren' || specs.schilderwerkType === 'volledige_kamer';
   const paintPlafond = items.plafond?.enabled || specs.schilderwerkType === 'plafond' || specs.schilderwerkType === 'volledige_kamer';
-  const paintKozijnen = items.kozijnen?.enabled || specs.schilderwerkType === 'kozijnen';
-  const paintDeuren = items.deuren?.enabled || specs.schilderwerkType === 'deuren';
   const paintPlinten = items.plinten?.enabled || specs.schilderwerkType === 'plinten' || specs.schilderwerkType === 'volledige_kamer';
   const paintLijstwerk = items.lijstwerk?.enabled || specs.schilderwerkType === 'lijstwerk' || specs.schilderwerkType === 'volledige_kamer';
+  // Binnen items
+  const paintBinnenkozijnen = items.binnenkozijnen?.enabled;
+  const paintBindendeuren = items.binnendeuren?.enabled;
+  const paintDeurkozijnen = items.deurkozijnen?.enabled;
+  // Buiten items
+  const paintBuitenkozijnen = items.buitenkozijnen?.enabled;
+  const paintBuitendeuren = items.buitendeuren?.enabled;
   const paintGevel = specs.schilderwerkType === 'gevel';
 
   // Build list of what's being painted
   const paintingList: string[] = [];
   if (paintMuren) paintingList.push('muren');
   if (paintPlafond) paintingList.push('plafond');
-  if (paintKozijnen) paintingList.push('kozijnen');
-  if (paintDeuren) paintingList.push('deuren');
   if (paintPlinten) paintingList.push('plinten');
   if (paintLijstwerk) paintingList.push('lijstwerk');
+  if (paintBinnenkozijnen) paintingList.push('binnenkozijnen');
+  if (paintBindendeuren) paintingList.push('binnendeuren');
+  if (paintDeurkozijnen) paintingList.push('deurkozijnen');
+  if (paintBuitenkozijnen) paintingList.push('buitenkozijnen');
+  if (paintBuitendeuren) paintingList.push('buitendeuren');
   if (paintGevel) paintingList.push('gevel');
   
   const werkDesc = paintingList.join(', ') || 'selected surfaces';
@@ -258,17 +271,33 @@ ${paintPlafond ? `
 - Paint EVERY visible part of the ceiling from wall to wall
 - DO NOT miss any ceiling sections
 ` : ''}
-${paintKozijnen ? `
-- Paint ONLY the window frames/kozijnen
-- Apply ${getKleurBeschrijving(items.kozijnen?.verfkleur)} paint to all frame parts
-- CRITICAL: The kozijnen color MUST be ${getKleurBeschrijving(items.kozijnen?.verfkleur)}
+${paintBinnenkozijnen ? `
+- Paint the INTERIOR window frames/binnenkozijnen
+- Apply ${getKleurBeschrijving(items.binnenkozijnen?.verfkleur)} paint to all interior frame parts
+- CRITICAL: The binnenkozijnen color MUST be ${getKleurBeschrijving(items.binnenkozijnen?.verfkleur)}
 - Keep glass clear and transparent
-- DO NOT paint the glass itself
 ` : ''}
-${paintDeuren ? `
-- Paint ONLY the doors
-- Apply ${getKleurBeschrijving(items.deuren?.verfkleur)} paint to entire door surface
-- CRITICAL: The door color MUST be ${getKleurBeschrijving(items.deuren?.verfkleur)}
+${paintBindendeuren ? `
+- Paint the INTERIOR doors/binnendeuren
+- Apply ${getKleurBeschrijving(items.binnendeuren?.verfkleur)} paint to entire door surface
+- CRITICAL: The binnendeuren color MUST be ${getKleurBeschrijving(items.binnendeuren?.verfkleur)}
+- Keep door handles/hardware unpainted (metal color)
+` : ''}
+${paintDeurkozijnen ? `
+- Paint the door frames/deurkozijnen (interior)
+- Apply ${getKleurBeschrijving(items.deurkozijnen?.verfkleur)} paint to door frame parts
+- CRITICAL: The deurkozijnen color MUST be ${getKleurBeschrijving(items.deurkozijnen?.verfkleur)}
+` : ''}
+${paintBuitenkozijnen ? `
+- Paint the EXTERIOR window frames/buitenkozijnen
+- Apply ${getKleurBeschrijving(items.buitenkozijnen?.verfkleur)} paint to all exterior frame parts
+- CRITICAL: The buitenkozijnen color MUST be ${getKleurBeschrijving(items.buitenkozijnen?.verfkleur)}
+- Keep glass clear and transparent
+` : ''}
+${paintBuitendeuren ? `
+- Paint the EXTERIOR doors/buitendeuren
+- Apply ${getKleurBeschrijving(items.buitendeuren?.verfkleur)} paint to entire exterior door surface
+- CRITICAL: The buitendeuren color MUST be ${getKleurBeschrijving(items.buitendeuren?.verfkleur)}
 - Keep door handles/hardware unpainted (metal color)
 ` : ''}
 ${paintPlinten ? `
@@ -298,8 +327,9 @@ STEP 3 - PRESERVE EVERYTHING ELSE 100%:
 - DO NOT paint areas that shouldn't be painted:
   ${!paintPlafond ? '* Keep ceiling COMPLETELY ORIGINAL - do not change ceiling color at all' : ''}
   ${!paintMuren ? '* Keep walls COMPLETELY ORIGINAL - do not change wall color at all' : ''}
-  ${!paintKozijnen ? '* Keep window frames in their original color' : ''}
-  ${!paintDeuren ? '* Keep doors in their original color' : ''}
+  ${!paintBinnenkozijnen && !paintBuitenkozijnen ? '* Keep window frames in their original color' : ''}
+  ${!paintBindendeuren && !paintBuitendeuren ? '* Keep doors in their original color' : ''}
+  ${!paintDeurkozijnen ? '* Keep door frames in their original color' : ''}
   ${!paintPlinten ? '* Keep baseboards/plinten in their original color' : ''}
   ${!paintLijstwerk ? '* Keep crown molding/lijstwerk in their original color' : ''}
   * Keep floors exactly the same
