@@ -272,33 +272,48 @@ ${paintPlafond ? `
 - DO NOT miss any ceiling sections
 ` : ''}
 ${paintBinnenkozijnen ? `
-- Paint the INTERIOR window frames/binnenkozijnen
-- Apply ${getKleurBeschrijving(items.binnenkozijnen?.verfkleur)} paint to all interior frame parts
-- CRITICAL: The binnenkozijnen color MUST be ${getKleurBeschrijving(items.binnenkozijnen?.verfkleur)}
-- Keep glass clear and transparent
+- Paint ALL INTERIOR window frames/binnenkozijnen COMPLETELY
+- Apply ${getKleurBeschrijving(items.binnenkozijnen?.verfkleur)} paint to ALL interior frame parts
+- Paint EVERY side, EVERY edge, EVERY visible surface of the window frame
+- CRITICAL: The COMPLETE interior window frame MUST be ${getKleurBeschrijving(items.binnenkozijnen?.verfkleur)}
+- Paint top, sides, bottom, sill, all trim pieces
+- ONLY keep glass clear and transparent
+- The window frame color transformation is MANDATORY and VISIBLE
 ` : ''}
 ${paintBindendeuren ? `
-- Paint the INTERIOR doors/binnendeuren
-- Apply ${getKleurBeschrijving(items.binnendeuren?.verfkleur)} paint to entire door surface
-- CRITICAL: The binnendeuren color MUST be ${getKleurBeschrijving(items.binnendeuren?.verfkleur)}
-- Keep door handles/hardware unpainted (metal color)
+- Paint ALL INTERIOR doors/binnendeuren COMPLETELY
+- Apply ${getKleurBeschrijving(items.binnendeuren?.verfkleur)} paint to ENTIRE door surface
+- Paint EVERY panel, EVERY section, EVERY part of the door
+- CRITICAL: The COMPLETE door surface MUST be ${getKleurBeschrijving(items.binnendeuren?.verfkleur)}
+- Paint ALL door panels, frames, edges, and flat surfaces
+- ONLY keep door handles/hardware unpainted (metal color)
+- The door color transformation is MANDATORY and VISIBLE
 ` : ''}
 ${paintDeurkozijnen ? `
-- Paint the door frames/deurkozijnen (interior)
-- Apply ${getKleurBeschrijving(items.deurkozijnen?.verfkleur)} paint to door frame parts
-- CRITICAL: The deurkozijnen color MUST be ${getKleurBeschrijving(items.deurkozijnen?.verfkleur)}
+- Paint ALL door frames/deurkozijnen (interior) COMPLETELY
+- Apply ${getKleurBeschrijving(items.deurkozijnen?.verfkleur)} paint to ALL door frame parts
+- Paint EVERY side of the frame, EVERY edge, EVERY visible surface
+- CRITICAL: The COMPLETE door frame MUST be ${getKleurBeschrijving(items.deurkozijnen?.verfkleur)}
+- Paint top frame, side frames, bottom threshold, all trim pieces
+- The door frame color transformation is MANDATORY and VISIBLE
 ` : ''}
 ${paintBuitenkozijnen ? `
-- Paint the EXTERIOR window frames/buitenkozijnen
-- Apply ${getKleurBeschrijving(items.buitenkozijnen?.verfkleur)} paint to all exterior frame parts
-- CRITICAL: The buitenkozijnen color MUST be ${getKleurBeschrijving(items.buitenkozijnen?.verfkleur)}
-- Keep glass clear and transparent
+- Paint ALL EXTERIOR window frames/buitenkozijnen COMPLETELY
+- Apply ${getKleurBeschrijving(items.buitenkozijnen?.verfkleur)} paint to ALL exterior frame parts
+- Paint EVERY side, EVERY edge, EVERY visible surface of the exterior window frame
+- CRITICAL: The COMPLETE exterior window frame MUST be ${getKleurBeschrijving(items.buitenkozijnen?.verfkleur)}
+- Paint top, sides, bottom, sill, all trim pieces
+- ONLY keep glass clear and transparent
+- The window frame color transformation is MANDATORY and VISIBLE
 ` : ''}
 ${paintBuitendeuren ? `
-- Paint the EXTERIOR doors/buitendeuren
-- Apply ${getKleurBeschrijving(items.buitendeuren?.verfkleur)} paint to entire exterior door surface
-- CRITICAL: The buitendeuren color MUST be ${getKleurBeschrijving(items.buitendeuren?.verfkleur)}
-- Keep door handles/hardware unpainted (metal color)
+- Paint ALL EXTERIOR doors/buitendeuren COMPLETELY
+- Apply ${getKleurBeschrijving(items.buitendeuren?.verfkleur)} paint to ENTIRE exterior door surface
+- Paint EVERY panel, EVERY section, EVERY part of the exterior door
+- CRITICAL: The COMPLETE exterior door surface MUST be ${getKleurBeschrijving(items.buitendeuren?.verfkleur)}
+- Paint ALL door panels, frames, edges, and flat surfaces
+- ONLY keep door handles/hardware unpainted (metal color)
+- The door color transformation is MANDATORY and VISIBLE
 ` : ''}
 ${paintPlinten ? `
 - Paint all baseboards/plinten
