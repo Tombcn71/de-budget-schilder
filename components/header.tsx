@@ -25,8 +25,10 @@ export function Header() {
               />
             </svg>
             <span className="font-normal text-base lg:text-2xl text-foreground">De </span>
-            <span className="font-bold text-base lg:text-2xl text-foreground">Budget</span>
-            <span className="font-normal text-base lg:text-2xl text-foreground">schilder</span>
+            <span className="text-base lg:text-2xl text-foreground">
+              <span className="font-bold">Budget</span>
+              <span className="font-normal">schilder</span>
+            </span>
           </Link>
 
           <div className="flex items-center gap-4 lg:gap-6">
