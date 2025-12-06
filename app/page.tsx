@@ -23,42 +23,22 @@ export default function Home() {
       <section className="py-16 lg:py-24 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl lg:text-5xl font-bold mb-8 text-center">
-              Hoe kunnen wij zo scherp prijzen?
-            </h2>
+           
             
             <div className="prose prose-lg max-w-none">
-              <p className="text-xl font-semibold text-center mb-12">
-                Ons geheim? Tevreden schilders die vol aan het werk zijn.
-              </p>
+              
 
-              <div className="bg-background p-8 rounded-lg mb-8">
-                <p className="text-lg mb-4">
-                  Bij Budget Schilder doen we het anders dan andere platforms. Waar veel platforms hun netwerk volproppen met honderden schilders die vervolgens om schaarse klussen vechten, kiezen wij bewust voor kwaliteit boven kwantiteit. We werken samen met een selecte groep vakbekwame schilders en zorgen dat zij continu voldoende werk hebben.
-                </p>
-                <p className="text-lg">
-                  Dit simpele principe maakt het verschil. Een schilder die wekenlang wacht op die ene klus, moet bij elke opdracht flink verdienen om zijn vaste kosten te dekken. Maar een schilder die door ons een gestage stroom aan werk krijgt? Die kan scherper calculeren, want zijn agenda staat vol en zijn inkomen is voorspelbaar.
-                </p>
-              </div>
+             
 
-              <h3 className="text-2xl font-bold mb-4">Direct prijs, geen gedoe</h3>
+              <h3 className="text-2xl font-bold mb-4">Direct een prijsindicatie, geen gedoe</h3>
               <div className="bg-primary/5 p-8 rounded-lg border border-primary/20 mb-8">
                 <p className="text-lg mb-4">
                   Vergeet langdurig wachten op offertes of ongemakkelijk onderhandelen. Met onze slimme calculatie tool weet u binnen enkele seconden wat uw schilderklus gaat kosten. Vul de details in, en u krijgt meteen een transparante prijsindicatie. Geen verrassingen, geen gedoe, gewoon een eerlijke prijs waar u direct op kunt beslissen.
                 </p>
-                <p className="text-lg font-semibold">
-                  Onze schilders weten precies waar ze aan toe zijn, en u ook. Wat u ziet, is wat u betaalt.
-                </p>
+                
               </div>
 
-              <div className="text-center bg-background p-8 rounded-lg">
-                <p className="text-2xl font-bold mb-4">
-                  Kwaliteit hoeft niet duur te zijn – als je het slim aanpakt.
-                </p>
-                <p className="text-lg text-muted-foreground">
-                  Door deze aanpak creëren we een win-win situatie: onze schilders zijn blij met hun volle agenda en kunnen daarom scherpe tarieven hanteren, en u profiteert van professioneel schilderwerk tegen eerlijke prijzen. Zo simpel kan het zijn.
-                </p>
-              </div>
+              
             </div>
           </div>
         </div>

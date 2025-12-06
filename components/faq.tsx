@@ -126,7 +126,7 @@ export function FAQ({ location, customFaqs }: FAQProps = {}) {
               Staat uw vraag er niet bij?
             </p>
             <a
-              href="#contact"
+              href="/contact"
               className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors"
             >
               Neem contact op

@@ -509,7 +509,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
             </h2>
           </div>
           <p className="text-xs sm:text-sm italic text-muted-foreground mb-3">
-            Vul dit formulier in en zie direct uw prijsindicatie
+            💡 Tip: Zorg dat je foto's hebt van de ruimtes voor je AI preview
           </p>
 
           <form className="space-y-4">
