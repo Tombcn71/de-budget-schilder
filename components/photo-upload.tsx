@@ -68,7 +68,7 @@ export function PhotoUpload({
             }
           `}
         >
-          <input {...getInputProps()} />
+          <input {...getInputProps()} aria-hidden="true" />
           <div className="flex flex-col items-center justify-center text-center space-y-2">
             <div className={`
               rounded-full p-2 transition-colors
