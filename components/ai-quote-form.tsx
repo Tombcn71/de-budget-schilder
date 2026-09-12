@@ -8,8 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Progress } from "@/components/ui/progress"
-import { ChevronLeft, ChevronRight, Loader2, Check, Sparkles, X, ZoomIn, Share2 } from "lucide-react"
-import { PhotoUpload } from "@/components/photo-upload"
+import { ChevronLeft, ChevronRight, Loader2, Check, Sparkles } from "lucide-react"
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -223,10 +222,6 @@ interface AIQuoteFormProps {
 
 export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
   const [currentStep, setCurrentStep] = useState(1) // Altijd 1, geen stappen meer
-  const [photos, setPhotos] = useState<File[]>([])
-  const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [analysisResults, setAnalysisResults] = useState<any[]>([])
-  const [enlargedImage, setEnlargedImage] = useState<string | null>(null)
   const [isSendingEmail, setIsSendingEmail] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
   const scrollPositionRef = useRef<number>(0)
@@ -290,29 +285,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
     }
   }, [priceRange?.min]) // Only track when price changes
 
-  // Verwijderd - veroorzaakte frozen scherm
-
-  const handleShare = async (imageUrl: string, title: string) => {
-    try {
-      if (navigator.share) {
-        const response = await fetch(imageUrl)
-        const blob = await response.blob()
-        const file = new File([blob], 'schilderwerk.jpg', { type: 'image/jpeg' })
-        
-        await navigator.share({
-          title: title,
-          text: `Bekijk mijn schilderwerk preview!`,
-          files: [file]
-        })
-      } else {
-        await navigator.clipboard.writeText(imageUrl)
-        alert('Link gekopieerd naar clipboard!')
-      }
-    } catch (error) {
-      console.log('Share cancelled or failed:', error)
-    }
-  }
-
   const handleSubmitQuote = async () => {
     if (!formData.naam || !formData.email) {
       alert('Vul alstublieft uw naam en e-mail in')
@@ -329,25 +301,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
     setIsSendingEmail(true)
 
     try {
-      // Als er foto's zijn EN nog geen preview, genereer deze eerst
-      let finalAnalysisResults = analysisResults
-      if (photos.length > 0 && analysisResults.length === 0) {
-        console.log('🎨 Genereren van previews voor verzenden...')
-        setIsAnalyzing(true)
-
-        try {
-          finalAnalysisResults = await generatePreviews()
-          // Update de state zodat het success scherm de previews kan tonen
-          setAnalysisResults(finalAnalysisResults)
-          console.log('✅ Analysis results geupdated:', finalAnalysisResults.length)
-        } catch (error) {
-          console.warn('⚠️ Preview kon niet gegenereerd worden, verzend zonder preview')
-          finalAnalysisResults = []
-        } finally {
-          setIsAnalyzing(false)
-        }
-      }
-
       const response = await fetch('/api/send-quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -361,7 +314,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
             aantalLagen: 2,
             voorbereiding: true,
           },
-          analysisResults: finalAnalysisResults,
           priceRange,
         }),
       })
@@ -400,84 +352,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
       alert(`${errorMessage}\n\nProbeer het opnieuw of neem contact op via budgetgroep.nl@gmail.com`)
     } finally {
       setIsSendingEmail(false)
-      setIsAnalyzing(false)
-    }
-  }
-
-  // Helper functie om previews te genereren en resultaat te returnen
-  const generatePreviews = async () => {
-    const results = []
-
-    try {
-      if (photos.length === 0) {
-        return []
-      }
-
-      // Verzamel alle gekozen verfkleuren en werkzaamheden
-      const selectedColors: string[] = []
-      const selectedTypes: string[] = []
-      
-      Object.entries(formData.items).forEach(([key, item]) => {
-        if (item.enabled) {
-          selectedTypes.push(key)
-          if (item.verfkleur) {
-            selectedColors.push(item.verfkleur)
-          }
-        }
-      })
-
-      const verfkleur = selectedColors[0] || 'wit'
-      const schilderwerkType = selectedTypes.join(', ') || 'muren'
-
-      const schilderwerkSpecs = {
-        verfkleur,
-        projectType: formData.projectType,
-        schilderwerkType,
-        items: formData.items,
-      }
-
-      for (const photo of photos) {
-        const uploadFormData = new FormData()
-        uploadFormData.append('file', photo)
-        
-        const uploadRes = await fetch('/api/upload', {
-          method: 'POST',
-          body: uploadFormData,
-        })
-        const { url } = await uploadRes.json()
-
-        try {
-          const generateRes = await fetch('/api/generate-schilderwerk-preview', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              imageUrl: url,
-              specs: schilderwerkSpecs 
-            }),
-          })
-          
-          if (!generateRes.ok) {
-            console.warn('⚠️ Preview generatie mislukt - gebruik originele foto')
-            results.push({ url, previewUrl: url })
-          } else {
-            const genData = await generateRes.json()
-            console.log('✅ Preview ontvangen, heeft previewImage:', !!genData.previewImage)
-            results.push({ 
-              url, 
-              previewUrl: genData.previewImage || url,  // API returned previewImage, niet previewUrl!
-            })
-          }
-        } catch (error) {
-          console.warn('⚠️ Preview error:', error)
-          results.push({ url, previewUrl: url })
-        }
-      }
-
-      console.log('✅ Preview generatie voltooid, aantal results:', results.length)
-      return results
-    } catch (error) {
-      console.error('❌ Preview generatie mislukt:', error)
-      return []
     }
   }
 
@@ -504,13 +378,9 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-6 h-6 lg:w-7 lg:h-7 text-primary" />
             <h2 className="font-bold text-base sm:text-lg lg:text-xl text-foreground">
-              <span className="sm:hidden">Direct prijsindicatie + preview</span>
-              <span className="hidden sm:inline">Direct een prijsindicatie en gratis preview</span>
+              Direct een gratis prijsindicatie
             </h2>
           </div>
-          <p className="text-xs sm:text-sm italic text-muted-foreground mb-3">
-            💡 Tip: Zorg dat je foto's hebt van de ruimtes voor je preview
-          </p>
 
           <form className="space-y-4">
             {currentStep === 1 && (
@@ -1295,37 +1165,22 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   <Button
                   type="button"
                 onClick={handleSubmitQuote}
-                disabled={isSendingEmail || isAnalyzing || !formData.naam || !formData.email || !priceRange}
+                disabled={isSendingEmail || !formData.naam || !formData.email || !priceRange}
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold h-12 text-base disabled:opacity-50"
               >
-                {isSendingEmail || isAnalyzing ? (
+                {isSendingEmail ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    {isAnalyzing ? 'Preview Genereren...' : 'Verzenden...'}
+                    Verzenden...
                       </>
                     ) : (
                       <>
                         <Sparkles className="w-4 h-4 mr-2" />
-                    {photos.length > 0
-                      ? `Verzenden met Preview (${photos.length} foto's)`
-                      : 'Ontvang Prijsindicatie per Email'}
+                    Ontvang Prijsindicatie per Email
                       </>
                     )}
                   </Button>
             </div>
-
-            {/* Loading tekst tijdens preview generatie */}
-            {isAnalyzing && photos.length > 0 && (
-              <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <Loader2 className="w-5 h-5 text-blue-600 animate-spin flex-shrink-0" />
-                  <div>
-                    <p className="text-blue-900 font-semibold text-sm">Preview wordt gegenereerd...</p>
-                    <p className="text-blue-700 text-xs mt-1">Dit duurt ongeveer 30 seconden per foto</p>
-            </div>
-            </div>
-              </div>
-            )}
           </form>
         </>
       ) : (
@@ -1340,108 +1195,9 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
               Check uw inbox: <strong>{formData.email}</strong>
             </p>
             <p className="text-green-600 text-sm">
-              {analysisResults.length > 0 
-                ? 'U ontvangt uw prijsindicatie per email + ziet hieronder uw preview'
-                : 'U ontvangt uw prijsindicatie per email'}
+              U ontvangt uw prijsindicatie per email
             </p>
           </div>
-
-          {/* Preview Sectie (als er previews zijn gegenereerd) */}
-          {analysisResults.length > 0 && (
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-6 border-2 border-green-200">
-              <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="w-6 h-6 text-green-600" />
-                <h3 className="font-bold text-xl text-foreground">✨ Uw Preview</h3>
-              </div>
-              
-              <div className="space-y-4">
-                {analysisResults.map((result, idx) => (
-                  <div key={idx} className="bg-white rounded-lg p-4 space-y-3">
-                    <p className="text-sm font-semibold text-muted-foreground">Preview {idx + 1}</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {/* Voor */}
-                      <div className="space-y-2">
-                        <div 
-                          className="relative rounded-lg overflow-hidden border-2 border-border group cursor-pointer"
-                          onClick={() => setEnlargedImage(result.url)}
-                        >
-                          <img
-                            src={result.url}
-                            alt={`Voor - Foto ${idx + 1}`}
-                            className="w-full h-auto object-contain max-h-64"
-                          />
-                          <div className="absolute top-2 right-2 flex gap-2">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleShare(result.url, 'Huidige situatie')
-                              }}
-                              className="bg-black/60 p-1.5 rounded-full hover:bg-black/80 transition-colors"
-                              aria-label="Deel foto"
-                            >
-                              <Share2 className="w-4 h-4 text-white" />
-                            </button>
-                            <button
-                              onClick={() => setEnlargedImage(result.url)}
-                              className="bg-black/60 p-1.5 rounded-full hover:bg-black/80 transition-colors"
-                              aria-label="Vergroot foto"
-                            >
-                              <ZoomIn className="w-4 h-4 text-white" />
-                            </button>
-                          </div>
-                        </div>
-                        <p className="text-sm text-center text-muted-foreground font-medium">
-                          📸 Voor
-                        </p>
-                      </div>
-
-                      {/* Na */}
-                      <div className="space-y-2">
-                        <div 
-                          className="relative rounded-lg overflow-hidden border-2 border-primary group cursor-pointer"
-                          onClick={() => setEnlargedImage(result.previewUrl || result.url)}
-                        >
-                          <img
-                            src={result.previewUrl || result.url}
-                            alt={`Na - Foto ${idx + 1}`}
-                            className="w-full h-auto object-contain max-h-64"
-                          />
-                          <div className="absolute top-2 right-2 flex gap-2">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                handleShare(result.previewUrl || result.url, 'Na schilderwerk')
-                              }}
-                              className="bg-black/60 p-1.5 rounded-full hover:bg-black/80 transition-colors"
-                              aria-label="Deel preview"
-                            >
-                              <Share2 className="w-4 h-4 text-white" />
-                            </button>
-                            <button
-                              onClick={() => setEnlargedImage(result.previewUrl || result.url)}
-                              className="bg-black/60 p-1.5 rounded-full hover:bg-black/80 transition-colors"
-                              aria-label="Vergroot preview"
-                            >
-                              <ZoomIn className="w-4 h-4 text-white" />
-                            </button>
-                          </div>
-                        </div>
-                        <p className="text-sm text-center text-primary font-medium">
-                          ✨ Na
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-4 p-3 bg-white rounded-lg">
-                <p className="text-xs text-center text-muted-foreground">
-                  ✨ Deze previews zijn automatisch gegenereerd op basis van uw gekozen specificaties.
-                </p>
-              </div>
-            </div>
-          )}
 
           {/* Prijsindicatie & Opbouw */}
           {priceRange && (
@@ -1637,8 +1393,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
           <div className="space-y-3">
           <Button
             onClick={() => {
-              setPhotos([])
-              setAnalysisResults([])
               setEmailSent(false)
               setFormData({
                 projectType: "",
@@ -1685,45 +1439,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
             </p>
           </div>
 
-        </div>
-      )}
-
-      {/* Lightbox Modal */}
-      {enlargedImage && (
-        <div 
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm"
-          onClick={() => setEnlargedImage(null)}
-        >
-          <div className="relative max-w-7xl max-h-full">
-            <div className="absolute -top-12 right-0 flex items-center gap-4">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  handleShare(enlargedImage, 'Mijn schilderwerk')
-                }}
-                className="text-white hover:text-gray-300 flex items-center gap-2 text-lg"
-              >
-                <Share2 className="w-5 h-5" />
-                Delen
-              </button>
-              <button
-                onClick={() => setEnlargedImage(null)}
-                className="text-white hover:text-gray-300 flex items-center gap-2 text-lg"
-              >
-                <X className="w-6 h-6" />
-                Sluiten
-              </button>
-            </div>
-            <img
-              src={enlargedImage}
-              alt="Vergrote weergave"
-              className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            />
-            <p className="text-white text-center mt-4 text-sm">
-              Klik buiten de foto om te sluiten
-            </p>
-          </div>
         </div>
       )}
     </Card>
