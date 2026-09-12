@@ -1246,41 +1246,6 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   </div>
                 )}
 
-          {/* Preview Upload Sectie */}
-                {formData.projectType && (
-                  <div className="space-y-4">
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-lg p-4">
-              <div className="flex items-start gap-2 mb-3">
-                        <Sparkles className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <h3 className="font-semibold text-base text-foreground mb-1">
-                            🎨 Gratis Preview (Optioneel)
-                  </h3>
-                  <p className="text-xs text-muted-foreground">
-                            Wilt u zien hoe het eruit gaat zien? Upload foto's van uw ruimte en ontvang automatisch een preview in uw gekozen kleuren!
-                  </p>
-                </div>
-              </div>
-
-                      <div className="space-y-3">
-                  <PhotoUpload 
-                    onPhotosChange={setPhotos}
-                    maxPhotos={5}
-                    minPhotos={0}
-                  />
-
-                {photos.length > 0 && (
-                          <div className="bg-white rounded-lg p-3 border border-green-300">
-                            <p className="text-xs text-green-700 font-medium">
-                              ✨ {photos.length} foto{photos.length > 1 ? "'s" : ""} geselecteerd - preview wordt automatisch gegenereerd bij verzenden
-                            </p>
-                          </div>
-                )}
-              </div>
-            </div>
-            </div>
-          )}
-
                 {/* Contactgegevens */}
                 {formData.projectType && (
                   <div className="space-y-4">
