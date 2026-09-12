@@ -111,7 +111,7 @@ export default function DelftPage() {
             <ul className="space-y-2 text-muted-foreground mb-8">
               <li>✓ <strong>Kennis van Delftse architectuur</strong> - Van monumenten tot nieuwbouw</li>
               <li>✓ <strong>Prijs match garantie</strong> - Scherpere prijs gevonden? Wij matchen deze direct!</li>
-              <li>✓ <strong>AI Preview</strong> - Zie direct hoe uw woning eruit ziet na het schilderen</li>
+              <li>✓ <strong>Preview</strong> - Zie direct hoe uw woning eruit ziet na het schilderen</li>
               <li>✓ <strong>Plan een gratis adviesgesprek</strong> - Bespreek uw wensen</li>
               <li>✓ <strong>Vakkundige schilders</strong> - Ervaring met alle woningtypen in Delft</li>
             </ul>

@@ -51,7 +51,7 @@ export default function DenHaagPage() {
             <h3 className="text-2xl font-bold mb-4">Waarom kiezen voor een schilder in Den Haag via De Budgetschilder?</h3>
             <ul className="space-y-2 text-muted-foreground mb-8">
               <li>✓ <strong>Prijs match garantie</strong> - Scherpere prijs gevonden? Wij matchen deze direct!</li>
-              <li>✓ <strong>Direct prijsindicatie</strong> met AI preview van uw geverfde woning</li>
+              <li>✓ <strong>Direct prijsindicatie</strong> met preview van uw geverfde woning</li>
               <li>✓ <strong>Actief in alle wijken</strong> van Den Haag</li>
               <li>✓ <strong>Professionele schilders</strong> - Ervaren en vakbekwaam</li>
               <li>✓ <strong>Plan een gratis adviesgesprek</strong> - Bespreek uw wensen</li>
@@ -186,13 +186,13 @@ export default function DenHaagPage() {
               <li>• <strong>Deuren lakken:</strong> €125 per deur</li>
             </ul>
             <p className="text-muted-foreground mb-6">
-              <strong>Direct uw prijs weten?</strong> Vul het formulier in en krijg binnen 30 seconden uw prijsindicatie. Zie met AI hoe uw woning eruit ziet na het schilderen - altijd de scherpste prijs in Den Haag dankzij onze prijs match garantie!
+              <strong>Direct uw prijs weten?</strong> Vul het formulier in en krijg binnen 30 seconden uw prijsindicatie. Zie direct hoe uw woning eruit ziet na het schilderen - altijd de scherpste prijs in Den Haag dankzij onze prijs match garantie!
             </p>
 
             <h3 className="text-2xl font-bold mb-4">Schilder nodig in Den Haag? Zo werkt het</h3>
             <ol className="space-y-3 text-muted-foreground mb-6">
               <li><strong>1. Vul het formulier in</strong> met uw oppervlaktes en wensen</li>
-              <li><strong>2. Bekijk AI preview</strong> van het eindresultaat met uw gekozen kleur</li>
+              <li><strong>2. Bekijk preview</strong> van het eindresultaat met uw gekozen kleur</li>
               <li><strong>3. Ontvang direct prijsindicatie</strong> voor uw schilderwerk in Den Haag</li>
               <li><strong>4. Schilder neemt contact op</strong> voor een gratis en vrijblijvend adviesgesprek</li>
               <li><strong>5. Planning & uitvoering</strong> van uw schilderwerk op een geschikt moment</li>

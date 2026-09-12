@@ -108,7 +108,7 @@ export default function RijswijkPage() {
               ✓ Buiten schilderwerk - Gevels, kozijnen, houtwerk<br/>
               ✓ Renovatie & onderhoud - Voor oudere woningen<br/>
               ✓ Nieuwbouw afwerking - Voor nieuwe projecten<br/>
-              ✓ AI Preview - Zie direct hoe het eruit ziet
+              ✓ Preview - Zie direct hoe het eruit ziet
             </p>
           </div>
         </div>

@@ -21,7 +21,7 @@ export function TopBanner() {
             
             {/* Desktop: Volledige tekst */}
             <span className="hidden sm:inline text-sm text-white font-medium">
-              Professioneel schilderwerk met AI preview - Upload een foto en zie direct hoe uw huis eruit ziet met uw nieuwe verfkleur!
+              Professioneel schilderwerk met preview - Upload een foto en zie direct hoe uw huis eruit ziet met uw nieuwe verfkleur!
             </span>
           </div>
           

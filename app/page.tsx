@@ -60,7 +60,7 @@ export default function Home() {
                 <h3 className="text-xl font-bold mb-4 text-foreground">Waarom De Budgetschilder?</h3>
                 <ul className="space-y-3 text-muted-foreground">
                   <li>✓ <strong className="text-foreground">Prijs match garantie</strong> - Scherpere prijs gevonden? Wij matchen deze direct!</li>
-                  <li>✓ <strong className="text-foreground">Direct prijsindicatie</strong> met AI preview</li>
+                  <li>✓ <strong className="text-foreground">Direct prijsindicatie</strong> met preview</li>
                   <li>✓ <strong className="text-foreground">Alle gemeentes</strong> in Haaglanden</li>
                   <li>✓ <strong className="text-foreground">Plan een gratis adviesgesprek</strong> via onze planner</li>
                   <li>✓ <strong className="text-foreground">Professionele schilders</strong> - Ervaren en betrouwbaar</li>

@@ -329,19 +329,19 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
     setIsSendingEmail(true)
 
     try {
-      // Als er foto's zijn EN nog geen AI preview, genereer deze eerst
+      // Als er foto's zijn EN nog geen preview, genereer deze eerst
       let finalAnalysisResults = analysisResults
       if (photos.length > 0 && analysisResults.length === 0) {
-        console.log('🎨 Genereren van AI previews voor verzenden...')
+        console.log('🎨 Genereren van previews voor verzenden...')
         setIsAnalyzing(true)
-        
+
         try {
           finalAnalysisResults = await generatePreviews()
           // Update de state zodat het success scherm de previews kan tonen
           setAnalysisResults(finalAnalysisResults)
           console.log('✅ Analysis results geupdated:', finalAnalysisResults.length)
         } catch (error) {
-          console.warn('⚠️ AI preview kon niet gegenereerd worden, verzend zonder preview')
+          console.warn('⚠️ Preview kon niet gegenereerd worden, verzend zonder preview')
           finalAnalysisResults = []
         } finally {
           setIsAnalyzing(false)
@@ -457,11 +457,11 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
           })
           
           if (!generateRes.ok) {
-            console.warn('⚠️ AI preview generatie mislukt - gebruik originele foto')
+            console.warn('⚠️ Preview generatie mislukt - gebruik originele foto')
             results.push({ url, previewUrl: url })
           } else {
             const genData = await generateRes.json()
-            console.log('✅ AI preview ontvangen, heeft previewImage:', !!genData.previewImage)
+            console.log('✅ Preview ontvangen, heeft previewImage:', !!genData.previewImage)
             results.push({ 
               url, 
               previewUrl: genData.previewImage || url,  // API returned previewImage, niet previewUrl!
@@ -504,12 +504,12 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-6 h-6 lg:w-7 lg:h-7 text-primary" />
             <h2 className="font-bold text-base sm:text-lg lg:text-xl text-foreground">
-              <span className="sm:hidden">Direct prijsindicatie + AI preview</span>
-              <span className="hidden sm:inline">Direct een prijsindicatie en gratis AI preview</span>
+              <span className="sm:hidden">Direct prijsindicatie + preview</span>
+              <span className="hidden sm:inline">Direct een prijsindicatie en gratis preview</span>
             </h2>
           </div>
           <p className="text-xs sm:text-sm italic text-muted-foreground mb-3">
-            💡 Tip: Zorg dat je foto's hebt van de ruimtes voor je AI preview
+            💡 Tip: Zorg dat je foto's hebt van de ruimtes voor je preview
           </p>
 
           <form className="space-y-4">
@@ -1246,7 +1246,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   </div>
                 )}
 
-          {/* AI Preview Upload Sectie */}
+          {/* Preview Upload Sectie */}
                 {formData.projectType && (
                   <div className="space-y-4">
                     <div className="bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-200 rounded-lg p-4">
@@ -1254,10 +1254,10 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                         <Sparkles className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                 <div>
                   <h3 className="font-semibold text-base text-foreground mb-1">
-                            🎨 Gratis AI Preview (Optioneel)
+                            🎨 Gratis Preview (Optioneel)
                   </h3>
                   <p className="text-xs text-muted-foreground">
-                            Wilt u zien hoe het eruit gaat zien? Upload foto's van uw ruimte en ontvang automatisch een AI preview in uw gekozen kleuren!
+                            Wilt u zien hoe het eruit gaat zien? Upload foto's van uw ruimte en ontvang automatisch een preview in uw gekozen kleuren!
                   </p>
                 </div>
               </div>
@@ -1272,7 +1272,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                 {photos.length > 0 && (
                           <div className="bg-white rounded-lg p-3 border border-green-300">
                             <p className="text-xs text-green-700 font-medium">
-                              ✨ {photos.length} foto{photos.length > 1 ? "'s" : ""} geselecteerd - AI preview wordt automatisch gegenereerd bij verzenden
+                              ✨ {photos.length} foto{photos.length > 1 ? "'s" : ""} geselecteerd - preview wordt automatisch gegenereerd bij verzenden
                             </p>
                           </div>
                 )}
@@ -1336,26 +1336,26 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                 {isSendingEmail || isAnalyzing ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    {isAnalyzing ? 'AI Preview Genereren...' : 'Verzenden...'}
+                    {isAnalyzing ? 'Preview Genereren...' : 'Verzenden...'}
                       </>
                     ) : (
                       <>
                         <Sparkles className="w-4 h-4 mr-2" />
-                    {photos.length > 0 
-                      ? `Verzenden met AI Preview (${photos.length} foto's)` 
+                    {photos.length > 0
+                      ? `Verzenden met Preview (${photos.length} foto's)`
                       : 'Ontvang Prijsindicatie per Email'}
                       </>
                     )}
                   </Button>
             </div>
 
-            {/* Loading tekst tijdens AI generatie */}
+            {/* Loading tekst tijdens preview generatie */}
             {isAnalyzing && photos.length > 0 && (
               <div className="mt-4 p-4 bg-blue-50 border-2 border-blue-200 rounded-lg">
                 <div className="flex items-center gap-3">
                   <Loader2 className="w-5 h-5 text-blue-600 animate-spin flex-shrink-0" />
                   <div>
-                    <p className="text-blue-900 font-semibold text-sm">AI Preview wordt gegenereerd...</p>
+                    <p className="text-blue-900 font-semibold text-sm">Preview wordt gegenereerd...</p>
                     <p className="text-blue-700 text-xs mt-1">Dit duurt ongeveer 30 seconden per foto</p>
             </div>
             </div>
@@ -1376,17 +1376,17 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
             </p>
             <p className="text-green-600 text-sm">
               {analysisResults.length > 0 
-                ? 'U ontvangt uw prijsindicatie per email + ziet hieronder uw AI preview'
+                ? 'U ontvangt uw prijsindicatie per email + ziet hieronder uw preview'
                 : 'U ontvangt uw prijsindicatie per email'}
             </p>
           </div>
 
-          {/* AI Preview Sectie (als er previews zijn gegenereerd) */}
+          {/* Preview Sectie (als er previews zijn gegenereerd) */}
           {analysisResults.length > 0 && (
             <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-6 border-2 border-green-200">
               <div className="flex items-center gap-2 mb-4">
                 <Sparkles className="w-6 h-6 text-green-600" />
-                <h3 className="font-bold text-xl text-foreground">✨ Uw AI Preview</h3>
+                <h3 className="font-bold text-xl text-foreground">✨ Uw Preview</h3>
               </div>
               
               <div className="space-y-4">
@@ -1472,7 +1472,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
 
               <div className="mt-4 p-3 bg-white rounded-lg">
                 <p className="text-xs text-center text-muted-foreground">
-                  ✨ <strong>Powered by AI</strong> - Deze previews zijn gegenereerd door AI op basis van uw gekozen specificaties.
+                  ✨ Deze previews zijn automatisch gegenereerd op basis van uw gekozen specificaties.
                 </p>
               </div>
             </div>

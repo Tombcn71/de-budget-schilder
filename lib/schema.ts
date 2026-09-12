@@ -43,7 +43,7 @@ export const localBusinessSchema = {
   "@type": "ProfessionalService",
   "@id": "https://debudgetschilder.nl",
   "name": "De Budgetschilder",
-  "description": "Professioneel schilderwerk in Den Haag en Haaglanden tegen de scherpste prijs. Scherpere prijs gevonden? Wij matchen deze direct! Direct prijsindicatie met AI preview. Actief in Den Haag, Delft, Zoetermeer, Westland, Rijswijk en heel Haaglanden.",
+  "description": "Professioneel schilderwerk in Den Haag en Haaglanden tegen de scherpste prijs. Scherpere prijs gevonden? Wij matchen deze direct! Direct prijsindicatie met preview. Actief in Den Haag, Delft, Zoetermeer, Westland, Rijswijk en heel Haaglanden.",
   "url": "https://debudgetschilder.nl",
   "logo": "https://debudgetschilder.nl/placeholder-logo.png",
   "image": "https://debudgetschilder.nl/placeholder-logo.png",
@@ -247,7 +247,7 @@ export const wijkPageSchema = (wijk: string) => ({
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": `De Budgetschilder ${wijk}`,
-  "description": `Professioneel schilderwerk in ${wijk}, Den Haag tegen de scherpste prijs. Direct prijsindicatie en AI preview.`,
+  "description": `Professioneel schilderwerk in ${wijk}, Den Haag tegen de scherpste prijs. Direct prijsindicatie en preview.`,
   "address": {
     "@type": "PostalAddress",
     "addressLocality": wijk,
