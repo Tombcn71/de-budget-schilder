@@ -67,7 +67,7 @@ export default function Leidschendam_VoorburgPage() {
         customFaqs={[
           {
             question: "Wat kost een schilder in Leidschendam-Voorburg?",
-            answer: "Vaste prijzen voor Leidschendam-Voorburg: muren €12,50/m², plafonds €13,50/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per deur. Geldt voor beide kernen."
+            answer: "Vaste prijzen voor Leidschendam-Voorburg: muren €12,50/m², plafonds €13,50/m², kozijnen €100 per stuk (binnen) of €125 per stuk (buiten), plinten en lijstwerk €7,50/m¹ en deuren lakken €100 per stuk (binnen) of €125 per stuk (buiten). Geldt voor beide kernen."
           },
           {
             question: "Werken jullie in Leidschendam én Voorburg?",
@@ -79,7 +79,7 @@ export default function Leidschendam_VoorburgPage() {
           },
           {
             question: "Wat kost het om kozijnen te schilderen in Leidschendam?",
-            answer: "Kozijnen schilderen kost €12,50 per strekkende meter in heel Leidschendam-Voorburg. Deuren lakken kost €125 per deur."
+            answer: "Kozijnen schilderen kost €100 per stuk (binnen) of €125 per stuk (buiten) in heel Leidschendam-Voorburg. Deuren lakken kost €100 per deur (binnen) of €125 per deur (buiten)."
           },
           {
             question: "Hoe lang duurt het om een huis te schilderen in Leidschendam-Voorburg?",

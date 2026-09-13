@@ -88,11 +88,6 @@ export function Footer() {
             <h3 className="font-bold mb-4">Contact</h3>
             <ul className="space-y-2 text-sm lg:text-base text-primary-foreground/80">
               <li>
-                <Link href="/laagste-prijs-garantie" className="hover:text-primary-foreground transition-colors">
-                  Prijs Match Garantie
-                </Link>
-              </li>
-              <li>
                 <Link href="/blog" className="hover:text-primary-foreground transition-colors">
                   Blog & Tips
                 </Link>

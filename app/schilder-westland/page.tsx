@@ -72,12 +72,12 @@ export default function WestlandPage() {
             <h3 className="text-2xl font-bold mb-4">Prijzen Schilderwerk Westland</h3>
             <p className="text-muted-foreground mb-3">Vaste prijzen binnen schilderwerk:</p>
             <ul className="space-y-2 text-muted-foreground mb-6">
-              <li>• <strong>Muren schilderen:</strong> €13,50 per m²</li>
+              <li>• <strong>Muren schilderen:</strong> €12,50 per m²</li>
               <li>• <strong>Plafond schilderen:</strong> €13,50 per m²</li>
-              <li>• <strong>Kozijnen schilderen:</strong> €12,50 per m¹</li>
+              <li>• <strong>Kozijnen schilderen:</strong> €100 per stuk (binnen), €125 per stuk (buiten)</li>
               <li>• <strong>Plinten schilderen:</strong> €7,50 per m¹</li>
               <li>• <strong>Lijstwerk schilderen:</strong> €7,50 per m¹</li>
-              <li>• <strong>Deuren lakken:</strong> €125 per deur</li>
+              <li>• <strong>Deuren lakken:</strong> €100 per deur (binnen), €125 per deur (buiten)</li>
             </ul>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function WestlandPage() {
         customFaqs={[
           {
             question: "Wat kost een schilder in Westland?",
-            answer: "Vaste prijzen voor Westland: muren €12,50/m², plafonds €13,50/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per deur. Deze prijzen gelden voor alle kernen."
+            answer: "Vaste prijzen voor Westland: muren €12,50/m², plafonds €13,50/m², kozijnen €100 per stuk (binnen) of €125 per stuk (buiten), plinten en lijstwerk €7,50/m¹ en deuren lakken €100 per stuk (binnen) of €125 per stuk (buiten). Deze prijzen gelden voor alle kernen."
           },
           {
             question: "Werken jullie in alle kernen van Westland?",
@@ -100,7 +100,7 @@ export default function WestlandPage() {
           },
           {
             question: "Wat kost het om kozijnen te schilderen in Monster?",
-            answer: "Kozijnen schilderen kost €12,50 per strekkende meter in heel Westland. Deuren lakken kost €125 per deur."
+            answer: "Kozijnen schilderen kost €100 per stuk (binnen) of €125 per stuk (buiten) in heel Westland. Deuren lakken kost €100 per deur (binnen) of €125 per deur (buiten)."
           },
           {
             question: "Hoe lang duurt het om een huis te schilderen in Westland?",
@@ -116,7 +116,7 @@ export default function WestlandPage() {
           },
           {
             question: "Kan ik alleen deuren laten lakken in Wateringen?",
-            answer: "Jazeker! Deuren lakken kost €125 per deur. U kunt ook alleen specifieke onderdelen laten schilderen in heel Westland."
+            answer: "Jazeker! Deuren lakken kost €100 per deur (binnen) of €125 per deur (buiten). U kunt ook alleen specifieke onderdelen laten schilderen in heel Westland."
           },
           {
             question: "Hoeveel lagen verf zijn nodig voor muren in Westland?",

@@ -75,13 +75,13 @@ export default function DeurenLakkenBlog() {
 
               <h2 className="text-3xl font-bold mt-12 mb-6">Wat kost deuren lakken in Haaglanden?</h2>
               <p>
-                Bij De Budgetschilder betaal je <strong>€125 per deur</strong> voor het professioneel lakken van deuren in heel Haaglanden. Deze prijs geldt voor alle gemeentes in de regio.
+                Bij De Budgetschilder betaal je <strong>€100 per binnendeur</strong> en <strong>€125 per buitendeur</strong> voor het professioneel lakken van deuren in heel Haaglanden. Deze prijzen gelden voor alle gemeentes in de regio.
               </p>
 
               <div className="bg-primary/10 p-6 rounded-lg my-8">
                 <h3 className="text-2xl font-bold mb-4">Voorbeeld: 3 binnendeuren</h3>
                 <p className="mb-2">Drie standaard binnendeuren lakken:</p>
-                <p className="text-2xl font-bold text-primary">3 deuren × €125 = €375</p>
+                <p className="text-2xl font-bold text-primary">3 deuren × €100 = €300</p>
               </div>
 
               <h2 className="text-3xl font-bold mt-12 mb-6">Het proces van deuren lakken</h2>

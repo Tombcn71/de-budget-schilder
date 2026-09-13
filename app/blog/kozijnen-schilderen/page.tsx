@@ -79,13 +79,13 @@ export default function KozijnenSchilderenBlog() {
 
               <h2 className="text-3xl font-bold mt-12 mb-6">Wat kost kozijnen schilderen in Haaglanden?</h2>
               <p>
-                Bij De Budgetschilder betaal je <strong>€12,50 per strekkende meter</strong> voor het professioneel schilderen van kozijnen in heel Haaglanden. Deze prijs geldt voor alle gemeentes in de regio.
+                Bij De Budgetschilder hanteren we vaste stuksprijzen: <strong>€100 per kozijn</strong> voor binnenkozijnen en <strong>€125 per kozijn</strong> voor buitenkozijnen. Deze prijzen gelden voor alle gemeentes in de regio.
               </p>
 
               <div className="bg-primary/10 p-6 rounded-lg my-8">
-                <h3 className="text-2xl font-bold mb-4">Voorbeeld: Raamkozijn</h3>
-                <p className="mb-2">Een standaard raamkozijn van 6 meter (rondom):</p>
-                <p className="text-2xl font-bold text-primary">6m × €12,50 = €75</p>
+                <h3 className="text-2xl font-bold mb-4">Voorbeeld: 3 Raamkozijnen</h3>
+                <p className="mb-2">3 buitenkozijnen laten schilderen:</p>
+                <p className="text-2xl font-bold text-primary">3 × €125 = €375</p>
               </div>
 
               <h2 className="text-3xl font-bold mt-12 mb-6">Binnen of buitenkozijnen schilderen?</h2>

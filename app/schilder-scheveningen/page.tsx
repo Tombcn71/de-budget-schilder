@@ -92,12 +92,12 @@ export default function ScheveningenPage() {
             <h3 className="text-2xl font-bold mb-4">Prijzen Schilderwerk Scheveningen</h3>
             <p className="text-muted-foreground mb-3">Vaste prijzen binnen schilderwerk:</p>
             <ul className="space-y-2 text-muted-foreground mb-6">
-              <li>• <strong>Muren schilderen:</strong> €13,50 per m²</li>
+              <li>• <strong>Muren schilderen:</strong> €12,50 per m²</li>
               <li>• <strong>Plafond schilderen:</strong> €13,50 per m²</li>
-              <li>• <strong>Kozijnen schilderen:</strong> €12,50 per m¹</li>
+              <li>• <strong>Kozijnen schilderen:</strong> €100 per stuk (binnen), €125 per stuk (buiten)</li>
               <li>• <strong>Plinten schilderen:</strong> €7,50 per m¹</li>
               <li>• <strong>Lijstwerk schilderen:</strong> €7,50 per m¹</li>
-              <li>• <strong>Deuren lakken:</strong> €125 per deur</li>
+              <li>• <strong>Deuren lakken:</strong> €100 per deur (binnen), €125 per deur (buiten)</li>
             </ul>
             <p className="text-muted-foreground mb-6">
               Voor buiten schilderwerk in Scheveningen adviseren wij zee-bestendige materialen vanwege het zilte klimaat. Vul het formulier in en krijg binnen 30 seconden een complete prijsindicatie inclusief advies over de beste materialen voor het zeeklimaat.
@@ -111,7 +111,7 @@ export default function ScheveningenPage() {
         customFaqs={[
           {
             question: "Wat kost een schilder in Scheveningen?",
-            answer: "Vaste prijzen voor binnen schilderwerk in Scheveningen: muren €12,50/m², plafonds €13,50/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per deur."
+            answer: "Vaste prijzen voor binnen schilderwerk in Scheveningen: muren €12,50/m², plafonds €13,50/m², kozijnen €100 per stuk (binnen) of €125 per stuk (buiten), plinten en lijstwerk €7,50/m¹ en deuren lakken €100 per stuk (binnen) of €125 per stuk (buiten)."
           },
           {
             question: "Werken jullie in alle delen van Scheveningen?",
@@ -123,7 +123,7 @@ export default function ScheveningenPage() {
           },
           {
             question: "Wat kost het om kozijnen te schilderen in Scheveningen?",
-            answer: "Kozijnen schilderen kost €12,50 per strekkende meter in Scheveningen. Deuren lakken kost €125 per deur."
+            answer: "Kozijnen schilderen kost €100 per stuk (binnen) of €125 per stuk (buiten) in Scheveningen. Deuren lakken kost €100 per deur (binnen) of €125 per deur (buiten)."
           },
           {
             question: "Hoe lang duurt het om een appartement te schilderen in Scheveningen?",

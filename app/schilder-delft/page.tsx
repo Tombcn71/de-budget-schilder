@@ -125,7 +125,7 @@ export default function DelftPage() {
         customFaqs={[
           {
             question: "Wat kost een schilder in Delft?",
-            answer: "Bij De Budgetschilder hanteren wij vaste prijzen voor Delft: muren €12,50/m², plafonds €13,50/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per stuk. Deze prijzen gelden voor alle wijken van Delft."
+            answer: "Bij De Budgetschilder hanteren wij vaste prijzen voor Delft: muren €12,50/m², plafonds €13,50/m², kozijnen €100 per stuk (binnen) of €125 per stuk (buiten), plinten en lijstwerk €7,50/m¹ en deuren lakken €100 per stuk (binnen) of €125 per stuk (buiten). Deze prijzen gelden voor alle wijken van Delft."
           },
           {
             question: "Werken jullie in alle wijken van Delft?",

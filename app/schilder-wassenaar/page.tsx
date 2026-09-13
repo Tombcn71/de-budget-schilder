@@ -51,12 +51,12 @@ export default function WassenaarPage() {
 
             <h3 className="text-2xl font-bold mb-4">Prijzen Schilderwerk Wassenaar</h3>
             <ul className="space-y-2 text-muted-foreground mb-6">
-              <li>• <strong>Muren schilderen:</strong> €13,50 per m²</li>
+              <li>• <strong>Muren schilderen:</strong> €12,50 per m²</li>
               <li>• <strong>Plafond schilderen:</strong> €13,50 per m²</li>
-              <li>• <strong>Kozijnen schilderen:</strong> €12,50 per m¹</li>
+              <li>• <strong>Kozijnen schilderen:</strong> €100 per stuk (binnen), €125 per stuk (buiten)</li>
               <li>• <strong>Plinten schilderen:</strong> €7,50 per m¹</li>
               <li>• <strong>Lijstwerk schilderen:</strong> €7,50 per m¹</li>
-              <li>• <strong>Deuren lakken:</strong> €125 per deur</li>
+              <li>• <strong>Deuren lakken:</strong> €100 per deur (binnen), €125 per deur (buiten)</li>
             </ul>
           </div>
         </div>
@@ -67,7 +67,7 @@ export default function WassenaarPage() {
         customFaqs={[
           {
             question: "Wat kost een schilder in Wassenaar?",
-            answer: "Vaste prijzen voor Wassenaar: muren €12,50/m², plafonds €13,50/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per deur. Dezelfde prijzen voor villa's en appartementen."
+            answer: "Vaste prijzen voor Wassenaar: muren €12,50/m², plafonds €13,50/m², kozijnen €100 per stuk (binnen) of €125 per stuk (buiten), plinten en lijstwerk €7,50/m¹ en deuren lakken €100 per stuk (binnen) of €125 per stuk (buiten). Dezelfde prijzen voor villa's en appartementen."
           },
           {
             question: "Werken jullie ook aan villa's in Wassenaar?",
@@ -79,7 +79,7 @@ export default function WassenaarPage() {
           },
           {
             question: "Wat kost het om kozijnen te schilderen in Wassenaar?",
-            answer: "Kozijnen schilderen kost €12,50 per strekkende meter in Wassenaar. Een standaard raamkozijn van 2 meter kost dus €25. Deuren lakken kost €125 per deur."
+            answer: "Kozijnen schilderen kost €100 per stuk (binnen) of €125 per stuk (buiten) in Wassenaar. Deuren lakken kost €100 per deur (binnen) of €125 per deur (buiten)."
           },
           {
             question: "Hoe lang duurt het om een woning te schilderen in Wassenaar?",

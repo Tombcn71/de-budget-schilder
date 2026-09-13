@@ -131,7 +131,7 @@ export default function RijswijkPage() {
           },
           {
             question: "Wat kost het om kozijnen te schilderen in Rijswijk?",
-            answer: "Kozijnen schilderen kost €12,50 per strekkende meter in Rijswijk. Deuren lakken kost €125 per deur."
+            answer: "Kozijnen schilderen kost €100 per stuk (binnen) of €125 per stuk (buiten) in Rijswijk. Deuren lakken kost €100 per deur (binnen) of €125 per deur (buiten)."
           },
           {
             question: "Hoe lang duurt het om een huis te schilderen in Rijswijk?",
@@ -147,7 +147,7 @@ export default function RijswijkPage() {
           },
           {
             question: "Kan ik alleen deuren laten lakken in Rijswijk?",
-            answer: "Jazeker! Deuren lakken kost €125 per deur. U kunt ook alleen specifieke onderdelen laten schilderen in heel Rijswijk."
+            answer: "Jazeker! Deuren lakken kost €100 per deur (binnen) of €125 per deur (buiten). U kunt ook alleen specifieke onderdelen laten schilderen in heel Rijswijk."
           },
           {
             question: "Hoeveel lagen verf zijn nodig voor muren in Rijswijk?",

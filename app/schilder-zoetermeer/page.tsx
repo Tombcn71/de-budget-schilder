@@ -101,12 +101,12 @@ export default function ZoetermeerPage() {
               <h4 className="text-xl font-bold mb-3">Prijzen Schilderwerk Zoetermeer</h4>
               <p className="text-muted-foreground mb-3">Binnen schilderwerk met vaste prijzen:</p>
               <ul className="space-y-2 text-muted-foreground mb-6">
-                <li>• <strong>Muren:</strong> €13,50 per m²</li>
+                <li>• <strong>Muren:</strong> €12,50 per m²</li>
                 <li>• <strong>Plafond:</strong> €13,50 per m²</li>
-                <li>• <strong>Kozijnen:</strong> €12,50 per m¹</li>
+                <li>• <strong>Kozijnen:</strong> €100 per stuk (binnen), €125 per stuk (buiten)</li>
                 <li>• <strong>Plinten:</strong> €7,50 per m¹</li>
                 <li>• <strong>Lijstwerk:</strong> €7,50 per m¹</li>
-                <li>• <strong>Deuren:</strong> €125 per stuk</li>
+                <li>• <strong>Deuren:</strong> €100 per stuk (binnen), €125 per stuk (buiten)</li>
               </ul>
               <p className="text-muted-foreground mb-6">
                 <strong>Diensten:</strong> Muren, plafonds, kozijnen, plinten, lijstwerk en deuren schilderen. Vul het formulier in en krijg binnen 30 seconden uw complete prijsindicatie!
@@ -126,7 +126,7 @@ export default function ZoetermeerPage() {
         customFaqs={[
           {
             question: "Wat kost een schilder in Zoetermeer?",
-            answer: "Onze vaste prijzen voor Zoetermeer: muren €12,50/m², plafonds €13,50/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per stuk. Deze prijzen gelden voor alle wijken van Zoetermeer."
+            answer: "Onze vaste prijzen voor Zoetermeer: muren €12,50/m², plafonds €13,50/m², kozijnen €100 per stuk (binnen) of €125 per stuk (buiten), plinten en lijstwerk €7,50/m¹ en deuren lakken €100 per stuk (binnen) of €125 per stuk (buiten). Deze prijzen gelden voor alle wijken van Zoetermeer."
           },
           {
             question: "In welke wijken van Zoetermeer werken jullie?",
