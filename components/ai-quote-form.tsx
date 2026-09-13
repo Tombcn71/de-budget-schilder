@@ -1096,23 +1096,11 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                   </div>
                 )}
 
-                {/* Prijs Indicatie */}
+                {/* Prijs Indicatie - bedrag pas zichtbaar na verzenden */}
                 {priceRange && (
-                  <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-4 sm:p-6 border-2 border-primary/20">
-                    <h3 className="font-bold text-lg sm:text-xl text-foreground mb-3">Uw Directe Prijs Indicatie</h3>
-                    <div className="text-center mb-4">
-                      <p className="text-3xl sm:text-4xl font-bold text-primary">
-                        {formatPrice(priceRange.min)}
-                      </p>
-                      <p className="text-xs sm:text-sm text-muted-foreground mt-1">Inclusief alle geselecteerde items</p>
-                    </div>
-                    <div className="bg-background rounded-lg p-3 space-y-1 text-left text-xs">
-                      <p className="text-muted-foreground font-semibold mb-2">Inbegrepen:</p>
-                      <p className="text-muted-foreground">✓ Professioneel schilderwerk</p>
-                      <p className="text-muted-foreground">✓ Verf en materialen</p>
-                      <p className="text-muted-foreground">✓ Schuren + voorbehandeling</p>
-                      <p className="text-muted-foreground">✓ 2 lagen afwerking</p>
-                    </div>
+                  <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg p-4 sm:p-6 border-2 border-primary/20 text-center">
+                    <h3 className="font-bold text-lg sm:text-xl text-foreground mb-1">Uw prijsindicatie is berekend!</h3>
+                    <p className="text-sm text-muted-foreground">Vul uw gegevens in en verstuur om uw prijs te ontvangen</p>
                   </div>
                 )}
 
