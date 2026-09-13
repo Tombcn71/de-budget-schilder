@@ -31,8 +31,9 @@ export default function WestlandPage() {
       ]} />
       <HeroAI 
         location="Westland"
-        title="Schilder Westland met Prijs Match Garantie"
-        description="Professioneel schilderwerk in heel Westland: Naaldwijk, Monster, 's-Gravenzande, Wateringen, De Lier en meer. Scherpere prijs gevonden? Wij matchen deze direct!"
+        title="Schilder Westland voor de Scherpste Prijs"
+        description="Professioneel schilderwerk in Westland tegen glasheldere, lage tarieven. Geen verborgen kosten, wel direct weten waar u aan toe bent."
+        badge="🏆 Vaste Lage Prijzen & Directe Duidelijkheid"
       />
       
       <HowItWorks />

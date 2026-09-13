@@ -31,8 +31,9 @@ export default function DenHaagPage() {
       ]} />
       <HeroAI 
         location="Den Haag"
-        title="Schilder Den Haag met Prijs Match Garantie"
-        description="Professioneel schilderwerk in alle wijken van Den Haag: Scheveningen, Centrum, Benoordenhout, Statenkwartier en meer. Scherpere prijs gevonden? Wij matchen deze direct!"
+        title="Schilder Den Haag voor de Scherpste Prijs"
+        description="Professioneel schilderwerk in Den Haag tegen glasheldere, lage tarieven. Geen verborgen kosten, wel direct weten waar u aan toe bent."
+        badge="🏆 Vaste Lage Prijzen & Directe Duidelijkheid"
       />
       
       <HowItWorks />

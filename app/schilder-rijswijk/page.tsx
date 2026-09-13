@@ -31,8 +31,9 @@ export default function RijswijkPage() {
       ]} />
       <HeroAI 
         location="Rijswijk"
-        title="Schilder Rijswijk met Prijs Match Garantie"
-        description="Professioneel schilderwerk in heel Rijswijk: Centrum, Sion, Steenvoorde, Elsenburgerbos en meer. Scherpere prijs gevonden? Wij matchen deze direct!"
+        title="Schilder Rijswijk voor de Scherpste Prijs"
+        description="Professioneel schilderwerk in Rijswijk tegen glasheldere, lage tarieven. Geen verborgen kosten, wel direct weten waar u aan toe bent."
+        badge="🏆 Vaste Lage Prijzen & Directe Duidelijkheid"
       />
       
       <HowItWorks />
@@ -91,12 +92,12 @@ export default function RijswijkPage() {
             <h3 className="text-2xl font-bold mb-4">Wat kost een schilder in Rijswijk?</h3>
             <p className="text-muted-foreground mb-3">Transparante prijzen binnen schilderwerk:</p>
             <ul className="space-y-2 text-muted-foreground mb-6">
-              <li>• <strong>Muren schilderen:</strong> €13,50 per m²</li>
+              <li>• <strong>Muren schilderen:</strong> €12,50 per m²</li>
               <li>• <strong>Plafond schilderen:</strong> €13,50 per m²</li>
-              <li>• <strong>Kozijnen schilderen:</strong> €12,50 per m¹</li>
+              <li>• <strong>Kozijnen schilderen:</strong> €100 per stuk (binnen), €125 per stuk (buiten)</li>
               <li>• <strong>Plinten schilderen:</strong> €7,50 per m¹</li>
               <li>• <strong>Lijstwerk schilderen:</strong> €7,50 per m¹</li>
-              <li>• <strong>Deuren lakken:</strong> €125 per deur</li>
+              <li>• <strong>Deuren lakken:</strong> €100 per deur (binnen), €125 per deur (buiten)</li>
             </ul>
             <p className="text-muted-foreground mb-8">
               Deze scherpe prijzen gelden voor alle wijken in Rijswijk - van centrum tot Sion en Elsenburgerbos. <strong>Vul het formulier in en krijg binnen 30 seconden uw complete prijsindicatie!</strong>
@@ -118,7 +119,7 @@ export default function RijswijkPage() {
         customFaqs={[
           {
             question: "Wat kost een schilder in Rijswijk?",
-            answer: "Vaste prijzen voor Rijswijk: muren €12,50/m², plafonds €13,50/m², kozijnen €12,50/m¹, plinten en lijstwerk €7,50/m¹ en deuren lakken €125 per deur. Deze prijzen gelden voor heel Rijswijk."
+            answer: "Vaste prijzen voor Rijswijk: muren €12,50/m², plafonds €13,50/m², kozijnen €100 per stuk (binnen) of €125 per stuk (buiten), plinten en lijstwerk €7,50/m¹ en deuren lakken €100 per stuk (binnen) of €125 per stuk (buiten). Deze prijzen gelden voor heel Rijswijk."
           },
           {
             question: "Werken jullie in alle wijken van Rijswijk?",
@@ -126,7 +127,7 @@ export default function RijswijkPage() {
           },
           {
             question: "Hoeveel kost het om een woonkamer te schilderen in Rijswijk?",
-            answer: "Een gemiddelde woonkamer van 25m² muren kost €312. Met plafond (20m² = €270) en plinten (15m¹ = €112) komt u op circa €694. Vul het formulier in voor uw prijsindicatie."
+            answer: "Een gemiddelde woonkamer van 25m² muren kost €312. Met plafond (20m² = €270) en plinten (15m¹ = €112) komt u op circa €694. Vul het formulier in voor uw exacte prijsindicatie."
           },
           {
             question: "Wat kost het om kozijnen te schilderen in Rijswijk?",

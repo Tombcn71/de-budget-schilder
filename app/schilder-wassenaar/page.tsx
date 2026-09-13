@@ -31,8 +31,9 @@ export default function WassenaarPage() {
       ]} />
       <HeroAI 
         location="Wassenaar"
-        title="Schilder Wassenaar met Prijs Match Garantie"
-        description="Professioneel schilderwerk in heel Wassenaar. Van villa's tot appartementen, vaste prijzen. Scherpere prijs gevonden? Wij matchen deze direct!"
+        title="Schilder Wassenaar voor de Scherpste Prijs"
+        description="Professioneel schilderwerk in Wassenaar tegen glasheldere, lage tarieven. Geen verborgen kosten, wel direct weten waar u aan toe bent."
+        badge="🏆 Vaste Lage Prijzen & Directe Duidelijkheid"
       />
       
       <HowItWorks />

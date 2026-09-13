@@ -31,8 +31,9 @@ export default function Pijnacker_NootdorpPage() {
       ]} />
       <HeroAI 
         location="Pijnacker-Nootdorp"
-        title="Schilder Pijnacker-Nootdorp met Prijs Match Garantie"
-        description="Professioneel schilderwerk in Pijnacker én Nootdorp. Beide kernen, één scherpe prijs. Scherpere prijs gevonden? Wij matchen deze direct!"
+        title="Schilder Pijnacker-Nootdorp voor de Scherpste Prijs"
+        description="Professioneel schilderwerk in Pijnacker-Nootdorp tegen glasheldere, lage tarieven. Geen verborgen kosten, wel direct weten waar u aan toe bent."
+        badge="🏆 Vaste Lage Prijzen & Directe Duidelijkheid"
       />
       
       <HowItWorks />

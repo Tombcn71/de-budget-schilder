@@ -31,8 +31,9 @@ export default function MiddenDelflandPage() {
       ]} />
       <HeroAI 
         location="Midden-Delfland"
-        title="Schilder Midden-Delfland met Prijs Match Garantie"
-        description="Professioneel schilderwerk in Maassluis, Schipluiden en Den Hoorn. Alle kernen, één scherpe prijs. Scherpere prijs gevonden? Wij matchen deze direct!"
+        title="Schilder Midden-Delfland voor de Scherpste Prijs"
+        description="Professioneel schilderwerk in Midden-Delfland tegen glasheldere, lage tarieven. Geen verborgen kosten, wel direct weten waar u aan toe bent."
+        badge="🏆 Vaste Lage Prijzen & Directe Duidelijkheid"
       />
       
       <HowItWorks />

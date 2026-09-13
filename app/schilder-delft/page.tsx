@@ -31,8 +31,9 @@ export default function DelftPage() {
       ]} />
       <HeroAI 
         location="Delft"
-        title="Schilder Delft met Prijs Match Garantie"
-        description="Professioneel schilderwerk in heel Delft: Centrum, Voorhof, Tanthof, Hof van Delft, TU-wijk en meer. Scherpere prijs gevonden? Wij matchen deze direct!"
+        title="Schilder Delft voor de Scherpste Prijs"
+        description="Professioneel schilderwerk in Delft tegen glasheldere, lage tarieven. Geen verborgen kosten, wel direct weten waar u aan toe bent."
+        badge="🏆 Vaste Lage Prijzen & Directe Duidelijkheid"
       />
       
       <HowItWorks />

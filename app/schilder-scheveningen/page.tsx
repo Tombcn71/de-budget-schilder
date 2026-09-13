@@ -31,8 +31,9 @@ export default function ScheveningenPage() {
       ]} />
       <HeroAI 
         location="Scheveningen"
-        title="Schilder Scheveningen met Prijs Match Garantie"
-        description="Professioneel schilderwerk in heel Scheveningen: Bad, Haven, Duindorp, Bosjes van Pex. Scherpere prijs gevonden? Wij matchen deze direct!"
+        title="Schilder Scheveningen voor de Scherpste Prijs"
+        description="Professioneel schilderwerk in Scheveningen tegen glasheldere, lage tarieven. Geen verborgen kosten, wel direct weten waar u aan toe bent."
+        badge="🏆 Vaste Lage Prijzen & Directe Duidelijkheid"
       />
       
       <HowItWorks />

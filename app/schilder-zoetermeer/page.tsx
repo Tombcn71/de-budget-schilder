@@ -31,8 +31,9 @@ export default function ZoetermeerPage() {
       ]} />
       <HeroAI 
         location="Zoetermeer"
-        title="Schilder Zoetermeer met Prijs Match Garantie"
-        description="Professioneel schilderwerk in heel Zoetermeer: Meerzicht, Rokkeveen, Oosterheem, Palenstein en meer. Scherpere prijs gevonden? Wij matchen deze direct!"
+        title="Schilder Zoetermeer voor de Scherpste Prijs"
+        description="Professioneel schilderwerk in Zoetermeer tegen glasheldere, lage tarieven. Geen verborgen kosten, wel direct weten waar u aan toe bent."
+        badge="🏆 Vaste Lage Prijzen & Directe Duidelijkheid"
       />
       
       <HowItWorks />

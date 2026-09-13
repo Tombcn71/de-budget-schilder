@@ -32,8 +32,9 @@ export default function HaaglandenPage() {
       ]} />
       <HeroAI 
         location="Haaglanden"
-        title="Schilder Haaglanden met Prijs Match Garantie"
-        description="Professioneel schilderwerk in heel Haaglanden tegen de scherpste prijs. Den Haag, Zoetermeer, Westland, Delft, Rijswijk en meer. Scherpere prijs gevonden? Wij matchen deze direct!"
+        title="Schilder Haaglanden voor de Scherpste Prijs"
+        description="Professioneel schilderwerk in heel Haaglanden tegen glasheldere, lage tarieven. Den Haag, Zoetermeer, Westland, Delft, Rijswijk en meer. Geen verborgen kosten, wel direct weten waar u aan toe bent."
+        badge="🏆 Vaste Lage Prijzen & Directe Duidelijkheid"
       />
       
       {/* Gemeentes sectie */}

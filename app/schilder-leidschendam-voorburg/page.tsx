@@ -31,8 +31,9 @@ export default function Leidschendam_VoorburgPage() {
       ]} />
       <HeroAI 
         location="Leidschendam-Voorburg"
-        title="Schilder Leidschendam-Voorburg met Prijs Match Garantie"
-        description="Professioneel schilderwerk in Leidschendam én Voorburg. Beide kernen, één scherpe prijs. Scherpere prijs gevonden? Wij matchen deze direct!"
+        title="Schilder Leidschendam-Voorburg voor de Scherpste Prijs"
+        description="Professioneel schilderwerk in Leidschendam-Voorburg tegen glasheldere, lage tarieven. Geen verborgen kosten, wel direct weten waar u aan toe bent."
+        badge="🏆 Vaste Lage Prijzen & Directe Duidelijkheid"
       />
       
       <HowItWorks />
@@ -50,12 +51,12 @@ export default function Leidschendam_VoorburgPage() {
 
             <h3 className="text-2xl font-bold mb-4">Prijzen Schilderwerk</h3>
             <ul className="space-y-2 text-muted-foreground mb-6">
-              <li>• <strong>Muren schilderen:</strong> €13,50 per m²</li>
+              <li>• <strong>Muren schilderen:</strong> €12,50 per m²</li>
               <li>• <strong>Plafond schilderen:</strong> €13,50 per m²</li>
-              <li>• <strong>Kozijnen schilderen:</strong> €12,50 per m¹</li>
+              <li>• <strong>Kozijnen schilderen:</strong> €100 per stuk (binnen), €125 per stuk (buiten)</li>
               <li>• <strong>Plinten schilderen:</strong> €7,50 per m¹</li>
               <li>• <strong>Lijstwerk schilderen:</strong> €7,50 per m¹</li>
-              <li>• <strong>Deuren lakken:</strong> €125 per deur</li>
+              <li>• <strong>Deuren lakken:</strong> €100 per deur (binnen), €125 per deur (buiten)</li>
             </ul>
           </div>
         </div>

@@ -14,15 +14,15 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: "Schilder Haaglanden met Prijs Match Garantie",
+  title: "Schilder Haaglanden voor de Scherpste Prijs | De Budgetschilder",
   description:
-    "Schilder Haaglanden nodig? Prijs Match Garantie. Direct prijsindicatie. Actief in Den Haag, Delft, Zoetermeer en meer.",
+    "Professioneel schilderwerk in heel Haaglanden tegen glasheldere, lage tarieven. Geen verborgen kosten - vaste prijzen voor Den Haag, Delft, Zoetermeer, Rijswijk en meer.",
   generator: "v0.app",
   keywords: "schilder den haag, schilderwerk den haag, schilder haaglanden, schilder delft, schilder zoetermeer, schilder rijswijk, schilder westland, schilder scheveningen, binnen schilderen den haag, buiten schilderen den haag, kozijnen schilderen den haag, schilder prijzen den haag, goedkope schilder den haag, schildersbedrijf den haag, huis laten schilderen den haag, woning schilderen den haag, muren verven den haag, plafond schilderen den haag, schilder leidschendam, schilder voorburg",
   authors: [{ name: "De Budgetschilder" }],
   openGraph: {
-    title: "Schilder Haaglanden | De Budgetschilder - Prijs Match Garantie",
-    description: "Schilder in Haaglanden nodig? Scherpere prijs gevonden? Wij matchen deze direct! Direct prijsindicatie. Actief in 23 gemeentes: Den Haag, Delft, Leiden, Zoetermeer, Rijswijk en heel Haaglanden.",
+    title: "Schilder Haaglanden voor de Scherpste Prijs | De Budgetschilder",
+    description: "Professioneel schilderwerk tegen glasheldere, lage tarieven. Geen verborgen kosten, wel direct weten waar u aan toe bent. Actief in 23 gemeentes: Den Haag, Delft, Leiden, Zoetermeer, Rijswijk en heel Haaglanden.",
     url: "https://debudgetschilder.nl",
     siteName: "De Budgetschilder Haaglanden",
     locale: "nl_NL",
@@ -30,8 +30,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Schilder Haaglanden | De Budgetschilder - Prijs Match Garantie",
-    description: "Schilder in Haaglanden nodig? 23 gemeentes, één prijs match garantie. Den Haag, Delft, Leiden, Zoetermeer en meer!",
+    title: "Schilder Haaglanden voor de Scherpste Prijs | De Budgetschilder",
+    description: "Vaste lage tarieven, geen verborgen kosten. 23 gemeentes: Den Haag, Delft, Leiden, Zoetermeer en meer!",
   },
   robots: {
     index: true,
