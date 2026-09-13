@@ -43,7 +43,7 @@ export const localBusinessSchema = {
   "@type": "ProfessionalService",
   "@id": "https://debudgetschilder.nl",
   "name": "De Budgetschilder",
-  "description": "Professioneel schilderwerk in Den Haag en Haaglanden tegen de scherpste prijs. Scherpere prijs gevonden? Wij matchen deze direct! Direct prijsindicatie met preview. Actief in Den Haag, Delft, Zoetermeer, Westland, Rijswijk en heel Haaglanden.",
+  "description": "Professioneel schilderwerk in Den Haag en Haaglanden tegen de scherpste prijs. Scherpere prijs gevonden? Wij matchen deze direct! Direct een gratis prijsindicatie binnen 30 seconden. Actief in Den Haag, Delft, Zoetermeer, Westland, Rijswijk en heel Haaglanden.",
   "url": "https://debudgetschilder.nl",
   "logo": "https://debudgetschilder.nl/placeholder-logo.png",
   "image": "https://debudgetschilder.nl/placeholder-logo.png",

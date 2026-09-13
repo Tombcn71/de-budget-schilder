@@ -8,7 +8,7 @@ export function Footer() {
           <div className="md:col-span-2 lg:col-span-4">
             <h2 className="text-xl lg:text-2xl font-bold mb-4">De Budgetschilder</h2>
             <p className="text-sm lg:text-base text-primary-foreground/80 leading-relaxed max-w-2xl">
-              Uw betrouwbare partner voor professioneel schilderwerk in Den Haag en Haaglanden tegen de beste prijs. Direct een prijsindicatie met preview van uw geverfde woning!
+              Uw betrouwbare partner voor professioneel schilderwerk in Den Haag en Haaglanden tegen de beste prijs. Direct een gratis prijsindicatie binnen 30 seconden!
             </p>
           </div>
 

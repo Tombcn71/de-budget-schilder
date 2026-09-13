@@ -16,12 +16,12 @@ export function TopBanner() {
           <div className="flex-1 text-center">
             {/* Mobile: Korte tekst */}
             <span className="text-sm sm:hidden text-white font-medium">
-              Upload een foto en zie direct hoe uw huis eruit ziet met uw nieuwe kleur!
+              Gratis prijsindicatie binnen 30 seconden!
             </span>
-            
+
             {/* Desktop: Volledige tekst */}
             <span className="hidden sm:inline text-sm text-white font-medium">
-              Professioneel schilderwerk met preview - Upload een foto en zie direct hoe uw huis eruit ziet met uw nieuwe verfkleur!
+              Professioneel schilderwerk tegen de scherpste prijs - Vraag direct uw gratis prijsindicatie aan!
             </span>
           </div>
           

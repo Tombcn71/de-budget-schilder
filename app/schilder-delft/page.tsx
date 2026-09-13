@@ -96,12 +96,12 @@ export default function DelftPage() {
               Vaste prijzen voor binnen schilderwerk in Delft:
             </p>
             <ul className="space-y-2 text-muted-foreground mb-6">
-              <li>• <strong>Muren schilderen:</strong> €13,50 per m²</li>
+              <li>• <strong>Muren schilderen:</strong> €12,50 per m²</li>
               <li>• <strong>Plafond schilderen:</strong> €13,50 per m²</li>
-              <li>• <strong>Kozijnen schilderen:</strong> €12,50 per m¹</li>
+              <li>• <strong>Kozijnen schilderen:</strong> €100 per stuk (binnen), €125 per stuk (buiten)</li>
               <li>• <strong>Plinten schilderen:</strong> €7,50 per m¹</li>
               <li>• <strong>Lijstwerk schilderen:</strong> €7,50 per m¹</li>
-              <li>• <strong>Deuren lakken:</strong> €125 per deur</li>
+              <li>• <strong>Deuren lakken:</strong> €100 per deur (binnen), €125 per deur (buiten)</li>
             </ul>
             <p className="text-muted-foreground mb-6">
               Deze scherpe prijzen gelden voor alle wijken in Delft - van monumentaal centrum tot moderne nieuwbouw in Voorhof en Tanthof. Vul het formulier in en krijg binnen 30 seconden een directe volledige prijsindicatie!
@@ -111,7 +111,7 @@ export default function DelftPage() {
             <ul className="space-y-2 text-muted-foreground mb-8">
               <li>✓ <strong>Kennis van Delftse architectuur</strong> - Van monumenten tot nieuwbouw</li>
               <li>✓ <strong>Prijs match garantie</strong> - Scherpere prijs gevonden? Wij matchen deze direct!</li>
-              <li>✓ <strong>Preview</strong> - Zie direct hoe uw woning eruit ziet na het schilderen</li>
+              <li>✓ <strong>Snelle offerte</strong> - Prijsindicatie binnen 30 seconden</li>
               <li>✓ <strong>Plan een gratis adviesgesprek</strong> - Bespreek uw wensen</li>
               <li>✓ <strong>Vakkundige schilders</strong> - Ervaring met alle woningtypen in Delft</li>
             </ul>

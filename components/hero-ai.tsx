@@ -5,12 +5,14 @@ interface HeroAIProps {
   location?: string
   title?: string
   description?: string
+  badge?: string
 }
 
-export function HeroAI({ location, title, description }: HeroAIProps = {}) {
+export function HeroAI({ location, title, description, badge }: HeroAIProps = {}) {
   const defaultTitle = "Professioneel schilderwerk met Prijs Match Garantie."
   const defaultDescriptionMobile = "Professioneel schilderwerk tegen de scherpste prijs. Scherpere prijs gevonden? Wij matchen deze direct!"
   const defaultDescriptionDesktop = "Professioneel schilderwerk in heel Haaglanden tegen de scherpste prijs. Den Haag, Zoetermeer, Westland, Delft, Rijswijk en meer. Scherpere prijs gevonden? Wij matchen deze direct!"
+  const defaultBadge = `🏆 Prijs Match Garantie ${location || ""}`.trim()
   
   return (
     <section className="relative min-h-[500px] lg:min-h-[600px] flex items-center justify-center overflow-hidden">
@@ -45,7 +47,7 @@ export function HeroAI({ location, title, description }: HeroAIProps = {}) {
 
             <div className="inline-block bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full mb-4">
               <p className="text-md sm:text-lg font-semibold text-white">
-                🏆 Prijs Match Garantie {location && `${location}`}
+                {badge || defaultBadge}
               </p>
             </div>
 
@@ -60,7 +62,7 @@ export function HeroAI({ location, title, description }: HeroAIProps = {}) {
             </div>
           </div>
 
-          <div className="w-full">
+          <div id="offerte-formulier" className="w-full scroll-mt-20">
             <AIQuoteForm />
           </div>
         </div>

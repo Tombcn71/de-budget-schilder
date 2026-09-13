@@ -7,51 +7,51 @@ import Link from "next/link"
 const defaultFaqs = [
   {
     question: "Wat kost een schilder per m2?",
-    answer: "Muren schilderen kost €12,50 per m², plafonds €13,50 per m². Plinten en lijstwerk kosten €7,50 per strekkende meter, kozijnen €12,50 per m¹ en deuren lakken €125 per deur. Vul ons formulier in voor een directe prijsindicatie."
+    answer: "Onze tarieven voor muren en plafonds zijn helder en per vierkante meter berekend. Muren schilderen kost €12,50 per m² en plafonds schilderen kost €13,50 per m² inclusief materiaal en uitvoering."
   },
   {
     question: "Hoeveel kost het om een woonkamer te schilderen?",
-    answer: "Een gemiddelde woonkamer van 25m² muren kost ongeveer €312 voor de muren. Met plafond (20m² = €270) en plinten (15m¹ = €112) komt u op circa €694. Vul het formulier in met uw exacte afmetingen voor een nauwkeurige prijsindicatie."
+    answer: "De kosten voor een woonkamer hangen af van de totale oppervlakte van de muren en plafonds, en of de kozijnen en deuren ook meegenomen moeten worden. Met onze online rekentool vult u uw gegevens in en ziet u binnen 30 seconden exact wat uw woonkamer gaat kosten."
   },
   {
     question: "Wat kost het om kozijnen te laten schilderen?",
-    answer: "Kozijnen schilderen kost €12,50 per strekkende meter. Een standaard raamkozijn van 2 meter kost dus €25. Deuren lakken kost €125 per deur. Vul het formulier in voor een directe prijsindicatie."
+    answer: "Voor het schilderen van kozijnen hanteren we vaste stuksprijzen. Binnenkozijnen kosten €100 per stuk en buitenkozijnen kosten €125 per stuk. Zo weet u vooraf precies waar u aan toe bent."
   },
   {
     question: "Hoe lang duurt het om een kamer te schilderen?",
-    answer: "Een gemiddelde slaapkamer is binnen 1 dag klaar. Een woonkamer met muren, plafond en plinten duurt 1-2 dagen. Dit is inclusief voorbereiden, gronden en afwerken."
+    answer: "Het schilderen van een gemiddelde kamer (muren en plafond) is door onze ervaren vakmensen meestal binnen één tot twee dagen volledig afgerond, inclusief de benodigde droogtijd tussen de lagen door."
   },
   {
     question: "Wanneer is de beste tijd om je huis te schilderen?",
-    answer: "Binnenschilderwerk kan het hele jaar door. Voor buitenschilderwerk is april tot oktober ideaal, bij droog weer en temperaturen boven 10°C. In de winter is binnenschilderwerk de beste optie."
+    answer: "Voor binnenschilderwerk maakt het seizoen niet uit. Voor buitenschilderwerk is het voorjaar tot en met het najaar (van ca. april tot oktober) de beste periode, omdat de temperatuur en luchtvochtigheid dan optimaal zijn voor de droging van de verf."
   },
   {
     question: "Hoeveel lagen verf heb ik nodig?",
-    answer: "Voor een goede dekking zijn meestal 2 lagen nodig. Bij een forse kleurverandering (bijv. donker naar licht) kunnen 3 lagen nodig zijn. Wij adviseren altijd het juiste aantal lagen voor een perfect resultaat."
+    answer: "Voor muren en plafonds rekenen we standaard op twee lagen latex voor een egaal en dekkend resultaat. Bij buitenschilderwerk brengen we minimaal één grondlaag en twee aflaklagen aan om uw houtwerk optimaal te beschermen."
   },
   {
     question: "Kan ik over behang schilderen?",
-    answer: "Technisch kan het, maar wij raden aan behang te verwijderen voor het beste resultaat. Geschilderd behang kan gaan loslaten en geeft een minder strak eindresultaat."
+    answer: "Ja, dat kan mits het behang stevig op de muur zit en geen losse naden heeft. Glasvezelbehang of renovlies is uitstekend over te schilderen. Bij erg bobbelig of loslatend papier adviseren we echter om het eerst te verwijderen voor een strak eindresultaat."
   },
   {
     question: "Moet ik meubels verwijderen voor schilderwerk?",
-    answer: "Grote meubels hoeven niet weg, maar moeten wel naar het midden van de kamer worden verplaatst. Wij dekken alles zorgvuldig af. Kleine spullen en schilderijen moeten wel worden verwijderd."
+    answer: "Het helpt enorm als kleine spullen en breekbare voorwerpen vooraf uit de ruimte zijn. Grotere meubels kunnen we in overleg naar het midden van de kamer schuiven en dekken we zorgvuldig af met plastic om verfspetters te voorkomen."
   },
   {
     question: "Hoe snel kan een schilder beginnen?",
-    answer: "Vul het formulier in voor een directe prijsindicatie en plan vervolgens een gratis adviesgesprek in via onze planner."
+    answer: "Dankzij ons brede netwerk van professionele schilders in de regio Haaglanden kunnen we vaak al op korte termijn bij u aan de slag. Vraag direct een prijsindicatie aan en plan via onze planner een adviesgesprek om de exacte planning af te stemmen."
   },
   {
     question: "Wat is het verschil tussen latex en acrylaat verf?",
-    answer: "Latex is goedkoper maar minder duurzaam. Acrylaat verf is wasbaar, slijtvaster en ideaal voor intensief gebruikte ruimtes zoals keukens, badkamers en kinderkamers."
+    answer: "Latex is een watergedragen muurverf die speciaal gebruikt wordt voor grote oppervlakken zoals muren en plafonds. Acrylaatverf is een duurzame, watergedragen verf op kunstharsbasis die we vooral gebruiken voor houtwerk zoals kozijnen, deuren en plinten."
   },
   {
     question: "Hoe lang moet verf drogen?",
-    answer: "Muurverf is na 2-4 uur stofdroog en na 24 uur overschilderbaar. Lakverf voor houtwerk heeft 6-8 uur nodig om stofdroog te zijn en 16-24 uur voor de volgende laag."
+    answer: "Watergedragen muurverf en lakverf zijn doorgaans binnen 2 tot 4 uur overschilderbaar. Volledige uitharding van de verflaag duurt echter enkele dagen tot een week, waarbij we adviseren om in de eerste dagen voorzichtig te zijn met stoten."
   },
   {
     question: "Wat kost het om een plafond te schilderen?",
-    answer: "Plafond schilderen kost €13,50 per m². Een plafond van 20m² kost dus €270. Vul het formulier in met uw afmetingen voor een directe prijsindicatie voor uw plafond."
+    answer: "Het schilderen van een plafond kost bij ons €13,50 per vierkante meter. Dit is inclusief professionele afwerking voor een streeploos en wit resultaat."
   }
 ]
 

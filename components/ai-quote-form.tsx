@@ -8,7 +8,19 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Progress } from "@/components/ui/progress"
-import { ChevronLeft, ChevronRight, Loader2, Check, Sparkles } from "lucide-react"
+import { ChevronLeft, ChevronRight, Loader2, Check } from "lucide-react"
+
+// Zelfde locatiepin-vorm als het logo in components/header.tsx, voor visuele consistentie
+function LogoMark({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path
+        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -376,7 +388,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
       {!emailSent ? (
         <>
           <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="w-6 h-6 lg:w-7 lg:h-7 text-primary" />
+            <LogoMark className="w-6 h-6 lg:w-7 lg:h-7 text-primary" />
             <h2 className="font-bold text-base sm:text-lg lg:text-xl text-foreground">
               Direct een gratis prijsindicatie
             </h2>
@@ -1163,7 +1175,7 @@ export function AIQuoteForm({ className = "" }: AIQuoteFormProps) {
                       </>
                     ) : (
                       <>
-                        <Sparkles className="w-4 h-4 mr-2" />
+                        <LogoMark className="w-4 h-4 mr-2" />
                     Ontvang Prijsindicatie per Email
                       </>
                     )}

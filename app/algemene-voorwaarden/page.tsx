@@ -75,7 +75,6 @@ export default function AlgemeneVoorwaardenPage() {
                     <li>Het faciliteren van offerteaanvragen</li>
                     <li>Het doorgeven van contactgegevens aan aangesloten schilders</li>
                     <li>Het verstrekken van informatieve content over schilderwerk</li>
-                    <li>Het bieden van een previewtool voor visualisatie (indicatief)</li>
                   </ul>
                   <p>
                     Al onze marketingdiensten zijn <strong className="text-foreground">kosteloos voor de klant</strong>. U betaalt enkel voor het daadwerkelijk uitgevoerde schilderwerk aan het schildersbedrijf.

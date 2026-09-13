@@ -107,8 +107,7 @@ export default function RijswijkPage() {
               ✓ Binnen schilderwerk - Wanden, plafonds, deuren<br/>
               ✓ Buiten schilderwerk - Gevels, kozijnen, houtwerk<br/>
               ✓ Renovatie & onderhoud - Voor oudere woningen<br/>
-              ✓ Nieuwbouw afwerking - Voor nieuwe projecten<br/>
-              ✓ Preview - Zie direct hoe het eruit ziet
+              ✓ Nieuwbouw afwerking - Voor nieuwe projecten
             </p>
           </div>
         </div>
