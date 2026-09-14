@@ -18,14 +18,14 @@ export function HeroAI({ location, title, description, badge }: HeroAIProps = {}
     <section className="relative min-h-[500px] lg:min-h-[600px] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
-          src="https://images.pexels.com/photos/1669754/pexels-photo-1669754.jpeg?auto=compress&cs=tinysrgb&w=1920"
+          src="/hero.jpg"
           alt="Professionele schilder aan het werk"
           fill
           priority
           fetchPriority="high"
           quality={85}
           sizes="100vw"
-          className="object-cover"
+          className="object-cover object-[20%_45%] sm:object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-transparent" />
       </div>
