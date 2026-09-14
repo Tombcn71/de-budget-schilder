@@ -1,4 +1,3 @@
-import { TopBanner } from "@/components/top-banner"
 import { Header } from "@/components/header"
 import { HeroAI } from "@/components/hero-ai"
 import { HowItWorks } from "@/components/how-it-works"
@@ -9,7 +8,6 @@ import Link from "next/link"
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <TopBanner />
       <Header />
       <HeroAI
         location="Haaglanden"

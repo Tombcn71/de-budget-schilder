@@ -120,18 +120,6 @@ export function FAQ({ location, customFaqs }: FAQProps = {}) {
               </div>
             ))}
           </div>
-
-          <div className="mt-12 text-center">
-            <p className="text-gray-600 mb-4">
-              Staat uw vraag er niet bij?
-            </p>
-            <a
-              href="/contact"
-              className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors"
-            >
-              Neem contact op
-            </a>
-          </div>
         </div>
       </div>
     </section>

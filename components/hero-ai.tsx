@@ -15,8 +15,8 @@ export function HeroAI({ location, title, description, badge }: HeroAIProps = {}
   const defaultBadge = `🏆 Prijs Match Garantie ${location || ""}`.trim()
   
   return (
-    <section className="relative min-h-[500px] lg:min-h-[600px] flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 z-0">
+    <section className="relative overflow-hidden lg:min-h-[600px] lg:flex lg:items-center lg:justify-center">
+      <div className="absolute top-0 left-0 right-0 h-[420px] lg:inset-0 lg:h-auto z-0">
         <Image
           src="/hero.jpg"
           alt="Professionele schilder aan het werk"

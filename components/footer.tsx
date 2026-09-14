@@ -92,11 +92,6 @@ export function Footer() {
                   Blog & Tips
                 </Link>
               </li>
-              <li>
-                <Link href="/contact" className="hover:text-primary-foreground transition-colors">
-                  Contactformulier
-                </Link>
-              </li>
               <li>info@debudgetschilder.nl</li>
               <li>Ma-Za: 07:00 - 22:00</li>
             </ul>
